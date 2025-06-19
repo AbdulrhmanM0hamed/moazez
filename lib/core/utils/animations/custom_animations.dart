@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
+import 'door_open_animation.dart';
 
 class CustomAnimations {
+  /// Door opening animation: two white panels slide outwards revealing the [child].
+  /// Place this at the top of the widget tree (inside a Stack recommended).
+  static Widget doorOpen({
+    required Widget child,
+    Duration duration = const Duration(milliseconds: 1500),
+  }) {
+    return DoorOpenAnimation(
+      child: child,
+      duration: duration,
+    );
+  }
   static Widget slideFromBottom({
     required Widget child,
     Duration duration = const Duration(milliseconds: 500),
