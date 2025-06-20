@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moazez/feature/home/presentation/widgets/home_top_section.dart';
+import 'package:moazez/feature/home/presentation/widgets/invite_participants_section.dart';
 import 'package:moazez/feature/home/presentation/widgets/progress_chart.dart';
 import 'package:moazez/feature/home/presentation/widgets/participants_section.dart';
 
@@ -84,6 +85,8 @@ class HomeViewBody extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           const ParticipantsSection(),
+          const SizedBox(height: 16),
+          const InviteParticipantsSection(),
         ],
       ),
     );
