@@ -3,6 +3,7 @@ import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/constant/app_assets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moazez/core/utils/theme/app_colors.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key});
@@ -28,9 +29,10 @@ class HomeHeader extends StatelessWidget {
               const SizedBox(width: 12),
               Text(
                 'مرحبا محمد',
-                style: getSemiBoldStyle(
+                style: getBoldStyle(
+                  color: AppColors.white,
                   fontFamily: FontConstant.cairo,
-                  fontSize: FontSize.size16,
+                  fontSize: FontSize.size20,
                 ),
               ),
             ],
@@ -44,10 +46,7 @@ class HomeHeader extends StatelessWidget {
                 AppAssets.notificationIcon,
                 width: 28,
                 height: 28,
-                colorFilter: ColorFilter.mode(
-                  Colors.black,
-                  BlendMode.srcIn,
-                ),
+                colorFilter: ColorFilter.mode(Colors.black, BlendMode.srcIn),
               ),
               Positioned(
                 top: -4,

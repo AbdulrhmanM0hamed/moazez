@@ -6,7 +6,6 @@ import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
-
 class CompleteProfileView extends StatefulWidget {
   static const String routeName = '/completeProfile';
   final Map<String, String> signupData;
@@ -52,12 +51,18 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                       CircleAvatar(
                         radius: 48,
                         backgroundColor: AppColors.border,
-                        backgroundImage: _avatarImage != null
-                            ? FileImage(_avatarImage!)
-                            : null,
-                        child: _avatarImage == null
-                            ? const Icon(Icons.person, size: 48, color: AppColors.primary)
-                            : null,
+                        backgroundImage:
+                            _avatarImage != null
+                                ? FileImage(_avatarImage!)
+                                : null,
+                        child:
+                            _avatarImage == null
+                                ? const Icon(
+                                  Icons.person,
+                                  size: 48,
+                                  color: AppColors.white,
+                                )
+                                : null,
                       ),
                       Positioned(
                         bottom: -4,
@@ -67,7 +72,11 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                           child: CircleAvatar(
                             radius: 16,
                             backgroundColor: AppColors.primary,
-                            child: const Icon(Icons.camera_alt, size: 18, color: Colors.white),
+                            child: const Icon(
+                              Icons.camera_alt,
+                              size: 18,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -76,29 +85,61 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                 ),
                 const SizedBox(height: 24),
                 // Gender
-                const Text(
-                  'النوع',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: RadioListTile<String>(
-                        title: const Text('ذكر'),
-                        value: 'male',
-                        groupValue: _gender,
-                        onChanged: (v) => setState(() => _gender = v),
+                FormField<String>(
+                  initialValue: _gender,
+                  validator: (value) {
+                    if (value == null) {
+                      return 'يرجى اختيار النوع';
+                    }
+                    return null;
+                  },
+                  builder: (FormFieldState<String> state) {
+                    return InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: 'النوع',
+                        errorText: state.errorText,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        // Adjust padding to make the field height similar to a TextField
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                       ),
-                    ),
-                    Expanded(
-                      child: RadioListTile<String>(
-                        title: const Text('أنثى'),
-                        value: 'female',
-                        groupValue: _gender,
-                        onChanged: (v) => setState(() => _gender = v),
+                      child: Row(
+                        children:[
+                          Expanded(
+                            child: RadioListTile<String>(
+                              title: const Text('ذكر'),
+                              value: 'male',
+                              groupValue: state.value,
+                              onChanged: (value) {
+                                setState(() {
+                                  state.didChange(value);
+                                  _gender = value;
+                                });
+                              },
+                              contentPadding: EdgeInsets.zero,
+                              dense: true,
+                            ),
+                          ),
+                          Expanded(
+                            child: RadioListTile<String>(
+                              title: const Text('أنثى'),
+                              value: 'female',
+                              groupValue: state.value,
+                              onChanged: (value) {
+                                setState(() {
+                                  state.didChange(value);
+                                  _gender = value;
+                                });
+                              },
+                              contentPadding: EdgeInsets.zero,
+                              dense: true,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
                 const SizedBox(height: 16),
                 // Birth date
@@ -138,7 +179,7 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                           v == null || v.isEmpty ? 'يرجى إدخال المنطقة' : null,
                 ),
                 const SizedBox(height: 32),
-                CustomButton(text: 'إنهاء', onPressed: _onFinish),
+                CustomButton(text: 'تأكيد', onPressed: _onFinish),
               ],
             ),
           ),
