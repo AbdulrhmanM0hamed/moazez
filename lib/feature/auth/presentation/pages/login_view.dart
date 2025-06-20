@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/common/custom_button.dart';
 import 'package:moazez/core/utils/common/custom_text_field.dart';
+import 'package:moazez/core/utils/constant/font_manger.dart';
+import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/validators/form_validators.dart';
 import 'package:moazez/feature/auth/presentation/pages/signup_view.dart';
 
@@ -59,23 +61,41 @@ class _LoginViewState extends State<LoginView> {
                     onPressed: () {
                       //     Navigator.of(context).pushNamed(ForgotPasswordView.routeName);
                     },
-                    child: const Text('نسيت كلمة المرور؟'),
+                    child: Text(
+                      'نسيت كلمة المرور؟',
+                      style: getSemiBoldStyle(
+                        fontFamily: FontConstant.cairo,
+                        fontSize: FontSize.size14,
+                      ),
+                    ),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
                 CustomButton(text: 'دخول', onPressed: _onLogin),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('ليس لديك حساب؟ '),
+                    Text(
+                      'ليس لديك حساب؟ ',
+                      style: getSemiBoldStyle(
+                        fontFamily: FontConstant.cairo,
+                        fontSize: FontSize.size16,
+                      ),
+                    ),
                     TextButton(
                       onPressed: () {
                         Navigator.of(
                           context,
                         ).pushReplacementNamed(RegisterView.routeName);
                       },
-                      child: const Text('إنشاء حساب'),
+                      child: Text(
+                        'إنشاء حساب',
+                        style: getSemiBoldStyle(
+                          fontFamily: FontConstant.cairo,
+                          fontSize: FontSize.size16,
+                        ),
+                      ),
                     ),
                   ],
                 ),

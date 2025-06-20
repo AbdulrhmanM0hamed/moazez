@@ -3,6 +3,8 @@ import 'package:moazez/core/utils/common/custom_button.dart';
 import 'package:moazez/core/utils/common/custom_text_field.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/common/password_field.dart';
+import 'package:moazez/core/utils/constant/font_manger.dart';
+import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/validators/form_validators.dart';
 
 class RegisterView extends StatefulWidget {
@@ -87,12 +89,24 @@ class _RegisterViewState extends State<RegisterView> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('لديك حساب بالفعل؟ '),
+                    Text(
+                      'لديك حساب بالفعل؟ ',
+                      style: getSemiBoldStyle(
+                        fontFamily: FontConstant.cairo,
+                        fontSize: FontSize.size16,
+                      ),
+                    ),
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pushReplacementNamed('/login');
                       },
-                      child: const Text('تسجيل الدخول'),
+                      child: Text(
+                        'تسجيل الدخول',
+                        style: getSemiBoldStyle(
+                          fontFamily: FontConstant.cairo,
+                          fontSize: FontSize.size16,
+                        ),
+                      ),
                     ),
                   ],
                 ),

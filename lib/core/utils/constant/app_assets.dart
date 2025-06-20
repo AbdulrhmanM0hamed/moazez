@@ -4,7 +4,6 @@ class AppAssets {
   static const String _iconsPath = 'assets/icons';
   static const String _lottiePath = 'assets/lottie';
 
-
   // Logo
   static const String logo = '$_imagesPath/logo.png';
   static const String logoWhite = '$_imagesPath/logo_white.png';
@@ -13,8 +12,6 @@ class AppAssets {
 
   // Onboarding
   static const String onboardingIllustration = '$_imagesPath/on_boarding.svg';
-
-
 
   // Auth
   static const String loginBg = '$_imagesPath/login_bg.png';
@@ -25,13 +22,10 @@ class AppAssets {
   static const String placeholderProfile =
       '$_imagesPath/placeholder_profile.png';
 
-
   // Icons
   static const String homeIcon = '$_iconsPath/home.svg';
-
+  static const String notificationIcon = '$_iconsPath/notification.svg';
 
   // Bottom Navigation Icons
   static const String homeIconBottom = '$_iconsPath/Home.svg';
-
-
 }
