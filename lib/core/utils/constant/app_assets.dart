@@ -25,6 +25,11 @@ class AppAssets {
   // Icons
   static const String homeIcon = '$_iconsPath/home.svg';
   static const String notificationIcon = '$_iconsPath/notification.svg';
+  static const String profileIcon = '$_iconsPath/profile.svg';
+
+  static const String home_outlined = '$_iconsPath/home_outline.svg';
+  static const String home_bold = '$_iconsPath/home_bold.svg';
+  static const String agreement = '$_iconsPath/agreement.svg';
 
   // Bottom Navigation Icons
   static const String homeIconBottom = '$_iconsPath/Home.svg';
