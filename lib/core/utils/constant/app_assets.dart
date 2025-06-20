@@ -12,7 +12,7 @@ class AppAssets {
   static const String splashImage = '$_imagesPath/splash_image.png';
 
   // Onboarding
-  static const String onboarding1 = '$_imagesPath/onboarding1.png';
+  static const String onboardingIllustration = '$_imagesPath/on_boarding.svg';
 
 
 

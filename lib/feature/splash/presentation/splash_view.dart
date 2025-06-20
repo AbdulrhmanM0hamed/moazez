@@ -17,7 +17,7 @@ class _SplashViewState extends State<SplashView> {
     // After the animation ends, you can navigate to the next screen.
     Future.delayed(const Duration(milliseconds: 1800), () {
       if (mounted) {
-        Navigator.of(context).pushReplacementNamed('/home');
+        Navigator.of(context).pushReplacementNamed('/onBoarding');
       }
     });
   }
