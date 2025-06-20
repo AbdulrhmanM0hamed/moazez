@@ -42,28 +42,33 @@ class _LoginViewState extends State<LoginView> {
         appBar: CustomAppBar(title: 'تسجيل الدخول'),
         body: BlocConsumer<LoginCubit, LoginState>(
           listener: (context, state) {
+            // First, handle hiding the loading indicator if it's showing.
+            // This should happen for both success and error states.
+            if (state is! LoginLoading && Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            }
+
+            // Now, handle the specific states
             if (state is LoginLoading) {
               showDialog(
                 context: context,
                 barrierDismissible: false,
-                builder: (_) => Center(child: const CustomProgressIndcator()),
+                builder: (_) => const Center(child: CustomProgressIndcator()),
               );
             } else if (state is LoginSuccess) {
-              if (Navigator.canPop(context)) {
-                Navigator.pop(context);
-              }
               CustomSnackbar.showSuccess(
                 context: context,
                 message: 'تم تسجيل الدخول بنجاح',
               );
-              // الانتقال بعد نصف ثانية لإتاحة ظهور الـ Snackbar
-              Future.delayed(const Duration(milliseconds: 600), () {
-                Navigator.of(context).pushReplacementNamed(HomeView.routeName);
+              // Delay navigation to allow the snackbar to be seen
+              Future.delayed(const Duration(milliseconds: 800), () {
+                if (context.mounted) {
+                  Navigator.of(
+                    context,
+                  ).pushReplacementNamed(HomeView.routeName);
+                }
               });
             } else if (state is LoginError) {
-              if (Navigator.canPop(context)) {
-                Navigator.pop(context);
-              }
               CustomSnackbar.showError(
                 context: context,
                 message: state.message,
@@ -92,7 +97,7 @@ class _LoginViewState extends State<LoginView> {
                         label: 'كلمة المرور',
                         obscureText: true,
                         prefix: const Icon(Icons.lock_outline),
-                        //        validator: FormValidators.validatePassword,
+                        validator: FormValidators.validatePasswordLogin,
                       ),
                       const SizedBox(height: 8),
                       Align(

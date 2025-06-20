@@ -23,7 +23,6 @@ class HomeTopSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const HomeHeader(),
-
           Text(
             'ابحث عن اتفاقياتك أو تابع تقدم مشاركيك لتحقيق أهدافهم',
             style: getRegularStyle(
@@ -37,7 +36,8 @@ class HomeTopSection extends StatelessWidget {
           CustomTextField(
             hint: 'ابحث...',
             prefix: const Icon(Icons.search),
-            fillColor: Colors.white,
+            fillColor: Theme.of(context).scaffoldBackgroundColor,
+            keyboardType: TextInputType.text,
             onSubmitted: (v) {},
             textAlign: TextAlign.right,
             textDirection: TextDirection.rtl,

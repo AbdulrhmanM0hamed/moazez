@@ -30,11 +30,7 @@ class OnboardingView extends StatelessWidget {
               Text(
                 'مرحباً بك في معزّز!\n\nهنا يلتقي الدعم بالإلتزام. قم بإبرام اتفاقياتك، اتبع عاداتك اليومية، واحصل على مكافأتك المستحقة سواءً كانت مادية أو معنوية.\n\nابدأ رحلتك الآن وصمِّم نجاحك بيدك.',
                 textAlign: TextAlign.center,
-                style: getMediumStyle(
-                  fontFamily: 'Cairo',
-                  fontSize: 18,
-                  color: AppColors.textPrimary,
-                ),
+                style: getMediumStyle(fontFamily: 'Cairo', fontSize: 18),
               ),
               const SizedBox(height: 40),
               CustomButton(

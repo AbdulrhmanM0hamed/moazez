@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:moazez/core/utils/theme/app_colors.dart';
 
 class CustomProgressIndcator extends StatefulWidget {
   final double size;
