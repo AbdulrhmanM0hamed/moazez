@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:moazez/core/utils/theme/app_theme.dart';
 import 'feature/splash/presentation/splash_view.dart';
 import 'core/utils/helper/on_genrated_routes.dart';
@@ -18,6 +19,13 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
+      supportedLocales: const [Locale('ar')],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+
       debugShowCheckedModeBanner: false,
       initialRoute: SplashView.routeName,
       onGenerateRoute: onGenratedRoutes,

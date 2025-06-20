@@ -4,6 +4,7 @@ import 'package:moazez/core/utils/common/custom_button.dart';
 import 'package:moazez/core/utils/constant/app_assets.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
+import 'package:moazez/feature/auth/presentation/pages/login_view.dart';
 
 class OnboardingView extends StatelessWidget {
   const OnboardingView({Key? key}) : super(key: key);
@@ -39,7 +40,9 @@ class OnboardingView extends StatelessWidget {
               CustomButton(
                 text: 'ابدأ',
                 onPressed: () {
-                  Navigator.of(context).pushReplacementNamed('/home');
+                  Navigator.of(
+                    context,
+                  ).pushReplacementNamed(LoginView.routeName);
                 },
                 backgroundColor: AppColors.primary,
               ),
