@@ -90,8 +90,10 @@ class ProgressChart extends StatelessWidget {
                                         begin: Alignment.bottomCenter,
                                         end: Alignment.topCenter,
                                         colors: [
+                                          AppColors.primary.withValues(
+                                            alpha: 0.4,
+                                          ),
                                           AppColors.primary,
-                                          AppColors.primary.withOpacity(0.4),
                                         ],
                                       ),
                                       borderRadius: BorderRadius.circular(6),
@@ -145,7 +147,7 @@ class _ChartGridPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint =
         Paint()
-          ..color = Colors.grey.withOpacity(0.2)
+          ..color = Colors.grey.withValues(alpha: 0.2)
           ..strokeWidth = 1;
 
     // draw horizontal grid lines each 20%

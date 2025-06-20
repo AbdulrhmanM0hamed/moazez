@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moazez/core/utils/theme/app_colors.dart';
 
 class CustomProgressIndcator extends StatefulWidget {
   final double size;
@@ -8,7 +9,7 @@ class CustomProgressIndcator extends StatefulWidget {
   const CustomProgressIndcator({
     super.key,
     this.size = 50.0,
-    this.color = const Color(0xFF183153),
+    this.color = const Color.fromARGB(255, 4, 190, 223),
     // Slower animation for better UX
     this.speed = const Duration(milliseconds: 1200),
   });
