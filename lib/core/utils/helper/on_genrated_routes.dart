@@ -12,8 +12,8 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const SplashView());
     case OnboardingView.routeName:
       return MaterialPageRoute(builder: (context) => const OnboardingView());
-    case RegisterView.routeName:
-      return MaterialPageRoute(builder: (context) => const RegisterView());
+    case SignUpView.routeName:
+        return MaterialPageRoute(builder: (_) => const SignUpView());
     case LoginView.routeName:
       return MaterialPageRoute(builder: (context) => const LoginView());
     case CompleteProfileView.routeName:

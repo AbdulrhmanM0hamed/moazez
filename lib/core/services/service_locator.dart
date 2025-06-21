@@ -9,7 +9,11 @@ import 'package:moazez/feature/auth/data/datasources/auth_remote_data_source.dar
 import 'package:moazez/feature/auth/data/repositories/auth_repository_impl.dart';
 import 'package:moazez/feature/auth/domain/repositories/auth_repository.dart';
 import 'package:moazez/feature/auth/domain/usecases/login_usecase.dart';
+import 'package:moazez/feature/auth/domain/usecases/logout_usecase.dart';
+import 'package:moazez/feature/auth/domain/usecases/register_usecase.dart';
 import 'package:moazez/feature/auth/presentation/cubit/login/login_cubit.dart';
+import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
+import 'package:moazez/feature/auth/presentation/cubit/register/register_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
@@ -21,24 +25,24 @@ Future<void> init() async {
 
   // Blocs & Cubits
   sl.registerFactory(() => LoginCubit(loginUseCase: sl()));
+  sl.registerFactory(() => RegisterCubit(registerUseCase: sl()));
+  sl.registerFactory(() => LogoutCubit(cacheHelper: sl(), logoutUseCase: sl()));
 
   // Use cases
   sl.registerLazySingleton(() => LoginUseCase(sl()));
+  sl.registerLazySingleton(() => RegisterUseCase(sl()));
+  sl.registerLazySingleton(() => LogoutUseCase(sl()));
+  
 
   // Repository
   sl.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(
-      remoteDataSource: sl(),
-      cacheService: sl(),
-      networkInfo: sl(),
-    ),
+    () => AuthRepositoryImpl(remoteDataSource: sl()),
   );
 
   // Data sources
   sl.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(dio: sl()),
   );
-  
 
   //############################################################################
   //                                Core

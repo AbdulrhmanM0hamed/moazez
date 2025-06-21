@@ -50,13 +50,12 @@ class InviteParticipantsSection extends StatelessWidget {
                         0.4,
                         0.3,
                         0.9,
-                       
                       ];
                       return Container(
                         width: 12,
                         height: chartHeight * heights[index],
                         decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.2),
+                          color: Colors.grey.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(6),
                         ),
                       );

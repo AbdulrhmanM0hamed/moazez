@@ -85,7 +85,7 @@ class HomeViewBody extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           const ParticipantsSection(),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           const InviteParticipantsSection(),
         ],
       ),

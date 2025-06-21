@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moazez/core/services/cache/cache_service.dart';
+import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/common/custom_button.dart';
 import 'package:moazez/core/utils/constant/app_assets.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
@@ -35,10 +37,12 @@ class OnboardingView extends StatelessWidget {
               const SizedBox(height: 40),
               CustomButton(
                 text: 'ابدأ',
-                onPressed: () {
-                  Navigator.of(
-                    context,
-                  ).pushReplacementNamed(LoginView.routeName);
+                onPressed: () async {
+                  await sl<CacheService>().setIsFirstTime(false);
+                  if (context.mounted) {
+                    Navigator.of(context)
+                        .pushReplacementNamed(LoginView.routeName);
+                  }
                 },
                 backgroundColor: AppColors.primary,
               ),

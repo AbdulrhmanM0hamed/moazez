@@ -1,9 +1,16 @@
+import 'package:dio/dio.dart';
+
 class ServerException implements Exception {
-  final String message;
+  final String? message;
 
   ServerException({
     this.message = 'حدث خطأ في الخادم',
   });
+
+  factory ServerException.fromDioException(DioException dioException) {
+    // TODO: Add more specific error handling based on dioException.type
+    return ServerException(message: dioException.message);
+  }
 }
 
 class UnauthorizedException implements Exception {

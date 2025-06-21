@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moazez/core/utils/constant/app_assets.dart';
 import 'package:moazez/feature/home/presentation/widgets/home_view_body.dart';
 import 'package:moazez/feature/home/presentation/view/agreements_view.dart';
-import 'package:moazez/feature/home/presentation/view/account_view.dart';
+import 'package:moazez/feature/profile/presentation/view/account_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});

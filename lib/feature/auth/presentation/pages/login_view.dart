@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
+import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/common/custom_button.dart';
 import 'package:moazez/core/utils/common/custom_text_field.dart';
@@ -56,6 +57,13 @@ class _LoginViewState extends State<LoginView> {
                 builder: (_) => const Center(child: CustomProgressIndcator()),
               );
             } else if (state is LoginSuccess) {
+              // Save credentials for future auto-fill / remember me functionality
+              final cache = sl<CacheService>();
+              cache.setRememberMe(true);
+              cache.saveLoginCredentials(
+                _emailController.text.trim(),
+                _passwordController.text,
+              );
               CustomSnackbar.showSuccess(
                 context: context,
                 message: 'تم تسجيل الدخول بنجاح',
@@ -138,7 +146,7 @@ class _LoginViewState extends State<LoginView> {
                             onPressed: () {
                               Navigator.of(
                                 context,
-                              ).pushReplacementNamed(RegisterView.routeName);
+                              ).pushReplacementNamed(SignUpView.routeName);
                             },
                             child: Text(
                               'إنشاء حساب',

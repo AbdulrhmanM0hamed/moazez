@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:moazez/core/services/cache/cache_service.dart';
+import 'package:moazez/core/services/service_locator.dart';
+import 'package:moazez/feature/onboarding/presentation/onboarding_view.dart';
+import 'package:moazez/feature/auth/presentation/pages/login_view.dart';
+import 'package:moazez/feature/home/presentation/view/home_view.dart';
 import '../../../core/utils/constant/app_assets.dart';
 import '../../../core/utils/animations/custom_animations.dart';
 
@@ -14,12 +19,29 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    // After the animation ends, you can navigate to the next screen.
-    Future.delayed(const Duration(milliseconds: 1800), () {
-      if (mounted) {
-        Navigator.of(context).pushReplacementNamed('/onBoarding');
-      }
-    });
+    _navigate();
+  }
+
+  Future<void> _navigate() async {
+    // Wait for splash animation
+    await Future.delayed(const Duration(milliseconds: 1800));
+
+    final cache = sl<CacheService>();
+    final bool isFirstTime = await cache.getIsFirstTime();
+    final String? token = await cache.getToken();
+
+    String route;
+    if (!isFirstTime && token != null) {
+      route = HomeView.routeName;
+    } else if (!isFirstTime) {
+      route = LoginView.routeName;
+    } else {
+      route = OnboardingView.routeName;
+    }
+
+    if (mounted) {
+      Navigator.of(context).pushReplacementNamed(route);
+    }
   }
 
   @override

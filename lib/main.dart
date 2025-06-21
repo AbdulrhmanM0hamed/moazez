@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/theme/app_theme.dart';
-import 'package:moazez/feature/auth/presentation/pages/login_view.dart';
+import 'package:moazez/feature/splash/presentation/splash_view.dart';
 import 'core/utils/helper/on_genrated_routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await init(); // setup service locator
+  await init();
   runApp(const MyApp());
 }
- 
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -31,7 +30,7 @@ class MyApp extends StatelessWidget {
       ],
 
       debugShowCheckedModeBanner: false,
-      initialRoute: LoginView.routeName,
+      initialRoute: SplashView.routeName,
       onGenerateRoute: onGenratedRoutes,
     );
   }
