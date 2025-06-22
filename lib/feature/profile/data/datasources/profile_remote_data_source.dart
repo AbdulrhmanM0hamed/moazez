@@ -3,7 +3,6 @@ import 'package:moazez/core/error/dio_exception_handler.dart';
 import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/utils/constant/api_endpoints.dart';
 import 'package:moazez/feature/profile/data/models/profile_model.dart';
-import 'dart:developer' as dev;
 
 abstract class ProfileRemoteDataSource {
   Future<UserProfile> getProfile();
@@ -18,13 +17,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<UserProfile> getProfile() async {
     try {
-      dev.log('Fetching profile...', name: 'ProfileRemoteDataSource');
       final token = await cacheService.getToken();
-      dev.log('Token: $token', name: 'ProfileRemoteDataSource');
       dio.options.headers['Authorization'] = 'Bearer $token';
-
       final response = await dio.get(ApiEndpoints.profile);
-      dev.log('Profile response status: ${response.statusCode}, body: ${response.data}', name: 'ProfileRemoteDataSource');
 
       final statusValue = response.data['status'];
       final isSuccess = statusValue == true || statusValue == 'success';
@@ -40,7 +35,6 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         );
       }
     } on DioException catch (e) {
-      dev.log('DioException caught: ${e.message}', error: e, name: 'ProfileRemoteDataSource');
       throw handleDioException(e);
     }
   }

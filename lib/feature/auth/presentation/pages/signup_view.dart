@@ -12,7 +12,7 @@ import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/feature/auth/presentation/cubit/register/register_cubit.dart';
 import 'package:moazez/feature/auth/presentation/pages/login_view.dart';
-import 'package:moazez/feature/home/presentation/view/home_view.dart';
+import 'package:moazez/feature/auth/presentation/pages/complete_profile_view.dart';
 
 class SignUpView extends StatelessWidget {
   static const String routeName = '/signup';
@@ -87,7 +87,14 @@ class _SignUpViewState extends State<_SignUpViewBody> {
                 Future.delayed(const Duration(seconds: 1), () {
                   if (mounted) {
                     Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => const HomeView()),
+                      MaterialPageRoute(
+                        builder: (context) => CompleteProfileView(
+                              signupData: {
+                                'name': _nameController.text,
+                                'email': _emailController.text,
+                                'phone': _phoneController.text,
+                              },
+                            )),
                       (route) => false,
                     );
                   }

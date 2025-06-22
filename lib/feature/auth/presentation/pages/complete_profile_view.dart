@@ -3,8 +3,13 @@ import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/common/custom_button.dart';
 import 'package:moazez/core/utils/common/custom_text_field.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moazez/feature/auth/presentation/cubit/complete_profile_cubit.dart';
+import 'package:moazez/feature/auth/domain/usecases/complete_profile_usecase.dart';
+import 'package:moazez/core/services/service_locator.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:moazez/feature/auth/data/models/area_city_static.dart';
 
 class CompleteProfileView extends StatefulWidget {
   static const String routeName = '/completeProfile';
@@ -21,18 +26,36 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
   String? _gender;
   DateTime? _birthDate;
   File? _avatarImage;
-  final _cityController = TextEditingController();
-  final _regionController = TextEditingController();
+  Area? _selectedArea;
+  City? _selectedCity;
 
   @override
   void dispose() {
-    _cityController.dispose();
-    _regionController.dispose();
+
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => sl<CompleteProfileCubit>(),
+      child: BlocListener<CompleteProfileCubit, CompleteProfileState>(
+        listener: (context, state) {
+          if (state is CompleteProfileSuccess) {
+            Navigator.of(context).pushReplacementNamed('/home');
+          } else if (state is CompleteProfileError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+        },
+        child: _buildBody(context),
+      ),
+    );
+  }
+
+  Widget _buildBody(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: 'استكمال البيانات'),
       body: SafeArea(
@@ -102,10 +125,13 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         // Adjust padding to make the field height similar to a TextField
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12.0,
+                          vertical: 8.0,
+                        ),
                       ),
                       child: Row(
-                        children:[
+                        children: [
                           Expanded(
                             child: RadioListTile<String>(
                               title: const Text('ذكر'),
@@ -161,25 +187,51 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                               : null,
                 ),
                 const SizedBox(height: 16),
-                CustomTextField(
-                  controller: _cityController,
-                  label: 'المدينة',
-                  prefix: const Icon(Icons.location_city_outlined),
-                  validator:
-                      (v) =>
-                          v == null || v.isEmpty ? 'يرجى إدخال المدينة' : null,
+                DropdownButtonFormField<Area>(
+                  decoration: const InputDecoration(
+                    labelText: 'المنطقة',
+                    border: OutlineInputBorder(),
+                  ),
+                  value: _selectedArea,
+                  items: kAreas
+                      .map((a) => DropdownMenuItem(value: a, child: Text(a.name)))
+                      .toList(),
+                  onChanged: (val) {
+                    setState(() {
+                      _selectedArea = val;
+                      _selectedCity = null;
+                    });
+                  },
+                  validator: (v) => v == null ? 'يرجى اختيار المنطقة' : null,
                 ),
                 const SizedBox(height: 16),
-                CustomTextField(
-                  controller: _regionController,
-                  label: 'المنطقة',
-                  prefix: const Icon(Icons.home_work_outlined),
-                  validator:
-                      (v) =>
-                          v == null || v.isEmpty ? 'يرجى إدخال المنطقة' : null,
+                const SizedBox(height: 16),
+                DropdownButtonFormField<City>(
+                  decoration: const InputDecoration(
+                    labelText: 'المدينة',
+                    border: OutlineInputBorder(),
+                  ),
+                  value: _selectedCity,
+                  items: (_selectedArea?.cities ?? [])
+                      .map((c) => DropdownMenuItem(value: c, child: Text(c.name)))
+                      .toList(),
+                  onChanged: (val) {
+                    setState(() {
+                      _selectedCity = val;
+                    });
+                  },
+                  validator: (v) => v == null ? 'يرجى اختيار المدينة' : null,
                 ),
                 const SizedBox(height: 32),
-                CustomButton(text: 'تأكيد', onPressed: _onFinish),
+                BlocBuilder<CompleteProfileCubit, CompleteProfileState>(
+                  builder: (context, state) {
+                    final loading = state is CompleteProfileLoading;
+                    return CustomButton(
+                      text: loading ? 'جارٍ الإرسال...' : 'تأكيد',
+                      onPressed: loading ? null : () => _onFinish(context),
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -196,6 +248,7 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
     );
     if (pickedFile != null) {
       setState(() => _avatarImage = File(pickedFile.path));
+      debugPrint('Picked image path: \\${pickedFile.path}');
     }
   }
 
@@ -211,10 +264,19 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
     }
   }
 
-  void _onFinish() {
+  void _onFinish(BuildContext context) {
     if (_formKey.currentState?.validate() ?? false) {
       // Combine data and navigate further or show success
-      Navigator.of(context).pushReplacementNamed('/home');
+      debugPrint('Submitting CompleteProfile with avatarPath: \\${_avatarImage?.path}');
+      context.read<CompleteProfileCubit>().submit(
+        CompleteProfileParams(
+          areaId: _selectedArea!.id,
+          cityId: _selectedCity!.id,
+          gender: _gender!,
+          birthdate: _birthDate!,
+          avatarPath: _avatarImage?.path,
+        ),
+      );
     }
   }
 }

@@ -1,8 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moazez/core/error/failures.dart';
+import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/feature/auth/domain/entities/auth_entity.dart';
 import 'package:moazez/feature/auth/domain/repositories/auth_repository.dart';
+import 'package:moazez/core/services/service_locator.dart';
 
 class RegisterUseCase {
   final AuthRepository repository;
@@ -10,7 +12,11 @@ class RegisterUseCase {
   RegisterUseCase(this.repository);
 
   Future<Either<Failure, AuthEntity>> call(RegisterParams params) async {
-    return await repository.register(params);
+    final result = await repository.register(params);
+    result.fold((failure) {}, (authEntity) {
+      sl<CacheService>().saveToken(authEntity.token);
+    });
+    return result;
   }
 }
 

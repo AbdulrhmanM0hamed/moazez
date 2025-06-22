@@ -27,7 +27,7 @@ class UserProfile {
   final String name;
   final String email;
   final String? phone;
-  final String avatarUrl;
+  final String? avatarUrl;
   final String userType;
   final bool isActive;
   final String? gender;
@@ -41,7 +41,7 @@ class UserProfile {
     required this.name,
     required this.email,
     this.phone,
-    required this.avatarUrl,
+    this.avatarUrl,
     required this.userType,
     required this.isActive,
     this.gender,

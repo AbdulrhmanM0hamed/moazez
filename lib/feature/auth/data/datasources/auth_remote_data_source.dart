@@ -5,6 +5,8 @@ import 'package:moazez/core/utils/constant/api_endpoints.dart';
 import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/feature/auth/data/models/auth_model.dart';
+import 'package:moazez/feature/profile/data/models/profile_model.dart';
+import 'package:moazez/feature/auth/domain/usecases/complete_profile_usecase.dart';
 
 abstract class AuthRemoteDataSource {
   Future<AuthModel> login(String email, String password);
@@ -15,6 +17,7 @@ abstract class AuthRemoteDataSource {
     required String password,
   });
   Future<void> logout();
+  Future<UserProfile> completeProfile(CompleteProfileParams params);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -74,6 +77,41 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         throw ServerException(
           message: response.data['message'] ?? 'حدث خطأ غير معروف',
         );
+      }
+    } on DioException catch (e) {
+      throw handleDioException(e);
+    }
+  }
+
+  @override
+  Future<UserProfile> completeProfile(CompleteProfileParams params) async {
+    try {
+      final token = await sl<CacheService>().getToken();
+      final formMap = {
+        'area_id': params.areaId,
+        'city_id': params.cityId,
+        'gender': params.gender,
+        'birthdate': params.birthdate.toIso8601String(),
+      };
+      if (params.avatarPath != null) {
+        formMap['avatar'] = await MultipartFile.fromFile(
+          params.avatarPath!,
+          filename: params.avatarPath!.split('/').last,
+        );
+      }
+
+      final response = await dio.post(
+        ApiEndpoints.profile,
+        data: FormData.fromMap(formMap),
+        options: Options(headers: {
+          'Accept': 'application/json',
+          if (token != null) 'Authorization': 'Bearer $token',
+        }),
+      );
+      if (response.data['status'] == 'success' || response.data['status'] == true) {
+        return UserProfile.fromJson(response.data['data']['user']);
+      } else {
+        throw ServerException(message: response.data['message']);
       }
     } on DioException catch (e) {
       throw handleDioException(e);

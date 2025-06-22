@@ -14,6 +14,8 @@ import 'package:moazez/feature/auth/domain/usecases/register_usecase.dart';
 import 'package:moazez/feature/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
 import 'package:moazez/feature/auth/presentation/cubit/register/register_cubit.dart';
+import 'package:moazez/feature/auth/presentation/cubit/complete_profile_cubit.dart';
+import 'package:moazez/feature/auth/domain/usecases/complete_profile_usecase.dart';
 import 'package:moazez/feature/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:moazez/feature/profile/data/repositories/profile_repository_impl.dart';
 import 'package:moazez/feature/profile/domain/repositories/profile_repository.dart';
@@ -31,11 +33,13 @@ Future<void> init() async {
   // Blocs & Cubits
   sl.registerFactory(() => LoginCubit(loginUseCase: sl()));
   sl.registerFactory(() => RegisterCubit(registerUseCase: sl()));
+  sl.registerFactory(() => CompleteProfileCubit(sl()));
   sl.registerFactory(() => LogoutCubit(cacheHelper: sl(), logoutUseCase: sl()));
 
   // Use cases
   sl.registerLazySingleton(() => LoginUseCase(sl()));
   sl.registerLazySingleton(() => RegisterUseCase(sl()));
+  sl.registerLazySingleton(() => CompleteProfileUseCase(sl()));
   sl.registerLazySingleton(() => LogoutUseCase(sl()));
 
   // Repository

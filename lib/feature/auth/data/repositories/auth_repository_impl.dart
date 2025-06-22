@@ -5,10 +5,13 @@ import 'package:moazez/feature/auth/data/datasources/auth_remote_data_source.dar
 
 import 'package:moazez/feature/auth/data/models/auth_model.dart';
 import 'package:moazez/feature/auth/domain/repositories/auth_repository.dart';
+import 'package:moazez/feature/auth/domain/usecases/complete_profile_usecase.dart';
 import 'package:moazez/feature/auth/domain/usecases/register_usecase.dart';
+import 'package:moazez/feature/profile/data/models/profile_model.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;
+ 
 
   AuthRepositoryImpl({required this.remoteDataSource});
 
@@ -46,6 +49,18 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await remoteDataSource.logout();
       return const Right(null);
+    } on Failure catch (f) {
+      return Left(f);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message ?? 'حدث خطأ غير معروف'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserProfile>> completeProfile(CompleteProfileParams params) async {
+    try {
+      final result = await remoteDataSource.completeProfile(params);
+      return Right(result);
     } on Failure catch (f) {
       return Left(f);
     } on ServerException catch (e) {
