@@ -5,9 +5,7 @@ import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
 import 'package:moazez/feature/auth/presentation/pages/login_view.dart';
 
-/// A reusable widget that listens to [LogoutCubit] states and handles UI
-/// feedback such as loading indicator, success, and error snackbars.
-/// Wrap the part of the UI that should be overlaid with the loading dialog.
+
 class LogoutListener extends StatelessWidget {
   final Widget child;
 

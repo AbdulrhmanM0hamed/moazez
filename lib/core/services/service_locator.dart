@@ -14,6 +14,11 @@ import 'package:moazez/feature/auth/domain/usecases/register_usecase.dart';
 import 'package:moazez/feature/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
 import 'package:moazez/feature/auth/presentation/cubit/register/register_cubit.dart';
+import 'package:moazez/feature/profile/data/datasources/profile_remote_data_source.dart';
+import 'package:moazez/feature/profile/data/repositories/profile_repository_impl.dart';
+import 'package:moazez/feature/profile/domain/repositories/profile_repository.dart';
+import 'package:moazez/feature/profile/domain/usecases/get_profile_usecase.dart';
+import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
@@ -32,7 +37,6 @@ Future<void> init() async {
   sl.registerLazySingleton(() => LoginUseCase(sl()));
   sl.registerLazySingleton(() => RegisterUseCase(sl()));
   sl.registerLazySingleton(() => LogoutUseCase(sl()));
-  
 
   // Repository
   sl.registerLazySingleton<AuthRepository>(
@@ -43,6 +47,15 @@ Future<void> init() async {
   sl.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(dio: sl()),
   );
+
+  sl.registerLazySingleton<ProfileRemoteDataSource>(
+    () => ProfileRemoteDataSourceImpl(dio: sl(), cacheService: sl()),
+  );
+  sl.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepositoryImpl(remoteDataSource: sl()),
+  );
+  sl.registerLazySingleton(() => GetProfileUseCase(sl()));
+  sl.registerFactory(() => ProfileCubit(getProfileUseCase: sl()));
 
   //############################################################################
   //                                Core

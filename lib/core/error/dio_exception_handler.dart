@@ -6,44 +6,47 @@ Failure handleDioException(DioException e) {
     case DioExceptionType.connectionTimeout:
     case DioExceptionType.sendTimeout:
     case DioExceptionType.receiveTimeout:
+    case DioExceptionType.connectionError:
+    case DioExceptionType.unknown:
+    case DioExceptionType.badCertificate:
       return const NetworkFailure(
-        message: 'انتهت مهلة الاتصال. يرجى التحقق من اتصالك بالإنترنت',
+        message: 'لا يوجد اتصال بالانترنت او حدث خطأ فى الشبكة !',
       );
-    case DioExceptionType.badResponse:
-      switch (e.response?.statusCode) {
-        case 400: // Bad Request
-          return ServerFailure(
-            message: e.response?.data['message'] ?? 'طلب غير صالح',
-          );
-        case 401: // Unauthorized
-          return UnauthorizedFailure(
-            message:
-                e.response?.data['message'] ??
-                'بيانات الاعتماد المقدمة غير صحيحة',
-          );
-        case 404: // Not Found
-          return ServerFailure(message: 'المورد المطلوب غير موجود');
-        case 422: // Unprocessable Entity (Validation Error)
-          return ValidationFailure(
-            message: e.response?.data['message'] ?? 'خطأ في التحقق من البيانات',
-            validationErrors: e.response?.data['errors'],
-          );
-        case 429: // Unprocessable Entity (Validation Error)
-          return ValidationFailure(
-            message:
-                e.response?.data['message'] ?? 'عدد الطلبات المسموح بها انتهت',
-            validationErrors: e.response?.data['errors'],
-          );
-        case 500: // Internal Server Error
-        default:
-          return ServerFailure(message: 'حدث خطأ داخلي في الخادم');
-      }
+
     case DioExceptionType.cancel:
       return const ServerFailure(message: 'تم إلغاء الطلب');
-    case DioExceptionType.unknown:
+
+    case DioExceptionType.badResponse:
+      return _handleBadResponse(e);
+  }
+}
+
+Failure _handleBadResponse(DioException e) {
+  switch (e.response?.statusCode) {
+    case 400:
+      return ServerFailure(
+        message: e.response?.data['message'] ?? 'طلب غير صالح',
+      );
+    case 401:
+      return UnauthorizedFailure(
+        message:
+            e.response?.data['message'] ?? 'بيانات الاعتماد المقدمة غير صحيحة',
+      );
+    case 404:
+      return ServerFailure(message: 'المورد المطلوب غير موجود');
+    case 422:
+      return ValidationFailure(
+        message: e.response?.data['message'] ?? 'خطأ في التحقق من البيانات',
+        validationErrors: e.response?.data['errors'],
+      );
+    case 429:
+      return ValidationFailure(
+        message: e.response?.data['message'] ?? 'عدد الطلبات المسموح بها انتهت',
+        validationErrors: e.response?.data['errors'],
+      );
     default:
-      return const NetworkFailure(
-        message: 'لا يوجد اتصال بالإنترنت أو حدث خطأ في الشبكة',
+      return ServerFailure(
+        message: e.response?.data['message'] ?? 'حدث خطأ داخلي في الخادم',
       );
   }
 }

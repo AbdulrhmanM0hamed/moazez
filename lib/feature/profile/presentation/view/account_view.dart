@@ -5,6 +5,7 @@ import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
+import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/profile/presentation/widgets/logout_listener.dart';
 import 'package:moazez/feature/profile/presentation/widgets/profile_header_card.dart';
 import 'package:moazez/feature/profile/presentation/widgets/profile_menu_item.dart';
@@ -14,8 +15,11 @@ class AccountView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<LogoutCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => sl<LogoutCubit>()),
+        BlocProvider(create: (context) => sl<ProfileCubit>()..fetchProfile()),
+      ],
       child: const _AccountViewBody(),
     );
   }
@@ -46,9 +50,25 @@ class _AccountViewBody extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              const ProfileHeaderCard(
-                name: 'عبدالرحمن محمد',
-                email: 'a.mohamed@example.com',
+              BlocBuilder<ProfileCubit, ProfileState>(
+                builder: (context, state) {
+                  if (state is ProfileLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is ProfileLoaded) {
+                    return ProfileHeaderCard(
+                      name: state.userProfile.name,
+                      email: state.userProfile.email,
+                    );
+                  } else if (state is ProfileError) {
+                    print(state.message);
+                    return const Center(child: Text('حدث خطأ'));
+                  } else {
+                    return const ProfileHeaderCard(
+                      name: 'جار التحميل...',
+                      email: '...',
+                    );
+                  }
+                },
               ),
               const SizedBox(height: 24),
               _buildMenuItems(context),
