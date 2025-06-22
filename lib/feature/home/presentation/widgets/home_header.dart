@@ -19,28 +19,29 @@ class HomeHeader extends StatelessWidget {
           BlocBuilder<ProfileCubit, ProfileState>(
             builder: (context, state) {
               if (state is ProfileLoaded) {
-                final user = state.userProfile;
+                final user = state.profileResponse.data.user;
                 return Row(
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(32),
-                      child: user.avatarUrl != null && user.avatarUrl != ''
-                          ? Image.network(
-                              user.avatarUrl!,
-                              width: 56,
-                              height: 56,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.asset(
-                              'assets/images/avatar.jpg',
-                              width: 56,
-                              height: 56,
-                              fit: BoxFit.cover,
-                            ),
+                      child:
+                          user.avatarUrl != null && user.avatarUrl != ''
+                              ? Image.network(
+                                user.avatarUrl!,
+                                width: 56,
+                                height: 56,
+                                fit: BoxFit.cover,
+                              )
+                              : Image.asset(
+                                'assets/images/avatar.jpg',
+                                width: 56,
+                                height: 56,
+                                fit: BoxFit.cover,
+                              ),
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      'مرحبا ${user.name}',
+                      'هلا ${user.name}',
                       style: getBoldStyle(
                         color: AppColors.white,
                         fontFamily: FontConstant.cairo,
@@ -61,11 +62,7 @@ class HomeHeader extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    Container(
-                      width: 80,
-                      height: 18,
-                      color: Colors.grey[300],
-                    ),
+                    Container(width: 80, height: 18, color: Colors.grey[300]),
                   ],
                 );
               } else {

@@ -12,12 +12,12 @@ class ProfileInitial extends ProfileState {}
 class ProfileLoading extends ProfileState {}
 
 class ProfileLoaded extends ProfileState {
-  final UserProfile userProfile;
+  final ProfileResponse profileResponse;
 
-  const ProfileLoaded(this.userProfile);
+  const ProfileLoaded(this.profileResponse);
 
   @override
-  List<Object> get props => [userProfile];
+  List<Object> get props => [profileResponse];
 }
 
 class ProfileError extends ProfileState {

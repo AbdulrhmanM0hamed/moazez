@@ -6,6 +6,7 @@ import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/services/cache/cache_service_impl.dart';
 import 'package:moazez/core/utils/constant/api_endpoints.dart';
 import 'package:moazez/feature/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:moazez/feature/profile/domain/usecases/edit_profile_usecase.dart';
 import 'package:moazez/feature/auth/data/repositories/auth_repository_impl.dart';
 import 'package:moazez/feature/auth/domain/repositories/auth_repository.dart';
 import 'package:moazez/feature/auth/domain/usecases/login_usecase.dart';
@@ -59,7 +60,11 @@ Future<void> init() async {
     () => ProfileRepositoryImpl(remoteDataSource: sl()),
   );
   sl.registerLazySingleton(() => GetProfileUseCase(sl()));
-  sl.registerFactory(() => ProfileCubit(getProfileUseCase: sl()));
+  sl.registerLazySingleton(() => EditProfileUseCase(repository: sl()));
+  sl.registerFactory(() => ProfileCubit(
+    getProfileUseCase: sl(),
+    editProfileUseCase: sl(),
+  ));
 
   //############################################################################
   //                                Core

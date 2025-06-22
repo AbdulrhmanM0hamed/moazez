@@ -54,7 +54,7 @@ class _AccountViewBody extends StatelessWidget {
             if (state is ProfileLoading) {
               return const ProfileShimmer();
             } else if (state is ProfileLoaded) {
-              return _buildProfileContent(context, state.userProfile);
+              return _buildProfileContent(context, state.profileResponse.data.user);
             } else if (state is ProfileError) {
               return Center(
                 child: Column(
