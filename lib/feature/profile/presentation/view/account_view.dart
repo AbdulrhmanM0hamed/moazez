@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/services/service_locator.dart';
-import 'package:moazez/core/utils/constant/font_manger.dart';
-import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
+import 'package:moazez/feature/profile/data/models/profile_model.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
+import 'package:moazez/feature/profile/presentation/widgets/info_card.dart';
 import 'package:moazez/feature/profile/presentation/widgets/logout_listener.dart';
-import 'package:moazez/feature/profile/presentation/widgets/profile_header_card.dart';
-import 'package:moazez/feature/profile/presentation/widgets/profile_menu_item.dart';
+import 'package:moazez/feature/profile/presentation/widgets/menu_items_card.dart';
+import 'package:moazez/feature/profile/presentation/widgets/profile_header.dart';
+import 'package:moazez/feature/profile/presentation/widgets/profile_shimmer.dart';
+import 'package:moazez/feature/profile/presentation/widgets/role_switcher.dart';
 
 class AccountView extends StatelessWidget {
   const AccountView({super.key});
@@ -34,92 +36,59 @@ class _AccountViewBody extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.scaffoldBackground,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: AppColors.scaffoldBackground,
           elevation: 0,
-          title: Text(
+          title: const Text(
             'حسابي',
-            style: getBoldStyle(
+            style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 20,
-              fontFamily: FontConstant.cairo,
+              fontWeight: FontWeight.bold,
             ),
           ),
           centerTitle: true,
         ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              BlocBuilder<ProfileCubit, ProfileState>(
-                builder: (context, state) {
-                  if (state is ProfileLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is ProfileLoaded) {
-                    return ProfileHeaderCard(
-                      name: state.userProfile.name,
-                      email: state.userProfile.email,
-                    );
-                  } else if (state is ProfileError) {
-                    print(state.message);
-                    return const Center(child: Text('حدث خطأ'));
-                  } else {
-                    return const ProfileHeaderCard(
-                      name: 'جار التحميل...',
-                      email: '...',
-                    );
-                  }
-                },
-              ),
-              const SizedBox(height: 24),
-              _buildMenuItems(context),
-            ],
-          ),
+        body: BlocBuilder<ProfileCubit, ProfileState>(
+          builder: (context, state) {
+            if (state is ProfileLoading) {
+              return const ProfileShimmer();
+            } else if (state is ProfileLoaded) {
+              return _buildProfileContent(context, state.userProfile);
+            } else if (state is ProfileError) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(state.message, style: const TextStyle(color: AppColors.textSecondary)),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => context.read<ProfileCubit>().fetchProfile(),
+                      child: const Text('إعادة المحاولة'),
+                    ),
+                  ],
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          },
         ),
       ),
     );
   }
 
-  Widget _buildMenuItems(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
+  Widget _buildProfileContent(BuildContext context, UserProfile user) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          ProfileMenuItem(
-            title: 'الملف الشخصي',
-            icon: Icons.person_outline,
-            onTap: () {},
-          ),
-          const Divider(height: 1, indent: 16, endIndent: 16),
-          ProfileMenuItem(
-            title: 'مكافآتك',
-            icon: Icons.card_giftcard_outlined,
-            onTap: () {},
-          ),
-          const Divider(height: 1, indent: 16, endIndent: 16),
-          ProfileMenuItem(
-            title: 'الإعدادات',
-            icon: Icons.settings_outlined,
-            onTap: () {},
-          ),
-          const Divider(height: 1, indent: 16, endIndent: 16),
-          ProfileMenuItem(
-            title: 'الدعم والمساعدة',
-            icon: Icons.help_outline,
-            onTap: () {},
-          ),
-          const SizedBox(height: 16),
-          ProfileMenuItem(
-            title: 'تسجيل الخروج',
-            icon: Icons.logout,
-            isLogout: true,
-            onTap: () {
-              context.read<LogoutCubit>().logout();
-            },
-          ),
+          ProfileHeader(user: user),
+          const SizedBox(height: 24),
+          const RoleSwitcher(),
+          const SizedBox(height: 24),
+          InfoCard(user: user),
+          const SizedBox(height: 24),
+          const MenuItemsCard(),
         ],
       ),
     );

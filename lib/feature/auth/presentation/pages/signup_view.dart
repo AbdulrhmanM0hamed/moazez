@@ -55,11 +55,11 @@ class _SignUpViewState extends State<_SignUpViewBody> {
   void _onContinue() {
     if (_formKey.currentState?.validate() ?? false) {
       context.read<RegisterCubit>().register(
-            name: _nameController.text,
-            email: _emailController.text,
-            phone: _phoneController.text,
-            password: _passwordController.text,
-          );
+        name: _nameController.text,
+        email: _emailController.text,
+        phone: _phoneController.text,
+        password: _passwordController.text,
+      );
     }
   }
 
@@ -83,25 +83,31 @@ class _SignUpViewState extends State<_SignUpViewBody> {
               }
               if (state is RegisterSuccess) {
                 CustomSnackbar.showSuccess(
-                    context: context, message: 'تم تسجيل حسابك بنجاح!');
+                  context: context,
+                  message: 'تم تسجيل حسابك بنجاح!',
+                );
                 Future.delayed(const Duration(seconds: 1), () {
                   if (mounted) {
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
-                        builder: (context) => CompleteProfileView(
+                        builder:
+                            (context) => CompleteProfileView(
                               signupData: {
                                 'name': _nameController.text,
                                 'email': _emailController.text,
                                 'phone': _phoneController.text,
                               },
-                            )),
+                            ),
+                      ),
                       (route) => false,
                     );
                   }
                 });
               } else if (state is RegisterError) {
                 CustomSnackbar.showError(
-                    context: context, message: state.message);
+                  context: context,
+                  message: state.message,
+                );
                 print(state.message);
               }
             }
@@ -146,15 +152,15 @@ class _SignUpViewState extends State<_SignUpViewBody> {
                     PasswordField(
                       controller: _confirmPasswordController,
                       hintText: 'تأكيد كلمة المرور',
-                      validator: (value) =>
-                          FormValidators.validateConfirmPassword(
-                        value,
-                        _passwordController.text,
-                      ),
+                      validator:
+                          (value) => FormValidators.validateConfirmPassword(
+                            value,
+                            _passwordController.text,
+                          ),
                     ),
                     const SizedBox(height: 32),
                     CustomButton(
-                      text: 'متابعة',
+                      text: 'إنشاء حساب',
                       onPressed: state is RegisterLoading ? null : _onContinue,
                     ),
                     const SizedBox(height: 24),
@@ -170,8 +176,9 @@ class _SignUpViewState extends State<_SignUpViewBody> {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context)
-                                .pushReplacementNamed(LoginView.routeName);
+                            Navigator.of(
+                              context,
+                            ).pushReplacementNamed(LoginView.routeName);
                           },
                           child: Text(
                             'تسجيل الدخول',
