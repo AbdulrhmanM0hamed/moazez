@@ -11,11 +11,17 @@ class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit({required this.getProfileUseCase}) : super(ProfileInitial());
 
   Future<void> fetchProfile() async {
+    if (isClosed) return;
     emit(ProfileLoading());
     final failureOrProfile = await getProfileUseCase();
+    if (isClosed) return;
     failureOrProfile.fold(
-      (failure) => emit(ProfileError(failure.message)),
-      (userProfile) => emit(ProfileLoaded(userProfile)),
+      (failure) {
+        if (!isClosed) emit(ProfileError(failure.message));
+      },
+      (userProfile) {
+        if (!isClosed) emit(ProfileLoaded(userProfile));
+      },
     );
   }
 }

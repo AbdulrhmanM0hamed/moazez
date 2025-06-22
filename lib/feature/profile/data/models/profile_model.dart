@@ -4,9 +4,7 @@ class ProfileResponse {
   ProfileResponse({required this.data});
 
   factory ProfileResponse.fromJson(Map<String, dynamic> json) {
-    return ProfileResponse(
-      data: ProfileData.fromJson(json['data']),
-    );
+    return ProfileResponse(data: ProfileData.fromJson(json['data']));
   }
 }
 
@@ -16,9 +14,7 @@ class ProfileData {
   ProfileData({required this.user});
 
   factory ProfileData.fromJson(Map<String, dynamic> json) {
-    return ProfileData(
-      user: UserProfile.fromJson(json['user']),
-    );
+    return ProfileData(user: UserProfile.fromJson(json['user']));
   }
 }
 
@@ -27,6 +23,7 @@ class UserProfile {
   final String name;
   final String email;
   final String? phone;
+  final String? avatar;
   final String? avatarUrl;
   final String userType;
   final bool isActive;
@@ -41,6 +38,7 @@ class UserProfile {
     required this.name,
     required this.email,
     this.phone,
+    this.avatar,
     this.avatarUrl,
     required this.userType,
     required this.isActive,
@@ -57,6 +55,7 @@ class UserProfile {
       name: json['name'],
       email: json['email'],
       phone: json['phone'],
+      avatar: json['avatar'],
       avatarUrl: json['avatar_url'],
       userType: json['user_type'],
       isActive: json['is_active'],
@@ -64,9 +63,10 @@ class UserProfile {
       birthdate: json['birthdate'],
       area: json['area'] != null ? Area.fromJson(json['area']) : null,
       city: json['city'] != null ? City.fromJson(json['city']) : null,
-      activeSubscription: json['active_subscription'] != null
-          ? ActiveSubscription.fromJson(json['active_subscription'])
-          : null,
+      activeSubscription:
+          json['active_subscription'] != null
+              ? ActiveSubscription.fromJson(json['active_subscription'])
+              : null,
     );
   }
 }
@@ -78,10 +78,7 @@ class Area {
   Area({required this.id, required this.name});
 
   factory Area.fromJson(Map<String, dynamic> json) {
-    return Area(
-      id: json['id'],
-      name: json['name'],
-    );
+    return Area(id: json['id'], name: json['name']);
   }
 }
 
@@ -92,10 +89,7 @@ class City {
   City({required this.id, required this.name});
 
   factory City.fromJson(Map<String, dynamic> json) {
-    return City(
-      id: json['id'],
-      name: json['name'],
-    );
+    return City(id: json['id'], name: json['name']);
   }
 }
 
