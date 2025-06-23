@@ -1,0 +1,116 @@
+import 'package:flutter/material.dart';
+import 'package:moazez/core/utils/theme/app_colors.dart';
+import 'package:moazez/feature/home/presentation/widgets/create_team_section.dart';
+import 'package:moazez/feature/home/presentation/widgets/home_top_section.dart';
+import 'package:moazez/feature/home/presentation/widgets/invite_participants_section.dart';
+import 'package:moazez/feature/home/presentation/widgets/trial_package_status.dart';
+import 'package:moazez/feature/home/presentation/widgets/progress_chart.dart';
+import 'package:moazez/feature/packages/presentation/cubit/packages_state.dart';
+import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
+import 'package:moazez/feature/home/presentation/cubit/team_state.dart';
+
+class PackagesView extends StatelessWidget {
+  final ProfileLoaded profileState;
+  final PackagesLoaded packagesState;
+  final TeamState teamState;
+
+  const PackagesView({
+    super.key,
+    required this.profileState,
+    required this.packagesState,
+    required this.teamState,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // ScrollController for CustomScrollView
+    final ScrollController scrollController = ScrollController();
+
+    // Check if the active subscription package name is "الباقة التجريبية"
+    bool showTrialPackageStatus =
+        profileState
+            .profileResponse
+            ?.data
+            ?.user
+            ?.activeSubscription
+            ?.packageName ==
+        "الباقة التجريبية";
+
+    // Determine if user owns a team based on team state
+    bool ownsTeam = false;
+    if (teamState is TeamLoaded) {
+      final loadedState = teamState as TeamLoaded;
+      ownsTeam = loadedState.team.isOwner ?? false;
+    } else if (teamState is TeamError) {
+      final errorState = teamState as TeamError;
+      ownsTeam = errorState.message.contains("تم جلب فريقك الذي تملكه بنجاح");
+    }
+
+    return CustomScrollView(
+      controller: scrollController,
+      slivers: [
+        const SliverToBoxAdapter(child: HomeTopSection()),
+        const SliverToBoxAdapter(child: SizedBox(height: 16)),
+        if (showTrialPackageStatus)
+          const SliverToBoxAdapter(child: TrialPackageStatus()),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          sliver: SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: const [
+                    Icon(
+                      Icons.bar_chart_rounded,
+                      size: 24,
+                      color: AppColors.primary,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      'تقدم المشاركين',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                if (ownsTeam && teamState is TeamLoaded && (teamState as TeamLoaded).team.membersCount != null && (teamState as TeamLoaded).team.membersCount! > 0)
+                  ProgressChart(
+                    items: const [
+                      ParticipantProgress(
+                        percent: 0.8,
+                        avatarPath: 'assets/images/avatar.jpg',
+                      ),
+                      ParticipantProgress(
+                        percent: 0.6,
+                        avatarPath: 'assets/images/avatar.jpg',
+                      ),
+                      ParticipantProgress(
+                        percent: 1.0,
+                        avatarPath: 'assets/images/avatar.jpg',
+                      ),
+                      ParticipantProgress(
+                        percent: 0.4,
+                        avatarPath: 'assets/images/avatar.jpg',
+                      ),
+                      ParticipantProgress(
+                        percent: 0.9,
+                        avatarPath: 'assets/images/avatar.jpg',
+                      ),
+                    ],
+                  )
+                else if (ownsTeam)
+                  const InviteParticipantsSection()
+                else
+                  const CreateTeamSection()
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

@@ -11,7 +11,7 @@ class InviteParticipantsSection extends StatelessWidget {
     const double chartHeight = 120;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(20),
@@ -90,9 +90,10 @@ class InviteParticipantsSection extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 60),
                       child: CustomButton(
                         onPressed: () {
-                          // TODO: Implement invite action
+                          // TODO: Navigate to a view for sending invitations to participants
+                          // This should be updated to the correct page for inviting participants
                         },
-                        text: 'إرسال دعوة',
+                        text: 'دعوة المشاركين',
                       ),
                     ),
                   ],

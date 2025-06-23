@@ -6,6 +6,11 @@ import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/services/cache/cache_service_impl.dart';
 import 'package:moazez/core/utils/constant/api_endpoints.dart';
 import 'package:moazez/feature/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:moazez/feature/home/data/datasources/team_remote_data_source.dart';
+import 'package:moazez/feature/home/data/repositories/team_repository_impl.dart';
+import 'package:moazez/feature/home/domain/repositories/team_repository.dart';
+import 'package:moazez/feature/home/domain/usecases/get_team_info_usecase.dart';
+import 'package:moazez/feature/home/presentation/cubit/team_cubit.dart';
 import 'package:moazez/feature/profile/domain/usecases/edit_profile_usecase.dart';
 import 'package:moazez/feature/auth/data/repositories/auth_repository_impl.dart';
 import 'package:moazez/feature/auth/domain/repositories/auth_repository.dart';
@@ -114,4 +119,25 @@ Future<void> init() async {
     ));
 
   sl.registerFactory(() => PackagesCubit(sl()));
+
+  //############################################################################
+  //                           Features - Team
+  //############################################################################
+
+  sl.registerLazySingleton<TeamRemoteDataSource>(() => 
+    TeamRemoteDataSourceImpl(dio: sl()));
+
+  sl.registerLazySingleton<TeamRepository>(() => 
+    TeamRepositoryImpl(
+      remoteDataSource: sl(),
+      networkInfo: sl(),
+    ));
+
+  sl.registerLazySingleton(() => GetTeamInfoUseCase(repository: sl()));
+  sl.registerLazySingleton(() => CreateTeamUseCase(repository: sl()));
+
+  sl.registerFactory(() => TeamCubit(
+    getTeamInfoUseCase: sl(),
+    createTeamUseCase: sl(),
+  ));
 }

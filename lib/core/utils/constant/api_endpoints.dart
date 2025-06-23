@@ -7,5 +7,7 @@ class ApiEndpoints {
   static const String profile = 'profile';
   static const String packages = 'packages';
   static const String trialPackage = 'trial-package';
+  static const String myTeam = 'my-team';
+  static const String createTeam = 'create-team';
 
 }
