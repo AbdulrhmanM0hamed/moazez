@@ -23,20 +23,6 @@ class SubscribedContent extends StatelessWidget {
     return CustomScrollView(
       controller: scrollController,
       slivers: [
-        // Trial Package
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 16,
-          ),
-          sliver: SliverToBoxAdapter(
-            child: PackageCard(
-              package: trialPackage,
-              isTrial: true,
-            ),
-          ),
-        ),
-
         // Progress Chart Section
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -82,22 +68,6 @@ class SubscribedContent extends StatelessWidget {
               ],
             ),
           ),
-        ),
-
-        // Paid Packages Section
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          sliver: SliverToBoxAdapter(
-            child: _buildSectionTitle(
-              'الباقات المدفوعة',
-              icon: Icons.workspace_premium_rounded,
-            ),
-          ),
-        ),
-
-        // Paid Packages Grid
-        PackagesGrid(
-          packages: packages,
         ),
       ],
     );
