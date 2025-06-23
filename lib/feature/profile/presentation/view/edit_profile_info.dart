@@ -30,7 +30,7 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
   final birthdateController = TextEditingController();
   String? _selectedBirthdate;
   Area? _selectedArea;
-  City? _selectedCity;
+  int? _selectedCityId;
   File? _avatarFile;
 
   @override
@@ -59,10 +59,11 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
         );
 
         if (_selectedArea != null && profile.city != null) {
-          _selectedCity = _selectedArea!.cities.firstWhere(
-            (city) => city.id == profile.city?.id,
-            orElse: () => City(id: 0, name: ''),
-          );
+          _selectedCityId = profile.city?.id;
+          // Validate if the selected city ID exists in the area's cities
+          if (_selectedCityId != null && !_selectedArea!.cities.any((city) => city.id == _selectedCityId)) {
+            _selectedCityId = null; // Reset if not found
+          }
         }
       }
     } finally {
@@ -97,7 +98,7 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
                     ? null
                     : birthdateController.text,
             areaId: _selectedArea?.id.toString(),
-            cityId: _selectedCity?.id.toString(),
+            cityId: _selectedCityId?.toString(),
             avatarPath: _avatarFile?.path,
           ),
         );
@@ -365,14 +366,13 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
                           onChanged: (value) {
                             setState(() {
                               _selectedArea = value;
-                              _selectedCity =
-                                  null; // Reset city when area changes
+                              _selectedCityId = null; // Reset city when area changes
                             });
                           },
                         ),
                         const SizedBox(height: 16),
-                        DropdownButtonFormField<City>(
-                          value: _selectedCity,
+                        DropdownButtonFormField<int>(
+                          value: _selectedCityId,
                           decoration: InputDecoration(
                             labelText: 'المدينة',
                             prefixIcon: const Icon(Icons.location_city),
@@ -393,19 +393,35 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
                               ),
                             ),
                           ),
-                          items:
-                              _selectedArea?.cities
+                          items: _selectedArea != null
+                              ? _selectedArea!.cities
+                                  .fold<Map<int, City>>({}, (map, city) {
+                                    if (!map.containsKey(city.id)) {
+                                      map[city.id] = city;
+                                    }
+                                    return map;
+                                  })
+                                  .values
                                   .map(
                                     (city) => DropdownMenuItem(
-                                      value: city,
+                                      value: city.id,
                                       child: Text(city.name),
                                     ),
                                   )
-                                  .toList() ??
-                              [],
+                                  .toList()
+                              : [],
+                          // Add a validator to ensure the value exists in items (for debugging)
+                          validator: (value) {
+                            if (_selectedArea != null && value != null) {
+                              if (!_selectedArea!.cities.any((city) => city.id == value)) {
+                                return 'المدينة المحددة غير موجودة في هذه المنطقة';
+                              }
+                            }
+                            return null;
+                          },
                           onChanged: (value) {
                             setState(() {
-                              _selectedCity = value;
+                              _selectedCityId = value;
                             });
                           },
                         ),

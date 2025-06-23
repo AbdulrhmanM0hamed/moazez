@@ -6,7 +6,6 @@ import 'package:moazez/feature/home/presentation/widgets/fallback_subscribed_con
 import 'package:moazez/feature/home/presentation/widgets/home_top_section.dart';
 import 'package:moazez/feature/home/presentation/widgets/non_subscribed_content.dart';
 import 'package:moazez/feature/home/presentation/widgets/subscribed_content.dart';
-import 'package:moazez/feature/packages/domain/models/package_entity.dart';
 import 'package:moazez/feature/packages/presentation/cubit/packages_cubit.dart';
 import 'package:moazez/feature/packages/presentation/cubit/packages_state.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';

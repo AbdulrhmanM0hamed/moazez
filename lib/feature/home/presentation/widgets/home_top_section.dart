@@ -35,7 +35,7 @@ class HomeTopSection extends StatelessWidget {
           // Search field
           CustomTextField(
             hint: 'ابحث...',
-            prefix: const Icon(Icons.search),
+            prefix: const Icon(Icons.search, size: 18, color: AppColors.textSecondary),
             fillColor: Theme.of(context).scaffoldBackgroundColor,
             keyboardType: TextInputType.text,
             onSubmitted: (v) {},

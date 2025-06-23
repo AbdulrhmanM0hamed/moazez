@@ -3,8 +3,6 @@ import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/home/presentation/widgets/participants_section.dart';
 import 'package:moazez/feature/home/presentation/widgets/progress_chart.dart';
 import 'package:moazez/feature/packages/domain/models/package_entity.dart';
-import 'package:moazez/feature/packages/presentation/widgets/package_card.dart';
-import 'package:moazez/feature/packages/presentation/widgets/packages_grid.dart';
 
 class SubscribedContent extends StatelessWidget {
   final PackageEntity trialPackage;
