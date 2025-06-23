@@ -1,93 +1,121 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
+import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/home/presentation/widgets/home_top_section.dart';
-import 'package:moazez/feature/home/presentation/widgets/invite_participants_section.dart';
-import 'package:moazez/feature/home/presentation/widgets/progress_chart.dart';
-import 'package:moazez/feature/home/presentation/widgets/participants_section.dart';
+import 'package:moazez/feature/home/presentation/widgets/non_subscribed_content.dart';
+import 'package:moazez/feature/home/presentation/widgets/subscribed_content.dart';
+import 'package:moazez/feature/packages/presentation/cubit/packages_cubit.dart';
+import 'package:moazez/feature/packages/presentation/cubit/packages_state.dart';
+import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 
 class HomeViewBody extends StatelessWidget {
   const HomeViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const HomeTopSection(),
-          const SizedBox(height: 24),
-          // dummy data
-          const ProgressChart(
-            items: [
-              ParticipantProgress(
-                percent: 1,
-                avatarPath: 'assets/images/avatar.jpg',
-              ),
-              ParticipantProgress(
-                percent: 0.6,
-                avatarPath: 'assets/images/avatar.jpg',
-              ),
-              ParticipantProgress(
-                percent: 0.4,
-                avatarPath: 'assets/images/avatar.jpg',
-              ),
-              ParticipantProgress(
-                percent: 0.8,
-                avatarPath: 'assets/images/avatar.jpg',
-              ),
-              ParticipantProgress(
-                percent: 0.7,
-                avatarPath: 'assets/images/avatar.jpg',
-              ),
-              ParticipantProgress(
-                percent: 0.2  ,
-                avatarPath: 'assets/images/avatar.jpg',
-              ),
-              ParticipantProgress(
-                percent: 0.3,
-                avatarPath: 'assets/images/avatar.jpg',
-              ),
-              ParticipantProgress(
-                percent: 1.0,
-                avatarPath: 'assets/images/avatar.jpg',
-              ),
-              ParticipantProgress(
-                percent: 0.8,
-                avatarPath: 'assets/images/avatar.jpg',
-              ),
-              ParticipantProgress(
-                percent: 0.55,
-                avatarPath: 'assets/images/avatar.jpg',
-              ),
-              ParticipantProgress(
-                percent: 0.3,
-                avatarPath: 'assets/images/avatar.jpg',
-              ),
-              ParticipantProgress(
-                percent: 1.0,
-                avatarPath: 'assets/images/avatar.jpg',
-              ),
-              ParticipantProgress(
-                percent: 0.8,
-                avatarPath: 'assets/images/avatar.jpg',
-              ),
-              ParticipantProgress(
-                percent: 0.55,
-                avatarPath: 'assets/images/avatar.jpg',
-              ),
-              ParticipantProgress(
-                percent: 0.3,
-                avatarPath: 'assets/images/avatar.jpg',
-              ),
-              ParticipantProgress(
-                percent: 1.0,
-                avatarPath: 'assets/images/avatar.jpg',
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          const ParticipantsSection(),
-          const SizedBox(height: 8),
-          const InviteParticipantsSection(),
-        ],
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, profileState) {
+        if (profileState is ProfileLoading) {
+          return const LoadingView();
+        }
+        if (profileState is ProfileError) {
+          return ErrorView(message: profileState.message);
+        }
+        if (profileState is ProfileLoaded) {
+          return BlocBuilder<PackagesCubit, PackagesState>(
+            builder: (context, packagesState) {
+              if (packagesState is PackagesLoading) {
+                return const LoadingView();
+              }
+              if (packagesState is PackagesError) {
+                return ErrorView(message: packagesState.message);
+              }
+              if (packagesState is PackagesLoaded) {
+                return _buildPackagesView(
+                  context,
+                  profileState,
+                  packagesState,
+                );
+              }
+              return const SizedBox();
+            },
+          );
+        }
+        return const LoadingView();
+      },
+    );
+  }
+
+  Widget _buildPackagesView(
+    BuildContext context,
+    ProfileLoaded profileState,
+    PackagesLoaded packagesState,
+  ) {
+    // TODO: Update this with the correct logic to check subscription status
+    // Temporarily setting to false to display SubscriptionPrompt for testing
+    bool isSubscribed = false;
+    
+    // ScrollController for CustomScrollView
+    final ScrollController scrollController = ScrollController();
+    
+    // Callback to scroll down to trial package section
+    void scrollToTrialPackageSection() {
+      if (scrollController.hasClients) {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent * 0.5, // Adjust to scroll to an approximate position
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeOut,
+        );
+      }
+    }
+    
+    return Column(
+      children: [
+        const HomeTopSection(),
+        const SizedBox(height: 24),
+        Expanded(
+          child: isSubscribed
+              ? SubscribedContent(
+                  trialPackage: packagesState.trialPackage,
+                  packages: packagesState.packages,
+                )
+              : NonSubscribedContent(
+                  trialPackage: packagesState.trialPackage,
+                  packages: packagesState.packages,
+                  onSubscribePressed: scrollToTrialPackageSection,
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+class LoadingView extends StatelessWidget {
+  const LoadingView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CustomProgressIndcator(
+        size: 40,
+        color: AppColors.primary,
+      ),
+    );
+  }
+}
+
+class ErrorView extends StatelessWidget {
+  final String message;
+
+  const ErrorView({super.key, required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        message,
+        style: Theme.of(context).textTheme.bodyLarge,
       ),
     );
   }

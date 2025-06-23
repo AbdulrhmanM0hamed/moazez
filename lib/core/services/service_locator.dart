@@ -22,6 +22,10 @@ import 'package:moazez/feature/profile/data/repositories/profile_repository_impl
 import 'package:moazez/feature/profile/domain/repositories/profile_repository.dart';
 import 'package:moazez/feature/profile/domain/usecases/get_profile_usecase.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
+import 'package:moazez/feature/packages/data/datasources/packages_remote_data_source.dart';
+import 'package:moazez/feature/packages/data/repositories/packages_repository_impl.dart';
+import 'package:moazez/feature/packages/domain/repositories/packages_repository.dart';
+import 'package:moazez/feature/packages/presentation/cubit/packages_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
@@ -95,4 +99,19 @@ Future<void> init() async {
   });
 
   sl.registerLazySingleton(() => Connectivity());
+
+  //############################################################################
+  //                           Features - Packages
+  //############################################################################
+
+  sl.registerLazySingleton<PackagesRemoteDataSource>(() => 
+    PackagesRemoteDataSource(sl()));
+
+  sl.registerLazySingleton<PackagesRepository>(() => 
+    PackagesRepositoryImpl(
+      remoteDataSource: sl(),
+      networkInfo: sl(),
+    ));
+
+  sl.registerFactory(() => PackagesCubit(sl()));
 }

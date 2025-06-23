@@ -30,12 +30,12 @@ class ProfileHeader extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          user.name,
+          user.name ?? '',
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
         ),
         const SizedBox(height: 4),
         Text(
-          user.email,
+          user.email ?? '',
           style: const TextStyle(fontSize: 16, color: AppColors.textSecondary),
         ),
       ],
