@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moazez/core/utils/common/custom_button.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
-import 'package:moazez/feature/home/presentation/widgets/create_team_section.dart';
 import 'package:moazez/feature/home/presentation/widgets/home_top_section.dart';
 import 'package:moazez/feature/home/presentation/widgets/invite_participants_section.dart';
 import 'package:moazez/feature/home/presentation/widgets/trial_package_status.dart';
@@ -8,6 +9,7 @@ import 'package:moazez/feature/home/presentation/widgets/progress_chart.dart';
 import 'package:moazez/feature/packages/presentation/cubit/packages_state.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/home/presentation/cubit/team_state.dart';
+import 'package:moazez/feature/home/presentation/cubit/team_cubit.dart';
 
 class PackagesView extends StatelessWidget {
   final ProfileLoaded profileState;
@@ -43,7 +45,7 @@ class PackagesView extends StatelessWidget {
       ownsTeam = loadedState.team.isOwner ?? false;
     } else if (teamState is TeamError) {
       final errorState = teamState as TeamError;
-      ownsTeam = errorState.message.contains("تم جلب فريقك الذي تملكه بنجاح");
+      ownsTeam = errorState.message.contains("تم جلب فريقك الذي تملكه بنجاح") || errorState.message.contains("تم إنشاء الفريق بنجاح");
     }
 
     return CustomScrollView(
@@ -77,7 +79,10 @@ class PackagesView extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
-                if (ownsTeam && teamState is TeamLoaded && (teamState as TeamLoaded).team.membersCount != null && (teamState as TeamLoaded).team.membersCount! > 0)
+                if (ownsTeam &&
+                    teamState is TeamLoaded &&
+                    (teamState as TeamLoaded).team.membersCount != null &&
+                    (teamState as TeamLoaded).team.membersCount! > 0)
                   ProgressChart(
                     items: const [
                       ParticipantProgress(
@@ -105,7 +110,27 @@ class PackagesView extends StatelessWidget {
                 else if (ownsTeam)
                   const InviteParticipantsSection()
                 else
-                  const CreateTeamSection()
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20.0),
+                    child: Center(
+                      child: SizedBox(
+                        width: 250, // Fixed width for a more professional look
+                        child: CustomButton(
+                          onPressed: () async {
+                            final result = await Navigator.pushNamed(
+                              context,
+                              '/create_team',
+                            );
+                            if (result == true) {
+                              // Refresh team state after team creation
+                              context.read<TeamCubit>().fetchTeamInfo();
+                            }
+                          },
+                          text: 'إنشاء فريق جديد',
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),

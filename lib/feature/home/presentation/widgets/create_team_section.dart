@@ -45,8 +45,8 @@ class _CreateTeamSectionState extends State<CreateTeamSection> {
             );
             _teamCreated = true;
             context.read<TeamCubit>().fetchTeamInfo();
-            // Add a longer delay to ensure state updates propagate before navigation
-            Future.delayed(const Duration(milliseconds: 1000), () {
+            // Add an even longer delay to ensure state updates propagate before navigation
+            Future.delayed(const Duration(milliseconds: 2000), () {
               Navigator.pop(context); // Return to the previous screen after fetch
             });
           }

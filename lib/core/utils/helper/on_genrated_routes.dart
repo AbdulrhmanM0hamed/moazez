@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moazez/feature/auth/presentation/pages/complete_profile_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/login_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/signup_view.dart';
+import 'package:moazez/feature/home/presentation/view/create_team_view.dart';
 import 'package:moazez/feature/home/presentation/view/home_view.dart';
 import 'package:moazez/feature/splash/presentation/splash_view.dart';
 import 'package:moazez/feature/profile/presentation/view/edit_profile_info.dart';
@@ -14,7 +15,7 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
     case OnboardingView.routeName:
       return MaterialPageRoute(builder: (context) => const OnboardingView());
     case SignUpView.routeName:
-        return MaterialPageRoute(builder: (_) => const SignUpView());
+      return MaterialPageRoute(builder: (_) => const SignUpView());
     case LoginView.routeName:
       return MaterialPageRoute(builder: (context) => const LoginView());
     case CompleteProfileView.routeName:
@@ -26,6 +27,8 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const HomeView());
     case EditProfileInfo.routeName:
       return MaterialPageRoute(builder: (context) => const EditProfileInfo());
+    case CreateTeamView.routeName:
+      return MaterialPageRoute(builder: (context) => const CreateTeamView());
     default:
       return MaterialPageRoute(builder: (context) => const SplashView());
   }
