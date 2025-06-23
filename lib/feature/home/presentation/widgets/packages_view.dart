@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moazez/core/utils/common/custom_button.dart';
-import 'package:moazez/core/utils/theme/app_colors.dart';
+
+import 'package:moazez/feature/home/presentation/view/create_team_view.dart';
+import 'package:moazez/feature/home/presentation/widgets/create_team_prompt.dart';
 import 'package:moazez/feature/home/presentation/widgets/home_top_section.dart';
 import 'package:moazez/feature/home/presentation/widgets/invite_participants_section.dart';
 import 'package:moazez/feature/home/presentation/widgets/trial_package_status.dart';
@@ -45,7 +46,9 @@ class PackagesView extends StatelessWidget {
       ownsTeam = loadedState.team.isOwner ?? false;
     } else if (teamState is TeamError) {
       final errorState = teamState as TeamError;
-      ownsTeam = errorState.message.contains("تم جلب فريقك الذي تملكه بنجاح") || errorState.message.contains("تم إنشاء الفريق بنجاح");
+      ownsTeam =
+          errorState.message.contains("تم جلب فريقك الذي تملكه بنجاح") ||
+          errorState.message.contains("تم إنشاء الفريق بنجاح");
     }
 
     return CustomScrollView(
@@ -61,23 +64,6 @@ class PackagesView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: const [
-                    Icon(
-                      Icons.bar_chart_rounded,
-                      size: 24,
-                      color: AppColors.primary,
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      'تقدم المشاركين',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
                 const SizedBox(height: 16),
                 if (ownsTeam &&
                     teamState is TeamLoaded &&
@@ -108,26 +94,22 @@ class PackagesView extends StatelessWidget {
                     ],
                   )
                 else if (ownsTeam)
-                  const InviteParticipantsSection()
+                  Center(child: const InviteParticipantsSection())
                 else
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: Center(
-                      child: SizedBox(
-                        width: 250, // Fixed width for a more professional look
-                        child: CustomButton(
-                          onPressed: () async {
-                            final result = await Navigator.pushNamed(
-                              context,
-                              '/create_team',
-                            );
-                            if (result == true) {
-                              // Refresh team state after team creation
-                              context.read<TeamCubit>().fetchTeamInfo();
-                            }
-                          },
-                          text: 'إنشاء فريق جديد',
-                        ),
+                      child: CreateTeamPrompt(
+                        onPressed: () async {
+                          final result = await Navigator.pushNamed(
+                            context,
+                            CreateTeamView.routeName,
+                          );
+                          if (result == true) {
+                            // Refresh team state after team creation
+                            context.read<TeamCubit>().fetchTeamInfo();
+                          }
+                        },
                       ),
                     ),
                   ),

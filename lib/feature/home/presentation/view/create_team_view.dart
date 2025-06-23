@@ -45,7 +45,6 @@ class _CreateTeamViewState extends State<CreateTeamView> {
           listener: (context, state) {
             if (state is TeamError) {
               if (!_teamCreated && state.message.contains("تم إنشاء الفريق بنجاح")) {
-                developer.log('Team creation error: تم إنشاء الفريق بنجاح');
                 CustomSnackbar.showSuccess(
                   context: context,
                   message: 'تم إنشاء الفريق بنجاح',
