@@ -43,6 +43,15 @@ class MenuItemsCard extends StatelessWidget {
               );
             },
           ),
+          
+          _buildMenuItem(
+            context,
+            'فريقي',
+            Icons.group_outlined,
+            () {
+              Navigator.pushNamed(context, '/team');
+            },
+          ),
 
           _buildMenuItem(
             context,

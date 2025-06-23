@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/services/service_locator.dart';
+import 'package:moazez/core/utils/common/custom_text_field.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
+import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
+import 'package:moazez/feature/home/presentation/cubit/team_cubit.dart';
+import 'package:moazez/feature/home/presentation/cubit/team_state.dart';
 import 'package:moazez/feature/profile/data/models/profile_model.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/profile/presentation/widgets/info_card.dart';
@@ -21,6 +25,7 @@ class AccountView extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => sl<LogoutCubit>()),
         BlocProvider(create: (context) => sl<ProfileCubit>()..fetchProfile()),
+        BlocProvider(create: (context) => sl<TeamCubit>()..fetchTeamInfo()),
       ],
       child: const _AccountViewBody(),
     );
@@ -54,16 +59,23 @@ class _AccountViewBody extends StatelessWidget {
             if (state is ProfileLoading) {
               return const ProfileShimmer();
             } else if (state is ProfileLoaded) {
-              return _buildProfileContent(context, state.profileResponse.data.user);
+              return _buildProfileContent(
+                context,
+                state.profileResponse.data.user,
+              );
             } else if (state is ProfileError) {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(state.message, style: const TextStyle(color: AppColors.textSecondary)),
+                    Text(
+                      state.message,
+                      style: const TextStyle(color: AppColors.textSecondary),
+                    ),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: () => context.read<ProfileCubit>().fetchProfile(),
+                      onPressed:
+                          () => context.read<ProfileCubit>().fetchProfile(),
                       child: const Text('إعادة المحاولة'),
                     ),
                   ],
@@ -89,6 +101,7 @@ class _AccountViewBody extends StatelessWidget {
           InfoCard(user: user),
           const SizedBox(height: 24),
           const MenuItemsCard(),
+          const SizedBox(height: 24),
         ],
       ),
     );

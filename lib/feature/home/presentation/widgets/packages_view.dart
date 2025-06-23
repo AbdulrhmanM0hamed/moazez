@@ -64,7 +64,6 @@ class PackagesView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 16),
                 if (ownsTeam &&
                     teamState is TeamLoaded &&
                     (teamState as TeamLoaded).team.membersCount != null &&

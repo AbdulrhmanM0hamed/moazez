@@ -138,6 +138,6 @@ Future<void> init() async {
 
   sl.registerFactory(() => TeamCubit(
     getTeamInfoUseCase: sl(),
-    createTeamUseCase: sl(),
+    teamRepository: sl(),
   ));
 }
