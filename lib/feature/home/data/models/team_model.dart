@@ -9,6 +9,7 @@ class TeamModel extends TeamEntity {
     required Map<String, dynamic>? owner,
     required int? membersCount,
     required List<dynamic>? members,
+    required Map<String, dynamic>? tasksSummary,
     required String? createdAt,
     required String? updatedAt,
   }) : super(
@@ -19,6 +20,7 @@ class TeamModel extends TeamEntity {
           owner: owner,
           membersCount: membersCount,
           members: members,
+          tasksSummary: tasksSummary,
           createdAt: createdAt,
           updatedAt: updatedAt,
         );
@@ -32,6 +34,7 @@ class TeamModel extends TeamEntity {
       owner: json['owner'],
       membersCount: json['members_count'],
       members: json['members'],
+      tasksSummary: json['tasks_summary'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
     );
@@ -46,6 +49,7 @@ class TeamModel extends TeamEntity {
       'owner': owner,
       'members_count': membersCount,
       'members': members,
+      'tasks_summary': tasksSummary,
       'created_at': createdAt,
       'updated_at': updatedAt,
     };

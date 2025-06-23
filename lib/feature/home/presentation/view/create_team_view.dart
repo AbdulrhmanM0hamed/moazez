@@ -61,9 +61,13 @@ class _CreateTeamViewState extends State<CreateTeamView> {
                 });
               } else if (!_teamCreated) {
                 developer.log('Team creation error: ${state.message}');
+                String errorMessage = state.message;
+                if (state.message.contains("البيانات المسترجعة غير صحيحة أو فارغة")) {
+                  errorMessage = 'خطأ في البيانات المُدخلة، يرجى المحاولة مرة أخرى';
+                }
                 CustomSnackbar.showError(
                   context: context,
-                  message: state.message,
+                  message: errorMessage,
                 );
               }
             } else if (state is TeamLoaded) {

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moazez/core/utils/theme/app_colors.dart';
 
 import 'package:moazez/feature/home/presentation/view/create_team_view.dart';
 import 'package:moazez/feature/home/presentation/widgets/create_team_prompt.dart';
 import 'package:moazez/feature/home/presentation/widgets/home_top_section.dart';
 import 'package:moazez/feature/home/presentation/widgets/invite_participants_section.dart';
+import 'package:moazez/feature/home/presentation/widgets/participants_section.dart';
+import 'package:moazez/feature/home/presentation/widgets/title_with_icon.dart';
 import 'package:moazez/feature/home/presentation/widgets/trial_package_status.dart';
 import 'package:moazez/feature/home/presentation/widgets/progress_chart.dart';
 import 'package:moazez/feature/packages/presentation/cubit/packages_state.dart';
@@ -43,12 +46,14 @@ class PackagesView extends StatelessWidget {
     bool ownsTeam = false;
     if (teamState is TeamLoaded) {
       final loadedState = teamState as TeamLoaded;
-      ownsTeam = loadedState.team.isOwner ?? false;
+      // Use the is_owner field to determine ownership
+      ownsTeam = loadedState.team.isOwner;
     } else if (teamState is TeamError) {
       final errorState = teamState as TeamError;
-      ownsTeam =
-          errorState.message.contains("تم جلب فريقك الذي تملكه بنجاح") ||
-          errorState.message.contains("تم إنشاء الفريق بنجاح");
+      // If the error message indicates the user does not own a team, explicitly set ownsTeam to false
+      if (errorState.message.contains("لا تملك فريقاً")) {
+        ownsTeam = false;
+      }
     }
 
     return CustomScrollView(
@@ -67,29 +72,40 @@ class PackagesView extends StatelessWidget {
                 if (ownsTeam &&
                     teamState is TeamLoaded &&
                     (teamState as TeamLoaded).team.membersCount != null &&
-                    (teamState as TeamLoaded).team.membersCount! > 0)
-                  ProgressChart(
-                    items: const [
-                      ParticipantProgress(
-                        percent: 0.8,
-                        avatarPath: 'assets/images/avatar.jpg',
+                    (teamState as TeamLoaded).team.membersCount! >= 1)
+                  Column(
+                    children: [
+                      TitleWithIcon(
+                        title: 'تقدم المشاركين',
+                        icon: Icons.bar_chart_rounded,
                       ),
-                      ParticipantProgress(
-                        percent: 0.6,
-                        avatarPath: 'assets/images/avatar.jpg',
+                      const SizedBox(height: 16),
+                      ProgressChart(
+                        items: const [
+                          ParticipantProgress(
+                            percent: 0.8,
+                            avatarPath: 'assets/images/avatar.jpg',
+                          ),
+                          ParticipantProgress(
+                            percent: 0.6,
+                            avatarPath: 'assets/images/avatar.jpg',
+                          ),
+                          ParticipantProgress(
+                            percent: 1.0,
+                            avatarPath: 'assets/images/avatar.jpg',
+                          ),
+                          ParticipantProgress(
+                            percent: 0.4,
+                            avatarPath: 'assets/images/avatar.jpg',
+                          ),
+                          ParticipantProgress(
+                            percent: 0.9,
+                            avatarPath: 'assets/images/avatar.jpg',
+                          ),
+                        ],
                       ),
-                      ParticipantProgress(
-                        percent: 1.0,
-                        avatarPath: 'assets/images/avatar.jpg',
-                      ),
-                      ParticipantProgress(
-                        percent: 0.4,
-                        avatarPath: 'assets/images/avatar.jpg',
-                      ),
-                      ParticipantProgress(
-                        percent: 0.9,
-                        avatarPath: 'assets/images/avatar.jpg',
-                      ),
+                      const SizedBox(height: 20),
+                      ParticipantsSection(),
                     ],
                   )
                 else if (ownsTeam)

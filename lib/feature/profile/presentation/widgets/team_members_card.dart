@@ -1,0 +1,191 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moazez/core/utils/theme/app_colors.dart';
+import 'package:moazez/feature/home/domain/entities/team_entity.dart';
+import 'package:moazez/feature/home/presentation/cubit/team_cubit.dart';
+
+class TeamMembersCard extends StatelessWidget {
+  final TeamEntity? team;
+
+  const TeamMembersCard({Key? key, this.team}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20.0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(20.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.15),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Theme.of(context).cardColor,
+            Theme.of(context).cardColor.withValues(alpha: 0.9),
+          ],
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'قائمة الأعضاء',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.refresh, color: AppColors.primary, size: 24),
+                onPressed: () => BlocProvider.of<TeamCubit>(context).fetchTeamInfo(),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          _buildMembersList(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMembersList(BuildContext context) {
+    if (team != null && team!.members != null && team!.members!.isNotEmpty) {
+      return ListView.builder(
+        padding: EdgeInsets.zero,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: team!.members!.length,
+        itemBuilder: (context, index) {
+          final member = team!.members![index];
+          if (member is Map<String, dynamic>) {
+            return Container(
+              margin: const EdgeInsets.only(bottom: 12.0),
+              padding: const EdgeInsets.all(12.0),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor.withValues(alpha: 0.8),
+                borderRadius: BorderRadius.circular(12.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 5,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: member['avatar_url'] != null
+                          ? DecorationImage(
+                              image: NetworkImage(_fixAvatarUrl(member['avatar_url'] as String)),
+                              fit: BoxFit.cover,
+                            )
+                          : null,
+                      color: member['avatar_url'] == null
+                          ? AppColors.primary.withValues(alpha: 0.2)
+                          : null,
+                    ),
+                    child: member['avatar_url'] == null
+                        ? Center(
+                            child: Text(
+                              (member['name'] as String? ?? 'ع').substring(0, 1).toUpperCase(),
+                              style: const TextStyle(
+                                color: AppColors.primary,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )
+                        : null,
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          member['name'] as String? ?? 'عضو بدون اسم',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                        if (member['email'] != null)
+                          Text(
+                            member['email'] as String,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
+      );
+    } else {
+      return Column(
+        children: [
+          const Text(
+            'لا توجد بيانات عن الأعضاء حاليًا.',
+            style: TextStyle(
+              fontSize: 16,
+              color: AppColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Center(
+            child: ElevatedButton.icon(
+              onPressed: () {
+                BlocProvider.of<TeamCubit>(context).fetchTeamInfo();
+              },
+              icon: const Icon(Icons.refresh, size: 20),
+              label: const Text('تحديث القائمة'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 12.0,
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+  }
+
+  String _fixAvatarUrl(String url) {
+    // Fix for URLs that have double 'https://www.moezez.com'
+    if (url.contains('https://www.moezez.comhttps://www.moezez.com')) {
+      return url.replaceFirst('https://www.moezez.comhttps://www.moezez.com', 'https://www.moezez.com');
+    }
+    return url;
+  }
+}

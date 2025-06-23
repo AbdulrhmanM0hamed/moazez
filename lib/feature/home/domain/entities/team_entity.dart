@@ -6,6 +6,7 @@ class TeamEntity {
   final Map<String, dynamic>? owner;
   final int? membersCount;
   final List<dynamic>? members;
+  final Map<String, dynamic>? tasksSummary;
   final String? createdAt;
   final String? updatedAt;
 
@@ -17,6 +18,7 @@ class TeamEntity {
     this.owner,
     this.membersCount,
     this.members,
+    this.tasksSummary,
     this.createdAt,
     this.updatedAt,
   });

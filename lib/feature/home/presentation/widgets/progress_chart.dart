@@ -28,23 +28,7 @@ class ProgressChart extends StatelessWidget {
         textDirection: TextDirection.ltr,
         child: Stack(
           children: [
-             Row(
-                  children: const [
-                    Icon(
-                      Icons.bar_chart_rounded,
-                      size: 24,
-                      color: AppColors.primary,
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      'تقدم المشاركين',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+            
             // Grid background behind the bars
             Positioned.fill(
               child: CustomPaint(painter: _ChartGridPainter(chartHeight)),

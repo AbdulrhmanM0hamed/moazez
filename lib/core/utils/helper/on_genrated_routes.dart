@@ -6,7 +6,7 @@ import 'package:moazez/feature/home/presentation/view/create_team_view.dart';
 import 'package:moazez/feature/home/presentation/view/home_view.dart';
 import 'package:moazez/feature/profile/presentation/view/team_view.dart';
 import 'package:moazez/feature/splash/presentation/splash_view.dart';
-import 'package:moazez/feature/profile/presentation/view/edit_profile_info.dart';
+import 'package:moazez/feature/profile/presentation/view/edit_profile_info_view.dart';
 import 'package:moazez/feature/onboarding/presentation/onboarding_view.dart';
 
 Route<dynamic> onGenratedRoutes(RouteSettings settings) {

@@ -31,15 +31,9 @@ class TeamRemoteDataSourceImpl implements TeamRemoteDataSource {
         ),
       );
       debugPrint('Get Team Info Response: ${response.data}');
-      if (response.data['status'] == 'success' || response.data['status'] == true || (response.data['message'] == 'تم جلب فريقك الذي تملكه بنجاح')) {
+      if (response.data['status'] == 'success' || response.data['status'] == true || (response.data['message'] == 'تم جلب فريقك الذي تملكه بنجاح') || (response.data['message'] == 'تم جلب فريقك بنجاح')) {
         debugPrint('Team Data Retrieved Successfully: ${response.data['data']}');
-        if (response.data['data'] != null && response.data['data'] is Map<String, dynamic>) {
-          return TeamModel.fromJson(response.data['data']);
-        } else {
-          throw ServerException(
-            message: 'البيانات المسترجعة غير صحيحة أو فارغة',
-          );
-        }
+        return TeamModel.fromJson(response.data['data']);
       } else {
         debugPrint('Team Data Retrieval Failed: ${response.data['message']}');
         throw ServerException(
@@ -66,15 +60,22 @@ class TeamRemoteDataSourceImpl implements TeamRemoteDataSource {
           },
         ),
       );
-      if (response.data['status'] == 'success' || response.data['status'] == true) {
+      debugPrint('Create Team Response: ${response.data}');
+      if (response.data['status'] == 'success' || response.data['status'] == true || (response.data['message'] != null && response.data['message'].contains('تم إنشاء الفريق بنجاح'))) {
         if (response.data['data'] != null && response.data['data'] is Map<String, dynamic>) {
+          debugPrint('Team Created Successfully: ${response.data['data']}');
           return TeamModel.fromJson(response.data['data']);
+        } else if (response.data['team'] != null && response.data['team'] is Map<String, dynamic>) {
+          debugPrint('Team Created Successfully (alternative key): ${response.data['team']}');
+          return TeamModel.fromJson(response.data['team']);
         } else {
+          debugPrint('Invalid or Empty Data in Response: ${response.data}');
           throw ServerException(
             message: 'البيانات المسترجعة غير صحيحة أو فارغة',
           );
         }
       } else {
+        debugPrint('Team Creation Failed: ${response.data['message']}');
         throw ServerException(
           message: response.data['message'] ?? 'حدث خطأ غير معروف',
         );
@@ -101,9 +102,9 @@ class TeamRemoteDataSourceImpl implements TeamRemoteDataSource {
       );
       debugPrint('Update Team Name Response: ${response.data}');
       if (response.data['status'] == 'success' || response.data['status'] == true || (response.data['message'] == 'تم تعديل اسم الفريق بنجاح')) {
-        debugPrint('Team Name Updated Successfully: ${response.data['team']}');
-        if (response.data['team'] != null && response.data['team'] is Map<String, dynamic>) {
-          return TeamModel.fromJson(response.data['team']);
+        debugPrint('Team Name Updated Successfully: ${response.data['data']}');
+        if (response.data['data'] != null && response.data['data'] is Map<String, dynamic>) {
+          return TeamModel.fromJson(response.data['data']);
         } else {
           throw ServerException(
             message: 'البيانات المسترجعة غير صحيحة أو فارغة',
