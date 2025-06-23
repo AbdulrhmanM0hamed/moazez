@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moazez/feature/packages/domain/models/package_entity.dart';
 import 'package:moazez/feature/packages/domain/repositories/packages_repository.dart';
 import 'package:moazez/feature/packages/presentation/cubit/packages_state.dart';
 
@@ -14,22 +15,34 @@ class PackagesCubit extends Cubit<PackagesState> {
       final trialPackageResult = await repository.getTrialPackage();
       final packagesResult = await repository.getPackages();
 
-      final trialPackage = trialPackageResult.fold(
-        (failure) => throw failure,
-        (package) => package,
+      PackageEntity? trialPackage;
+      trialPackageResult.fold(
+        (failure) {
+          // If trial package fetch fails, continue without it
+        },
+        (package) {
+          trialPackage = package;
+        },
       );
 
       final packages = packagesResult.fold(
-        (failure) => throw failure,
+        (failure) {
+          emit(PackagesError("فشل في جلب الباقات: ${failure.message}"));
+          return <PackageEntity>[];
+        },
         (packages) => packages,
       );
 
-      emit(PackagesLoaded(
-        trialPackage: trialPackage,
-        packages: packages,
-      ));
+      if (packages.isNotEmpty || trialPackage != null) {
+        emit(PackagesLoaded(
+          trialPackage: trialPackage,
+          packages: packages,
+        ));
+      } else if (packages.isEmpty && trialPackage == null) {
+        emit(PackagesError("لا توجد باقات متاحة حاليًا."));
+      }
     } catch (e) {
-      emit(PackagesError(e.toString()));
+      emit(PackagesError("خطأ غير متوقع: ${e.toString()}"));
     }
   }
 }

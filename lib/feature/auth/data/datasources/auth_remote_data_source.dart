@@ -18,6 +18,7 @@ abstract class AuthRemoteDataSource {
   });
   Future<void> logout();
   Future<UserProfile> completeProfile(CompleteProfileParams params);
+  Future<void> subscribeToTrialPackage(String token);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -128,6 +129,24 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           headers: {
             'Accept': 'application/json',
             if (token != null) 'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+    } on DioException catch (e) {
+      throw handleDioException(e);
+    }
+  }
+
+  @override
+  Future<void> subscribeToTrialPackage(String token) async {
+    try {
+      await dio.post(
+        ApiEndpoints.subscribe,
+        data: {'package_id': 1},
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
           },
         ),
       );

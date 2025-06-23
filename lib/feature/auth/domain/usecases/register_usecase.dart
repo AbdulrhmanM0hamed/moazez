@@ -13,8 +13,9 @@ class RegisterUseCase {
 
   Future<Either<Failure, AuthEntity>> call(RegisterParams params) async {
     final result = await repository.register(params);
-    result.fold((failure) {}, (authEntity) {
+    await result.fold((failure) async {}, (authEntity) async {
       sl<CacheService>().saveToken(authEntity.token);
+      await repository.subscribeToTrialPackage(authEntity.token);
     });
     return result;
   }

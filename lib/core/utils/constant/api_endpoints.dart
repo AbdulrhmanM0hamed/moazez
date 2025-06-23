@@ -3,6 +3,7 @@ class ApiEndpoints {
   static const String login = 'login';
   static const String register = 'register';
   static const String logout = 'logout';
+  static const String subscribe = 'subscribe';
   static const String profile = 'profile';
   static const String packages = 'packages';
   static const String trialPackage = 'trial-package';

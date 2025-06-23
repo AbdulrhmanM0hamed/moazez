@@ -5,11 +5,11 @@ sealed class PackagesState {}
 class PackagesLoading extends PackagesState {}
 
 class PackagesLoaded extends PackagesState {
-  final PackageEntity trialPackage;
+  final PackageEntity? trialPackage;
   final List<PackageEntity> packages;
 
   PackagesLoaded({
-    required this.trialPackage,
+    this.trialPackage,
     required this.packages,
   });
 }

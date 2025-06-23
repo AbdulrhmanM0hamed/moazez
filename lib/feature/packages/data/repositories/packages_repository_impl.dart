@@ -27,6 +27,8 @@ class PackagesRepositoryImpl implements PackagesRepository {
       return Right(packages);
     } on DioException catch (e) {
       return Left(handleDioException(e));
+    } catch (e) {
+      return Left(ServerFailure(message: "خطأ غير متوقع: ${e.toString()}"));
     }
   }
 
@@ -41,6 +43,8 @@ class PackagesRepositoryImpl implements PackagesRepository {
       return Right(trialPackage);
     } on DioException catch (e) {
       return Left(handleDioException(e));
+    } catch (e) {
+      return Left(ServerFailure(message: "خطأ غير متوقع في جلب الباقة التجريبية: ${e.toString()}"));
     }
   }
 }
