@@ -6,8 +6,8 @@ import 'package:moazez/core/utils/common/custom_text_field.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/validators/form_validators.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
-import 'package:moazez/feature/send_invitations/presentation/cubit/invitation_cubit.dart';
-import 'package:moazez/feature/send_invitations/presentation/cubit/invitation_state.dart';
+import 'package:moazez/feature/invitations/presentation/cubit/invitation_cubit.dart';
+import 'package:moazez/feature/invitations/presentation/cubit/invitation_state.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 

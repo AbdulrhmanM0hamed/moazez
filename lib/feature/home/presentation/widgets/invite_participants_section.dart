@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moazez/core/utils/common/custom_button.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
-import 'package:moazez/feature/send_invitations/presentation/send_invitations_view.dart';
+import 'package:moazez/feature/invitations/presentation/send_invitations_view.dart';
 
 class InviteParticipantsSection extends StatelessWidget {
   const InviteParticipantsSection({super.key});

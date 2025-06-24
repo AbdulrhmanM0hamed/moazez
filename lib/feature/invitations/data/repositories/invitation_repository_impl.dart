@@ -2,9 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:moazez/core/error/exceptions.dart';
 import 'package:moazez/core/error/failures.dart';
 import 'package:moazez/core/network/network_info.dart';
-import 'package:moazez/feature/send_invitations/data/datasources/invitation_remote_data_source.dart';
-import 'package:moazez/feature/send_invitations/domain/entities/invitation_entity.dart';
-import 'package:moazez/feature/send_invitations/domain/repositories/invitation_repository.dart';
+import 'package:moazez/feature/invitations/data/datasources/invitation_remote_data_source.dart';
+import 'package:moazez/feature/invitations/domain/entities/invitation_entity.dart';
+import 'package:moazez/feature/invitations/domain/repositories/invitation_repository.dart';
 
 class InvitationRepositoryImpl implements InvitationRepository {
   final InvitationRemoteDataSource remoteDataSource;

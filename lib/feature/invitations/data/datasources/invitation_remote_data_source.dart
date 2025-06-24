@@ -3,7 +3,7 @@ import 'package:moazez/core/error/exceptions.dart';
 import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/constant/api_endpoints.dart';
-import 'package:moazez/feature/send_invitations/data/models/invitation_model.dart';
+import 'package:moazez/feature/invitations/data/models/invitation_model.dart';
 
 abstract class InvitationRemoteDataSource {
   Future<InvitationModel> sendInvitation(String email);
@@ -55,7 +55,7 @@ class InvitationRemoteDataSourceImpl implements InvitationRemoteDataSource {
     try {
       final token = await sl<CacheService>().getToken();
       final response = await dio.get(
-        '${ApiEndpoints.baseUrl}get-sent-invitations',
+        '${ApiEndpoints.baseUrl}${ApiEndpoints.teamInvitations}',
         options: Options(
           headers: {
             'Content-Type': 'application/json',

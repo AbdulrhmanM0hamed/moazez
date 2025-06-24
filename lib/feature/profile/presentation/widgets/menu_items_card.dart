@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
+import 'package:moazez/feature/invitations/presentation/cubit/invitation_cubit.dart';
+import 'package:moazez/feature/invitations/presentation/sent_invitations_view.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/profile/presentation/view/edit_profile_info.dart';
+import 'package:moazez/feature/profile/presentation/view/team_view.dart';
 
 class MenuItemsCard extends StatelessWidget {
   const MenuItemsCard({super.key});
@@ -43,15 +47,21 @@ class MenuItemsCard extends StatelessWidget {
               );
             },
           ),
-          
-          _buildMenuItem(
-            context,
-            'فريقي',
-            Icons.group_outlined,
-            () {
-              Navigator.pushNamed(context, '/team');
-            },
-          ),
+
+          _buildMenuItem(context, 'فريقي', Icons.group_outlined, () {
+            Navigator.pushNamed(context, TeamView.routeName);
+          }),
+          _buildMenuItem(context, 'الدعوات المرسلة', Icons.send_outlined, () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BlocProvider(
+                  create: (context) => sl<InvitationCubit>()..getSentInvitations(),
+                  child: const SentInvitationsView(),
+                ),
+              ),
+            );
+          }),
 
           _buildMenuItem(
             context,

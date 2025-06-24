@@ -8,7 +8,7 @@ import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/home/presentation/cubit/team_cubit.dart';
 import 'package:moazez/feature/home/presentation/cubit/team_state.dart';
-import 'package:moazez/feature/send_invitations/presentation/send_invitations_view.dart';
+import 'package:moazez/feature/invitations/presentation/send_invitations_view.dart';
 
 class HomeViewBody extends StatefulWidget {
   const HomeViewBody({super.key});
