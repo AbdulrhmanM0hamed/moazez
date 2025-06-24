@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
 import 'package:moazez/feature/home/presentation/widgets/packages_view.dart';
+import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/home/presentation/cubit/subscription_cubit.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
@@ -48,17 +49,63 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 if (teamState is TeamLoading) {
                   return const Center(child: CustomProgressIndcator());
                 }
-                return MultiBlocProvider(
-                  providers: [
-                    BlocProvider<SubscriptionCubit>(
-                      create: (context) => sl<SubscriptionCubit>()..fetchCurrentSubscription(),
+
+                bool ownsTeam = false;
+                if (teamState is TeamLoaded) {
+                  ownsTeam = teamState.team.isOwner;
+                } else if (teamState is TeamError) {
+                  if (teamState.message.contains("لا تملك فريقاً")) {
+                    ownsTeam = false;
+                  }
+                }
+
+                return Stack(
+                  children: [
+                    MultiBlocProvider(
+                      providers: [
+                        BlocProvider<SubscriptionCubit>(
+                          create: (context) =>
+                              sl<SubscriptionCubit>()..fetchCurrentSubscription(),
+                        ),
+                      ],
+                      child: PackagesView(
+                        profileState: profileState,
+                        teamState: teamState,
+                      ),
                     ),
+                    if (ownsTeam)
+                      Positioned(
+                        bottom: 1,
+                        left: 0,
+                        right: 0,
+                        child: Center(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.primary.withValues(alpha: 0.4),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: CircleAvatar(
+                              radius: 25,
+                              backgroundColor: AppColors.primary,
+                              child: IconButton(
+                                icon: const Icon(Icons.add,
+                                    color: Colors.white, size: 32),
+                                onPressed: () {
+                                  // TODO: Implement add participant action
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
-                  child: PackagesView(
-                  profileState: profileState,
-                  teamState: teamState,
-                ),
-              );
+                );
               },
             );
           } else if (profileState is ProfileError) {

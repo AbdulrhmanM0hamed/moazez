@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
-import 'package:moazez/core/utils/theme/app_colors.dart';
 
 class ParticipantsSection extends StatelessWidget {
   const ParticipantsSection({super.key});
@@ -72,30 +71,6 @@ class ParticipantsSection extends StatelessWidget {
                 },
               ),
             ],
-          ),
-        ),
-        const SizedBox(height: 12),
-        // Add Button
-        Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.primary.withValues(alpha: 0.4),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: CircleAvatar(
-            radius: 32,
-            backgroundColor: AppColors.primary,
-            child: IconButton(
-              icon: const Icon(Icons.add, color: Colors.white, size: 32),
-              onPressed: () {
-                // TODO: Implement add participant action
-              },
-            ),
           ),
         ),
       ],
