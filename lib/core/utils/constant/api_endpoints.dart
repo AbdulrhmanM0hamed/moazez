@@ -10,5 +10,6 @@ class ApiEndpoints {
   static const String currentSubscription = 'current-subscription';
   static const String myTeam = 'my-team';
   static const String createTeam = 'create-team';
+  static const String sendInvitation = 'invitations/sent';
 
 }

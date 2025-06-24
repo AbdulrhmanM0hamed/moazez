@@ -14,6 +14,12 @@ import 'package:moazez/feature/home/domain/repositories/subscription_repository.
 import 'package:moazez/feature/home/domain/repositories/team_repository.dart';
 import 'package:moazez/feature/home/domain/usecases/get_current_subscription_usecase.dart';
 import 'package:moazez/feature/home/domain/usecases/get_team_info_usecase.dart';
+import 'package:moazez/feature/send_invitations/data/datasources/invitation_remote_data_source.dart';
+import 'package:moazez/feature/send_invitations/data/repositories/invitation_repository_impl.dart';
+import 'package:moazez/feature/send_invitations/domain/repositories/invitation_repository.dart';
+import 'package:moazez/feature/send_invitations/domain/usecases/get_sent_invitations_usecase.dart';
+import 'package:moazez/feature/send_invitations/domain/usecases/send_invitation_usecase.dart';
+import 'package:moazez/feature/send_invitations/presentation/cubit/invitation_cubit.dart';
 import 'package:moazez/feature/home/presentation/cubit/subscription_cubit.dart';
 import 'package:moazez/feature/home/presentation/cubit/team_cubit.dart';
 import 'package:moazez/feature/profile/domain/usecases/edit_profile_usecase.dart';
@@ -77,16 +83,30 @@ Future<void> init() async {
   sl.registerFactory(
     () => TeamCubit(getTeamInfoUseCase: sl(), teamRepository: sl()),
   );
+  sl.registerFactory(
+    () => InvitationCubit(
+      sendInvitationUseCase: sl(),
+      getSentInvitationsUseCase: sl(),
+    ),
+  );
   sl.registerLazySingleton(() => GetTeamInfoUseCase(repository: sl()));
+  sl.registerLazySingleton(() => SendInvitationUseCase(sl()));
+  sl.registerLazySingleton(() => GetSentInvitationsUseCase(sl()));
 
   // Repository
   sl.registerLazySingleton<TeamRepository>(
     () => TeamRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()),
   );
+  sl.registerLazySingleton<InvitationRepository>(
+    () => InvitationRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()),
+  );
 
   // Data sources
   sl.registerLazySingleton<TeamRemoteDataSource>(
     () => TeamRemoteDataSourceImpl(dio: sl()),
+  );
+  sl.registerLazySingleton<InvitationRemoteDataSource>(
+    () => InvitationRemoteDataSourceImpl(dio: sl()),
   );
   sl.registerLazySingleton(() => CreateTeamUseCase(repository: sl()));
 

@@ -51,7 +51,7 @@ class SubscriptionCard extends StatelessWidget {
     final int remainingTasks = sub.usage.remainingTasks;
     final int totalTasks = sub.usage.tasksCreated + sub.usage.remainingTasks;
     final String trialPeriod =
-        sub.daysRemaining != null ? '${sub.daysRemaining} يوم متبقي' : 'N/A';
+        sub.daysRemaining != null ? '${sub.daysRemaining} يوم متبقي' : 'غير محدد';
 
     // Now, return the new UI using these variables
     return Directionality(

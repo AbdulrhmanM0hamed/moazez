@@ -26,14 +26,14 @@ class SubscriptionModel extends SubscriptionEntity {
   factory SubscriptionModel.fromJson(Map<String, dynamic> json) {
     return SubscriptionModel(
       id: json['id'],
-      status: json['status'],
-      startDate: json['start_date'],
-      endDate: json['end_date'],
-      pricePaid: json['price_paid'],
-      package: PackageModel.fromJson(json['package']),
-      usage: UsageModel.fromJson(json['usage']),
-      daysRemaining: json['days_remaining'],
-      isActive: json['is_active'],
+      status: json['status'] ?? '',
+      startDate: json['start_date'] ?? '',
+      endDate: json['end_date'] ?? '',
+      pricePaid: json['price_paid'] ?? '',
+      package: PackageModel.fromJson(json['package'] ?? {}),
+      usage: UsageModel.fromJson(json['usage'] ?? {}),
+      daysRemaining: json['days_remaining'] ?? 0,
+      isActive: json['is_active'] ?? false,
     );
   }
 
@@ -69,11 +69,11 @@ class PackageModel extends PackageEntity {
 
   factory PackageModel.fromJson(Map<String, dynamic> json) {
     return PackageModel(
-      id: json['id'],
-      name: json['name'],
-      isTrial: json['is_trial'],
-      maxTasks: json['max_tasks'],
-      maxMilestonesPerTask: json['max_milestones_per_task'],
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      isTrial: json['is_trial'] ?? 0,
+      maxTasks: json['max_tasks'] ?? 0,
+      maxMilestonesPerTask: json['max_milestones_per_task'] ?? 0,
     );
   }
 
@@ -101,9 +101,9 @@ class UsageModel extends UsageEntity {
 
   factory UsageModel.fromJson(Map<String, dynamic> json) {
     return UsageModel(
-      tasksCreated: json['tasks_created'],
-      remainingTasks: json['remaining_tasks'],
-      usagePercentage: json['usage_percentage'],
+      tasksCreated: json['tasks_created'] ?? 0,
+      remainingTasks: json['remaining_tasks'] ?? 0,
+      usagePercentage: json['usage_percentage'] ?? 0,
     );
   }
 

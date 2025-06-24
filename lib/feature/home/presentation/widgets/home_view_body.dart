@@ -8,6 +8,7 @@ import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/home/presentation/cubit/team_cubit.dart';
 import 'package:moazez/feature/home/presentation/cubit/team_state.dart';
+import 'package:moazez/feature/send_invitations/presentation/send_invitations_view.dart';
 
 class HomeViewBody extends StatefulWidget {
   const HomeViewBody({super.key});
@@ -97,7 +98,12 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                                 icon: const Icon(Icons.add,
                                     color: Colors.white, size: 32),
                                 onPressed: () {
-                                  // TODO: Implement add participant action
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const SendInvitationsView(),
+                                    ),
+                                  );
                                 },
                               ),
                             ),
