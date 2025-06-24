@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:moazez/core/utils/common/custom_dialog_button.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
@@ -93,7 +94,9 @@ class _TeamMembersCardState extends State<TeamMembersCard> {
   }
 
   Widget _buildMembersList(BuildContext context) {
-    if (widget.team != null && widget.team!.members != null && widget.team!.members!.isNotEmpty) {
+    if (widget.team != null &&
+        widget.team!.members != null &&
+        widget.team!.members!.isNotEmpty) {
       return ListView.builder(
         padding: EdgeInsets.zero,
         shrinkWrap: true,
@@ -176,13 +179,8 @@ class _TeamMembersCardState extends State<TeamMembersCard> {
                     ],
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.delete,
-                    color: AppColors.error,
-                    size: 24,
-                  ),
-                  onPressed: () {
+                GestureDetector(
+                  onTap: () {
                     showDialog(
                       context: context,
                       builder: (BuildContext dialogContext) {
@@ -232,6 +230,15 @@ class _TeamMembersCardState extends State<TeamMembersCard> {
                       },
                     );
                   },
+                  child: SvgPicture.asset(
+                    "assets/images/trash.svg",
+                    width: 24,
+                    height: 24,
+                    colorFilter: ColorFilter.mode(
+                      AppColors.error,
+                      BlendMode.srcIn,
+                    ),
+                  ),
                 ),
               ],
             ),
