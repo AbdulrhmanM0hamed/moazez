@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
-import 'package:moazez/feature/profile/presentation/view/edit_profile_info_view.dart';
+import 'package:moazez/feature/profile/presentation/view/edit_profile_info.dart';
 
 class MenuItemsCard extends StatelessWidget {
   const MenuItemsCard({super.key});

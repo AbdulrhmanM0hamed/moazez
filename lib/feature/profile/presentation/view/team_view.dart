@@ -60,17 +60,21 @@ class _TeamViewBodyState extends State<_TeamViewBody> {
           } else if (state is TeamLoading) {
             debugPrint('Team Loading...');
           } else if (state is TeamLoaded) {
+            final bool wasUpdating = _isUpdating;
             setState(() {
               _currentTeam = state.team;
               _isUpdating = false;
             });
-            // Show success message if team info is fetched successfully after update
-            CustomSnackbar.show(
-              context: context,
-              message: 'تم تعديل اسم الفريق بنجاح',
-              isError: false,
-            );
-          } else {}
+
+            // Only show success message if an update was just performed.
+            if (wasUpdating) {
+              CustomSnackbar.show(
+                context: context,
+                message: 'تم تعديل اسم الفريق بنجاح',
+                isError: false,
+              );
+            }
+          }
         },
         builder: (context, state) {
           if (state is TeamLoading || _isUpdating) {

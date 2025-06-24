@@ -1,46 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moazez/core/utils/theme/app_colors.dart';
 
 import 'package:moazez/feature/home/presentation/view/create_team_view.dart';
 import 'package:moazez/feature/home/presentation/widgets/create_team_prompt.dart';
 import 'package:moazez/feature/home/presentation/widgets/home_top_section.dart';
 import 'package:moazez/feature/home/presentation/widgets/invite_participants_section.dart';
 import 'package:moazez/feature/home/presentation/widgets/participants_section.dart';
+import 'package:moazez/feature/home/presentation/widgets/subscription_card.dart';
+import 'package:moazez/feature/home/presentation/cubit/subscription_cubit.dart';
+import 'package:moazez/feature/home/presentation/cubit/subscription_state.dart';
 import 'package:moazez/feature/home/presentation/widgets/title_with_icon.dart';
-import 'package:moazez/feature/home/presentation/widgets/trial_package_status.dart';
 import 'package:moazez/feature/home/presentation/widgets/progress_chart.dart';
-import 'package:moazez/feature/packages/presentation/cubit/packages_state.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/home/presentation/cubit/team_state.dart';
 import 'package:moazez/feature/home/presentation/cubit/team_cubit.dart';
 
 class PackagesView extends StatelessWidget {
   final ProfileLoaded profileState;
-  final PackagesLoaded packagesState;
   final TeamState teamState;
 
   const PackagesView({
     super.key,
     required this.profileState,
-    required this.packagesState,
     required this.teamState,
   });
 
   @override
   Widget build(BuildContext context) {
     // ScrollController for CustomScrollView
-    final ScrollController scrollController = ScrollController();
-
-    // Check if the active subscription package name is "الباقة التجريبية"
-    bool showTrialPackageStatus =
-        profileState
-            .profileResponse
-            ?.data
-            ?.user
-            ?.activeSubscription
-            ?.packageName ==
-        "الباقة التجريبية";
 
     // Determine if user owns a team based on team state
     bool ownsTeam = false;
@@ -57,12 +44,25 @@ class PackagesView extends StatelessWidget {
     }
 
     return CustomScrollView(
-      controller: scrollController,
       slivers: [
         const SliverToBoxAdapter(child: HomeTopSection()),
-        const SliverToBoxAdapter(child: SizedBox(height: 16)),
-        if (showTrialPackageStatus)
-          const SliverToBoxAdapter(child: TrialPackageStatus()),
+        SliverToBoxAdapter(
+          child: BlocBuilder<SubscriptionCubit, SubscriptionState>(
+            builder: (context, subState) {
+              if (subState is SubscriptionLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (subState is SubscriptionLoaded) {
+                return SubscriptionCard(subscription: subState.subscription);
+              } else if (subState is SubscriptionError) {
+                return Center(child: Text(subState.message));
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          ),
+        ),
+  
+
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           sliver: SliverToBoxAdapter(
@@ -112,7 +112,7 @@ class PackagesView extends StatelessWidget {
                   Center(child: const InviteParticipantsSection())
                 else
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20.0),
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Center(
                       child: CreateTeamPrompt(
                         onPressed: () async {

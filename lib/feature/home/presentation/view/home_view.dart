@@ -9,7 +9,6 @@ import 'package:moazez/feature/home/presentation/view/agreements_view.dart';
 import 'package:moazez/feature/profile/presentation/view/account_view.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
-import 'package:moazez/feature/packages/presentation/cubit/packages_cubit.dart';
 import 'package:moazez/feature/home/presentation/cubit/team_cubit.dart';
 
 class HomeView extends StatefulWidget {
@@ -36,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
       providers: [
         BlocProvider(create: (_) => sl<LogoutCubit>()),
         BlocProvider(create: (_) => sl<ProfileCubit>()..fetchProfile()),
-        BlocProvider(create: (_) => sl<PackagesCubit>()..fetchPackages()),
+    //    BlocProvider(create: (_) => sl<PackagesCubit>()..fetchPackages()),
         BlocProvider(create: (_) => sl<TeamCubit>()..fetchTeamInfo()),
       ],
       child: Scaffold(

@@ -6,10 +6,15 @@ import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/services/cache/cache_service_impl.dart';
 import 'package:moazez/core/utils/constant/api_endpoints.dart';
 import 'package:moazez/feature/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:moazez/feature/home/data/datasources/subscription_remote_data_source.dart';
 import 'package:moazez/feature/home/data/datasources/team_remote_data_source.dart';
+import 'package:moazez/feature/home/data/repositories/subscription_repository_impl.dart';
 import 'package:moazez/feature/home/data/repositories/team_repository_impl.dart';
+import 'package:moazez/feature/home/domain/repositories/subscription_repository.dart';
 import 'package:moazez/feature/home/domain/repositories/team_repository.dart';
+import 'package:moazez/feature/home/domain/usecases/get_current_subscription_usecase.dart';
 import 'package:moazez/feature/home/domain/usecases/get_team_info_usecase.dart';
+import 'package:moazez/feature/home/presentation/cubit/subscription_cubit.dart';
 import 'package:moazez/feature/home/presentation/cubit/team_cubit.dart';
 import 'package:moazez/feature/profile/domain/usecases/edit_profile_usecase.dart';
 import 'package:moazez/feature/auth/data/repositories/auth_repository_impl.dart';
@@ -27,10 +32,6 @@ import 'package:moazez/feature/profile/data/repositories/profile_repository_impl
 import 'package:moazez/feature/profile/domain/repositories/profile_repository.dart';
 import 'package:moazez/feature/profile/domain/usecases/get_profile_usecase.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
-import 'package:moazez/feature/packages/data/datasources/packages_remote_data_source.dart';
-import 'package:moazez/feature/packages/data/repositories/packages_repository_impl.dart';
-import 'package:moazez/feature/packages/domain/repositories/packages_repository.dart';
-import 'package:moazez/feature/packages/presentation/cubit/packages_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
@@ -70,10 +71,24 @@ Future<void> init() async {
   );
   sl.registerLazySingleton(() => GetProfileUseCase(sl()));
   sl.registerLazySingleton(() => EditProfileUseCase(repository: sl()));
-  sl.registerFactory(() => ProfileCubit(
-    getProfileUseCase: sl(),
-    editProfileUseCase: sl(),
-  ));
+  sl.registerFactory(
+    () => ProfileCubit(getProfileUseCase: sl(), editProfileUseCase: sl()),
+  );
+  sl.registerFactory(
+    () => TeamCubit(getTeamInfoUseCase: sl(), teamRepository: sl()),
+  );
+  sl.registerLazySingleton(() => GetTeamInfoUseCase(repository: sl()));
+
+  // Repository
+  sl.registerLazySingleton<TeamRepository>(
+    () => TeamRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<TeamRemoteDataSource>(
+    () => TeamRemoteDataSourceImpl(dio: sl()),
+  );
+  sl.registerLazySingleton(() => CreateTeamUseCase(repository: sl()));
 
   //############################################################################
   //                                Core
@@ -108,36 +123,14 @@ Future<void> init() async {
   //############################################################################
   //                           Features - Packages
   //############################################################################
-
-  sl.registerLazySingleton<PackagesRemoteDataSource>(() => 
-    PackagesRemoteDataSource(sl()));
-
-  sl.registerLazySingleton<PackagesRepository>(() => 
-    PackagesRepositoryImpl(
-      remoteDataSource: sl(),
-      networkInfo: sl(),
-    ));
-
-  sl.registerFactory(() => PackagesCubit(sl()));
-
-  //############################################################################
-  //                           Features - Team
-  //############################################################################
-
-  sl.registerLazySingleton<TeamRemoteDataSource>(() => 
-    TeamRemoteDataSourceImpl(dio: sl()));
-
-  sl.registerLazySingleton<TeamRepository>(() => 
-    TeamRepositoryImpl(
-      remoteDataSource: sl(),
-      networkInfo: sl(),
-    ));
-
-  sl.registerLazySingleton(() => GetTeamInfoUseCase(repository: sl()));
-  sl.registerLazySingleton(() => CreateTeamUseCase(repository: sl()));
-
-  sl.registerFactory(() => TeamCubit(
-    getTeamInfoUseCase: sl(),
-    teamRepository: sl(),
-  ));
+  sl.registerLazySingleton<SubscriptionRemoteDataSource>(
+    () => SubscriptionRemoteDataSourceImpl(dio: sl()),
+  );
+  sl.registerLazySingleton<SubscriptionRepository>(
+    () => SubscriptionRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()),
+  );
+  sl.registerLazySingleton(() => GetCurrentSubscriptionUseCase(sl()));
+  sl.registerFactory(
+    () => SubscriptionCubit(getCurrentSubscriptionUseCase: sl()),
+  );
 }
