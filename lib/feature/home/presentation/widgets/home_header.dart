@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
-import 'package:moazez/core/utils/constant/app_assets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
+import 'package:moazez/feature/invitations/presentation/received_invitations_view.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 
 class HomeHeader extends StatelessWidget {
@@ -92,22 +92,29 @@ class HomeHeader extends StatelessWidget {
             },
           ),
           const Spacer(),
-          // Notification icon with badge
+          // Invitations icon with badge
           Stack(
             clipBehavior: Clip.none,
             children: [
-              SvgPicture.asset(
-                AppAssets.notificationIcon,
-                width: 28,
-                height: 28,
-                colorFilter: ColorFilter.mode(Colors.black, BlendMode.srcIn),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    ReceivedInvitationsView.routeName,
+                  );
+                },
+                child: SvgPicture.asset(
+                  'assets/images/request.svg', // Ensure this asset exists or replace with an appropriate icon
+                  width: 28,
+                  height: 28,
+                ),
               ),
               Positioned(
                 top: -4,
-                right: 2,
+                right: 8,
                 child: Container(
-                  width: 10,
-                  height: 10,
+                  width: 8,
+                  height: 8,
                   decoration: const BoxDecoration(
                     color: Colors.red,
                     shape: BoxShape.circle,

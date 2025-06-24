@@ -8,7 +8,7 @@ class SubscriptionEntity extends Equatable {
   final String pricePaid;
   final PackageEntity package;
   final UsageEntity usage;
-  final int? daysRemaining;
+  final double? daysRemaining;
   final bool isActive;
 
   const SubscriptionEntity({

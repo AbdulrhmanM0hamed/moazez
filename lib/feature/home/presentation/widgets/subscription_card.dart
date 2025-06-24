@@ -48,9 +48,12 @@ class SubscriptionCard extends StatelessWidget {
     final String planName = sub.package.name;
     final String billingCycle =
         isTrial ? 'فترة تجريبية' : 'شهرياً'; // Placeholder
-    final String status = sub.status;
+    final String status = _getStatusText(sub.status);
     final int remainingTasks = sub.usage.remainingTasks;
     final int totalTasks = sub.usage.tasksCreated + sub.usage.remainingTasks;
+    final double usagePercentage =
+        sub.usage.usagePercentage /
+        100.0; // Convert to 0.0-1.0 range for progress bar
     final String trialPeriod =
         sub.daysRemaining != null
             ? '${sub.daysRemaining} يوم متبقي'
@@ -75,17 +78,12 @@ class SubscriptionCard extends StatelessWidget {
                 colors:
                     isTrial
                         ? [
+                          const Color.fromARGB(255, 84, 175, 90), // Light Green
                           const Color.fromARGB(
                             255,
-                            129,
-                            199,
-                            132,
-                          ), // Light Green
-                          const Color.fromARGB(
-                            255,
-                            66,
-                            150,
-                            71,
+                            93,
+                            172,
+                            98,
                           ), // Medium Green
                         ]
                         : [
@@ -103,7 +101,13 @@ class SubscriptionCard extends StatelessWidget {
                   _buildHeader(planName, trialPeriod, billingCycle, isTrial),
                   const SizedBox(height: 8.0),
 
-                  _buildProgress(remainingTasks, totalTasks, isTrial),
+                  _buildProgress(
+                    context,
+                    remainingTasks,
+                    totalTasks,
+                    isTrial,
+                    usagePercentage,
+                  ),
                   const SizedBox(height: 16.0),
                   _buildStatus(status),
                 ],
@@ -147,10 +151,17 @@ class SubscriptionCard extends StatelessWidget {
     );
   }
 
-  Widget _buildProgress(int tasksRemaining, int totalTasks, bool isTrial) {
+  Widget _buildProgress(
+    BuildContext context,
+    int tasksRemaining,
+    int totalTasks,
+    bool isTrial,
+    double usagePercentage,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // النصوص العلوية
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -175,20 +186,50 @@ class SubscriptionCard extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12.0),
-        if (totalTasks > 0)
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: LinearProgressIndicator(
-              value: (totalTasks - tasksRemaining) / totalTasks,
-              backgroundColor: Colors.white.withValues(alpha: 0.2),
-              valueColor: AlwaysStoppedAnimation<Color>(
-                isTrial ? Colors.white : const Color(0xFF2ECC71),
+
+        // Progress Bar بتدرج احترافي
+        Stack(
+          children: [
+            // الخلفية
+            Container(
+              height: 10.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: Colors.white.withValues(alpha: 0.2),
               ),
-              minHeight: 8.0,
             ),
-          ),
+
+            // الشريط نفسه مع تدريج
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Container(
+                height: 10.0,
+                width:
+                    usagePercentage.clamp(0.0, 1.0) *
+                    MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: _getInterpolatedColor(usagePercentage, isTrial),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+            ),
+          ],
+        ),
       ],
     );
+  }
+
+  Color _getInterpolatedColor(double percentage, bool isTrial) {
+    if (percentage <= 0.5) {
+      // من 0% إلى 50% - أخضر
+      return const Color.fromARGB(255, 46, 204, 113); // Green
+    } else if (percentage <= 0.8) {
+      // من 51% إلى 80% - أصفر
+      return const Color.fromARGB(255, 241, 196, 15); // Yellow
+    } else {
+      // من 81% إلى 100% - أحمر
+      return const Color.fromARGB(255, 231, 76, 60); // Red
+    }
   }
 
   Widget _buildStatus(String status) {
@@ -216,13 +257,29 @@ class SubscriptionCard extends StatelessWidget {
     );
   }
 
+  String _getStatusText(String status) {
+    switch (status.toLowerCase()) {
+      case 'active':
+        return 'نشط';
+      case 'expired':
+        return 'منتهي';
+      case 'pending':
+        return 'معلق';
+      default:
+        return 'غير معروف';
+    }
+  }
+
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'active':
+      case 'نشط':
         return const Color(0xFF2ECC71);
       case 'expired':
+      case 'منتهي':
         return const Color(0xFFE74C3C);
       case 'pending':
+      case 'معلق':
         return const Color(0xFFF39C12);
       default:
         return const Color(0xFF95A5A6);
@@ -232,10 +289,13 @@ class SubscriptionCard extends StatelessWidget {
   IconData _getStatusIcon(String status) {
     switch (status.toLowerCase()) {
       case 'active':
+      case 'نشط':
         return Icons.check_circle_outline_rounded;
       case 'expired':
+      case 'منتهي':
         return Icons.error_outline_rounded;
       case 'pending':
+      case 'معلق':
         return Icons.pending_outlined;
       default:
         return Icons.info_outline_rounded;

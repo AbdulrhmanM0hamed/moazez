@@ -61,7 +61,10 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
         if (_selectedArea != null && profile.city != null) {
           _selectedCityId = profile.city?.id;
           // Validate if the selected city ID exists in the area's cities
-          if (_selectedCityId != null && !_selectedArea!.cities.any((city) => city.id == _selectedCityId)) {
+          if (_selectedCityId != null &&
+              !_selectedArea!.cities.any(
+                (city) => city.id == _selectedCityId,
+              )) {
             _selectedCityId = null; // Reset if not found
           }
         }
@@ -219,7 +222,7 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
                                       boxShadow: [
                                         BoxShadow(
                                           color: AppColors.primary.withValues(
-                                            alpha:  0.3,
+                                            alpha: 0.3,
                                           ),
                                           blurRadius: 8,
                                           offset: const Offset(0, 2),
@@ -366,7 +369,8 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
                           onChanged: (value) {
                             setState(() {
                               _selectedArea = value;
-                              _selectedCityId = null; // Reset city when area changes
+                              _selectedCityId =
+                                  null; // Reset city when area changes
                             });
                           },
                         ),
@@ -393,27 +397,30 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
                               ),
                             ),
                           ),
-                          items: _selectedArea != null
-                              ? _selectedArea!.cities
-                                  .fold<Map<int, City>>({}, (map, city) {
-                                    if (!map.containsKey(city.id)) {
-                                      map[city.id] = city;
-                                    }
-                                    return map;
-                                  })
-                                  .values
-                                  .map(
-                                    (city) => DropdownMenuItem(
-                                      value: city.id,
-                                      child: Text(city.name),
-                                    ),
-                                  )
-                                  .toList()
-                              : [],
+                          items:
+                              _selectedArea != null
+                                  ? _selectedArea!.cities
+                                      .fold<Map<int, City>>({}, (map, city) {
+                                        if (!map.containsKey(city.id)) {
+                                          map[city.id] = city;
+                                        }
+                                        return map;
+                                      })
+                                      .values
+                                      .map(
+                                        (city) => DropdownMenuItem(
+                                          value: city.id,
+                                          child: Text(city.name),
+                                        ),
+                                      )
+                                      .toList()
+                                  : [],
                           // Add a validator to ensure the value exists in items (for debugging)
                           validator: (value) {
                             if (_selectedArea != null && value != null) {
-                              if (!_selectedArea!.cities.any((city) => city.id == value)) {
+                              if (!_selectedArea!.cities.any(
+                                (city) => city.id == value,
+                              )) {
                                 return 'المدينة المحددة غير موجودة في هذه المنطقة';
                               }
                             }
@@ -439,6 +446,7 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
                               onPressed: _saveProfile,
                               text: 'حفظ التغييرات',
                             ),
+                        const SizedBox(height: 24),
                       ],
                     ),
                   ),

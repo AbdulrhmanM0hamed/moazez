@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moazez/core/utils/common/cached_network_image.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/invitations/domain/entities/invitation_entity.dart';
 import 'package:moazez/feature/invitations/presentation/cubit/invitation_cubit.dart';
 import 'package:moazez/feature/invitations/presentation/cubit/invitation_state.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
+import 'package:moazez/core/utils/common/cached_network_image.dart';
 
 class SentInvitationsView extends StatelessWidget {
   const SentInvitationsView({super.key});
@@ -105,13 +107,23 @@ class InvitationCard extends StatelessWidget {
           children: [
             // Avatar or Icon section
             invitation.user.avatarUrl.isNotEmpty
-                ? CircleAvatar(
-                    radius: 25,
-                    backgroundImage: NetworkImage(invitation.user.avatarUrl),
-                    onBackgroundImageError: (_, __) => Icon(
-                      statusIcon,
-                      color: statusColor,
-                      size: 30,
+                ? CustomCachedNetworkImage(
+                    imageUrl: invitation.user.avatarUrl,
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                    borderRadius: BorderRadius.circular(25),
+                    errorWidget: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: statusColor.withOpacity(0.1),
+                      ),
+                      child: Icon(
+                        statusIcon,
+                        color: statusColor,
+                        size: 30,
+                      ),
                     ),
                   )
                 : Container(

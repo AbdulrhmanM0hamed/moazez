@@ -71,7 +71,7 @@ class _HomeViewState extends State<HomeView> {
                 selectedItemColor: AppColors.primary,
                 unselectedItemColor: Colors.grey,
                 showSelectedLabels: true,
-                showUnselectedLabels: false,
+                showUnselectedLabels: true,
                 elevation: 0,
                 items: [
                   BottomNavigationBarItem(
@@ -82,7 +82,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     activeIcon: SvgPicture.asset(
                       AppAssets.home_bold,
-                      width: 26,
+                      width: 28,
                       colorFilter: const ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
                     ),
                     label: 'الرئيسية',
@@ -95,7 +95,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     activeIcon: SvgPicture.asset(
                       AppAssets.agreement,
-                      width: 26,
+                      width: 28,
                       colorFilter: const ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
                     ),
                     label: 'اتفاقياتى',
@@ -108,7 +108,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     activeIcon: SvgPicture.asset(
                       AppAssets.profileIcon,
-                      width: 26,
+                      width: 28,
                       colorFilter: const ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
                     ),
                     label: 'حساب',

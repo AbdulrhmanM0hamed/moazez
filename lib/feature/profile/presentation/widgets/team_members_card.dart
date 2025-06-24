@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moazez/core/utils/common/cached_network_image.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moazez/core/utils/common/custom_dialog_button.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
@@ -27,7 +28,7 @@ class _TeamMembersCardState extends State<TeamMembersCard> {
         if (state is TeamLoaded && _isDeleting) {
           CustomSnackbar.showSuccess(
             context: context,
-            message: 'تم إزالة العضو من فريقك بنجاح',
+            message: 'تم حذف العضو بنجاح',
           );
           setState(() {
             _isDeleting = false;
@@ -120,41 +121,50 @@ class _TeamMembersCardState extends State<TeamMembersCard> {
             ),
             child: Row(
               children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image:
-                        member.avatarUrl != null && member.avatarUrl!.isNotEmpty
-                            ? DecorationImage(
-                              image: NetworkImage(
-                                _fixAvatarUrl(member.avatarUrl!),
-                              ),
-                              fit: BoxFit.cover,
-                            )
-                            : null,
-                    color:
-                        member.avatarUrl == null || member.avatarUrl!.isEmpty
-                            ? AppColors.primary.withValues(alpha: 0.2)
-                            : null,
-                  ),
-                  child:
-                      member.avatarUrl == null || member.avatarUrl!.isEmpty
-                          ? Center(
+                member.avatarUrl != null && member.avatarUrl!.isNotEmpty
+                    ? CustomCachedNetworkImage(
+                        imageUrl: _fixAvatarUrl(member.avatarUrl!),
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.cover,
+                        borderRadius: BorderRadius.circular(25),
+                        errorWidget: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.primary.withValues(alpha: 0.2),
+                          ),
+                          child: Center(
                             child: Text(
-                              (member.name ?? 'ع')
-                                  .substring(0, 1)
-                                  .toUpperCase(),
+                              (member.name ?? 'ع').substring(0, 1).toUpperCase(),
                               style: const TextStyle(
                                 color: AppColors.primary,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          )
-                          : null,
-                ),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.primary.withValues(alpha: 0.2),
+                        ),
+                        child: Center(
+                          child: Text(
+                            (member.name ?? 'ع').substring(0, 1).toUpperCase(),
+                            style: const TextStyle(
+                              color: AppColors.primary,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(

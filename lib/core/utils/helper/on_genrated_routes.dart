@@ -4,6 +4,7 @@ import 'package:moazez/feature/auth/presentation/pages/login_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/signup_view.dart';
 import 'package:moazez/feature/home/presentation/view/create_team_view.dart';
 import 'package:moazez/feature/home/presentation/view/home_view.dart';
+import 'package:moazez/feature/invitations/presentation/received_invitations_view.dart';
 import 'package:moazez/feature/invitations/presentation/sent_invitations_view.dart';
 import 'package:moazez/feature/profile/presentation/view/team_view.dart';
 import 'package:moazez/feature/splash/presentation/splash_view.dart';
@@ -37,6 +38,11 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => const SentInvitationsView(),
       );
+       case ReceivedInvitationsView.routeName:
+      return MaterialPageRoute(
+        builder: (context) => const ReceivedInvitationsView(),
+      );
+
     default:
       return MaterialPageRoute(builder: (context) => const SplashView());
   }

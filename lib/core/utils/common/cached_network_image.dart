@@ -33,32 +33,43 @@ class CustomCachedNetworkImage extends StatelessWidget {
         width: width,
         height: height,
         color: backgroundColor,
-        child: CachedNetworkImage(
-          imageUrl: imageUrl,
-          fit: fit ?? BoxFit.cover,
-          placeholder: (context, url) =>
-              placeholder ??
-              Container(
-                color: Colors.grey[200],
-                child: const Center(
-                  child: LoadingWidget(
-                    size: 24,
-                    color: AppColors.primary,
+        child: imageUrl.isEmpty || !Uri.parse(imageUrl).hasAuthority
+            ? (errorWidget ??
+                Container(
+                  color: Colors.grey[200],
+                  child: const Center(
+                    child: Icon(
+                      Icons.error_outline,
+                      color: AppColors.error,
+                    ),
                   ),
-                ),
+                ))
+            : CachedNetworkImage(
+                imageUrl: imageUrl,
+                fit: fit ?? BoxFit.cover,
+                placeholder: (context, url) =>
+                    placeholder ??
+                    Container(
+                      color: Colors.grey[200],
+                      child: const Center(
+                        child: LoadingWidget(
+                          size: 24,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                errorWidget: (context, url, error) =>
+                    errorWidget ??
+                    Container(
+                      color: Colors.grey[200],
+                      child: const Center(
+                        child: Icon(
+                          Icons.error_outline,
+                          color: AppColors.error,
+                        ),
+                      ),
+                    ),
               ),
-          errorWidget: (context, url, error) =>
-              errorWidget ??
-              Container(
-                color: Colors.grey[200],
-                child: const Center(
-                  child: Icon(
-                    Icons.error_outline,
-                    color: AppColors.error,
-                  ),
-                ),
-              ),
-        ),
       ),
     );
   }

@@ -4,17 +4,17 @@ class SubscriptionModel extends SubscriptionEntity {
   const SubscriptionModel({
     required int id,
     required String status,
-    required String startDate,
-    String? endDate,
+    required String? startDate,
+    required String? endDate,
     required String pricePaid,
     required PackageModel package,
     required UsageModel usage,
-    int? daysRemaining,
+    required double? daysRemaining,
     required bool isActive,
   }) : super(
           id: id,
           status: status,
-          startDate: startDate,
+          startDate: startDate ?? '',
           endDate: endDate,
           pricePaid: pricePaid,
           package: package,
@@ -27,12 +27,16 @@ class SubscriptionModel extends SubscriptionEntity {
     return SubscriptionModel(
       id: json['id'],
       status: json['status'] ?? '',
-      startDate: json['start_date'] ?? '',
-      endDate: json['end_date'] ?? '',
+      startDate: json['start_date'],
+      endDate: json['end_date'],
       pricePaid: json['price_paid'] ?? '',
       package: PackageModel.fromJson(json['package'] ?? {}),
       usage: UsageModel.fromJson(json['usage'] ?? {}),
-      daysRemaining: json['days_remaining'] ?? 0,
+      daysRemaining: json['days_remaining'] is double 
+          ? json['days_remaining'] 
+          : (json['days_remaining'] is String && json['days_remaining'] != 'غير محدد') 
+              ? double.tryParse(json['days_remaining']) 
+              : null,
       isActive: json['is_active'] ?? false,
     );
   }
@@ -100,9 +104,14 @@ class UsageModel extends UsageEntity {
         );
 
   factory UsageModel.fromJson(Map<String, dynamic> json) {
+    final int tasksCreated = json['tasks_created'] ?? 0;
+    final int maxTasks = json['max_tasks'] ?? 0;
+    final int remainingTasks = json.containsKey('remaining_tasks') 
+        ? json['remaining_tasks'] 
+        : (maxTasks > 0 ? maxTasks - tasksCreated : 0);
     return UsageModel(
-      tasksCreated: json['tasks_created'] ?? 0,
-      remainingTasks: json['remaining_tasks'] ?? 0,
+      tasksCreated: tasksCreated,
+      remainingTasks: remainingTasks,
       usagePercentage: json['usage_percentage'] ?? 0,
     );
   }

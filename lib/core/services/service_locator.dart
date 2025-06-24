@@ -18,6 +18,8 @@ import 'package:moazez/feature/invitations/data/datasources/invitation_remote_da
 import 'package:moazez/feature/invitations/data/repositories/invitation_repository_impl.dart';
 import 'package:moazez/feature/invitations/domain/repositories/invitation_repository.dart';
 import 'package:moazez/feature/invitations/domain/usecases/get_sent_invitations_usecase.dart';
+import 'package:moazez/feature/invitations/domain/usecases/respond_to_invitation_usecase.dart';
+import 'package:moazez/feature/invitations/domain/usecases/get_received_invitations_usecase.dart';
 import 'package:moazez/feature/invitations/domain/usecases/send_invitation_usecase.dart';
 import 'package:moazez/feature/invitations/presentation/cubit/invitation_cubit.dart';
 import 'package:moazez/feature/home/presentation/cubit/subscription_cubit.dart';
@@ -83,15 +85,19 @@ Future<void> init() async {
   sl.registerFactory(
     () => TeamCubit(getTeamInfoUseCase: sl(), teamRepository: sl()),
   );
-  sl.registerFactory(
-    () => InvitationCubit(
-      sendInvitationUseCase: sl(),
-      getSentInvitationsUseCase: sl(),
-    ),
-  );
+    sl.registerFactory(
+      () => InvitationCubit(
+        sendInvitationUseCase: sl(),
+        getSentInvitationsUseCase: sl(),
+        getReceivedInvitationsUseCase: sl(),
+        respondToInvitationUseCase: sl(),
+      ),
+    );
   sl.registerLazySingleton(() => GetTeamInfoUseCase(repository: sl()));
   sl.registerLazySingleton(() => SendInvitationUseCase(sl()));
   sl.registerLazySingleton(() => GetSentInvitationsUseCase(sl()));
+    sl.registerLazySingleton(() => GetReceivedInvitationsUseCase(sl()));
+    sl.registerLazySingleton(() => RespondToInvitationUseCase(sl()));
 
   // Repository
   sl.registerLazySingleton<TeamRepository>(
