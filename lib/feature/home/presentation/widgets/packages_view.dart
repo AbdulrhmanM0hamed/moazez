@@ -43,93 +43,97 @@ class PackagesView extends StatelessWidget {
       }
     }
 
-    return CustomScrollView(
-      slivers: [
-        const SliverToBoxAdapter(child: HomeTopSection()),
-        SliverToBoxAdapter(
-          child: BlocBuilder<SubscriptionCubit, SubscriptionState>(
-            builder: (context, subState) {
-              if (subState is SubscriptionLoading) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (subState is SubscriptionLoaded) {
-                return SubscriptionCard(subscription: subState.subscription);
-              } else if (subState is SubscriptionError) {
-                return Center(child: Text(subState.message));
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
-          ),
-        ),
-  
-
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          sliver: SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (ownsTeam &&
-                    teamState is TeamLoaded &&
-                    (teamState as TeamLoaded).team.membersCount != null &&
-                    (teamState as TeamLoaded).team.membersCount! >= 1)
-                  Column(
+    return Column(
+      children: [
+        const HomeTopSection(),
+        Expanded(
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: BlocBuilder<SubscriptionCubit, SubscriptionState>(
+                  builder: (context, subState) {
+                    if (subState is SubscriptionLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (subState is SubscriptionLoaded) {
+                      return SubscriptionCard(subscription: subState.subscription);
+                    } else if (subState is SubscriptionError) {
+                      return Center(child: Text(subState.message));
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                ),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                sliver: SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TitleWithIcon(
-                        title: 'تقدم المشاركين',
-                        icon: Icons.bar_chart_rounded,
-                      ),
-                      const SizedBox(height: 16),
-                      ProgressChart(
-                        items: const [
-                          ParticipantProgress(
-                            percent: 0.8,
-                            avatarPath: 'assets/images/avatar.jpg',
+                      if (ownsTeam &&
+                          teamState is TeamLoaded &&
+                          (teamState as TeamLoaded).team.membersCount != null &&
+                          (teamState as TeamLoaded).team.membersCount! >= 1)
+                        Column(
+                          children: [
+                            TitleWithIcon(
+                              title: 'تقدم المشاركين',
+                              icon: Icons.bar_chart_rounded,
+                            ),
+                            const SizedBox(height: 16),
+                            ProgressChart(
+                              items: const [
+                                ParticipantProgress(
+                                  percent: 0.8,
+                                  avatarPath: 'assets/images/avatar.jpg',
+                                ),
+                                ParticipantProgress(
+                                  percent: 0.6,
+                                  avatarPath: 'assets/images/avatar.jpg',
+                                ),
+                                ParticipantProgress(
+                                  percent: 1.0,
+                                  avatarPath: 'assets/images/avatar.jpg',
+                                ),
+                                ParticipantProgress(
+                                  percent: 0.4,
+                                  avatarPath: 'assets/images/avatar.jpg',
+                                ),
+                                ParticipantProgress(
+                                  percent: 0.9,
+                                  avatarPath: 'assets/images/avatar.jpg',
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            ParticipantsSection(),
+                          ],
+                        )
+                      else if (ownsTeam)
+                        Center(child: const InviteParticipantsSection())
+                      else
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Center(
+                            child: CreateTeamPrompt(
+                              onPressed: () async {
+                                final result = await Navigator.pushNamed(
+                                  context,
+                                  CreateTeamView.routeName,
+                                );
+                                if (result == true) {
+                                  // Refresh team state after team creation
+                                  context.read<TeamCubit>().fetchTeamInfo();
+                                }
+                              },
+                            ),
                           ),
-                          ParticipantProgress(
-                            percent: 0.6,
-                            avatarPath: 'assets/images/avatar.jpg',
-                          ),
-                          ParticipantProgress(
-                            percent: 1.0,
-                            avatarPath: 'assets/images/avatar.jpg',
-                          ),
-                          ParticipantProgress(
-                            percent: 0.4,
-                            avatarPath: 'assets/images/avatar.jpg',
-                          ),
-                          ParticipantProgress(
-                            percent: 0.9,
-                            avatarPath: 'assets/images/avatar.jpg',
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      ParticipantsSection(),
+                        ),
                     ],
-                  )
-                else if (ownsTeam)
-                  Center(child: const InviteParticipantsSection())
-                else
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Center(
-                      child: CreateTeamPrompt(
-                        onPressed: () async {
-                          final result = await Navigator.pushNamed(
-                            context,
-                            CreateTeamView.routeName,
-                          );
-                          if (result == true) {
-                            // Refresh team state after team creation
-                            context.read<TeamCubit>().fetchTeamInfo();
-                          }
-                        },
-                      ),
-                    ),
                   ),
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
         ),
       ],

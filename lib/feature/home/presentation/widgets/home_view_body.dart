@@ -31,6 +31,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, profileState) {
           if (profileState is ProfileLoading) {
+            
             return const Center(child: CustomProgressIndcator());
           }
           if (profileState is ProfileError) {
