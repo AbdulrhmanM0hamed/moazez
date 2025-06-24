@@ -33,14 +33,17 @@ class HomeTopSection extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           // Search field
-          CustomTextField(
-            hint: 'ابحث...',
-            prefix: const Icon(Icons.search, size: 18, color: AppColors.textSecondary),
-            fillColor: Theme.of(context).scaffoldBackgroundColor,
-            keyboardType: TextInputType.text,
-            onSubmitted: (v) {},
-            textAlign: TextAlign.right,
-            textDirection: TextDirection.rtl,
+          SizedBox(
+            height: 50, // Reduce the height of the text field
+            child: CustomTextField(
+              hint: 'ابحث...',
+              prefix: const Icon(Icons.search, size: 35, color: AppColors.textSecondary),
+              fillColor: Theme.of(context).scaffoldBackgroundColor,
+              keyboardType: TextInputType.text,
+              onSubmitted: (v) {},
+              textAlign: TextAlign.right,
+              textDirection: TextDirection.rtl,
+            ),
           ),
         ],
       ),

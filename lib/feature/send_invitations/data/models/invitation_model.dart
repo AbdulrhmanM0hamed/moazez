@@ -18,10 +18,10 @@ class InvitationModel extends InvitationEntity {
   factory InvitationModel.fromJson(Map<String, dynamic> json) {
     return InvitationModel(
       id: json['id'],
-      email: json['email'],
-      status: json['status'],
-      sentAt: json['sent_at'],
-      acceptedAt: json['accepted_at'],
+      email: json['email'] ?? '',
+      status: json['status'] ?? 'pending',
+      sentAt: json['created_at'] ?? json['sent_at'] ?? '',
+      acceptedAt: json['updated_at'] ?? json['accepted_at'],
     );
   }
 

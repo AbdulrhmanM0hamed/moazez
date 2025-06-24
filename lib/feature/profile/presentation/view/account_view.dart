@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/services/service_locator.dart';
+import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
 import 'package:moazez/feature/home/presentation/cubit/team_cubit.dart';
@@ -37,18 +38,10 @@ class _AccountViewBody extends StatelessWidget {
     return LogoutListener(
       child: Scaffold(
         backgroundColor: AppColors.scaffoldBackground,
-        appBar: AppBar(
+        appBar: CustomAppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: AppColors.scaffoldBackground,
           elevation: 0,
-          title: const Text(
-            'حسابي',
-            style: TextStyle(
-              color: AppColors.textPrimary,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          title: 'حسابي',
           centerTitle: true,
         ),
         body: BlocBuilder<ProfileCubit, ProfileState>(

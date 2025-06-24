@@ -20,7 +20,7 @@ class InvitationRepositoryImpl implements InvitationRepository {
     if (await networkInfo.isConnected) {
       try {
         final remoteInvitation = await remoteDataSource.sendInvitation(email);
-        return Right(remoteInvitation);
+        return Right( remoteInvitation);
       } on ServerException catch (e) {
         return Left(ServerFailure(message: e.message ?? 'خطأ في الخادم'));
       }

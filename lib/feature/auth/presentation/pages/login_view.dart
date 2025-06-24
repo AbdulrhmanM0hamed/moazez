@@ -40,7 +40,10 @@ class _LoginViewState extends State<LoginView> {
     return BlocProvider(
       create: (context) => sl<LoginCubit>(),
       child: Scaffold(
-        appBar: CustomAppBar(title: 'تسجيل الدخول'),
+        appBar: CustomAppBar(
+          automaticallyImplyLeading: false,
+          title: 'تسجيل الدخول',
+        ),
         body: BlocConsumer<LoginCubit, LoginState>(
           listener: (context, state) {
             // First, handle hiding the loading indicator if it's showing.

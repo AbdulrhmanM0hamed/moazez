@@ -57,7 +57,10 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
 
   Widget _buildBody(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'استكمال البيانات'),
+      appBar: const CustomAppBar(
+        automaticallyImplyLeading: false,
+        title: 'استكمال البيانات',
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),

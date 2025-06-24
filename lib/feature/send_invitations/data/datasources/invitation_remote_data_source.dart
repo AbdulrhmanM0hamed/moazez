@@ -18,6 +18,8 @@ class InvitationRemoteDataSourceImpl implements InvitationRemoteDataSource {
   @override
   Future<InvitationModel> sendInvitation(String email) async {
     try {
+      final token = await sl<CacheService>().getToken();
+      print('Token used for Invitation API: $token');
       final response = await dio.post(
         '${ApiEndpoints.baseUrl}${ApiEndpoints.sendInvitation}',
         data: {'email': email},
@@ -25,13 +27,13 @@ class InvitationRemoteDataSourceImpl implements InvitationRemoteDataSource {
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': 'Bearer ${sl<CacheService>().getToken()}',
+            'Authorization': 'Bearer ${token ?? ""}',
           },
         ),
       );
       print('Send Invitation API Response: ${response.statusCode} - ${response.data}');
-      if (response.statusCode == 200 && response.data != null) {
-        final data = response.data['data'];
+      if ((response.statusCode == 200 || response.statusCode == 201) && response.data != null) {
+        final data = response.data['data'] ?? response.data['join_request'];
         if (data != null) {
           print('Invitation Data to Parse: $data');
           return InvitationModel.fromJson(data);
@@ -51,13 +53,14 @@ class InvitationRemoteDataSourceImpl implements InvitationRemoteDataSource {
   @override
   Future<List<InvitationModel>> getSentInvitations() async {
     try {
+      final token = await sl<CacheService>().getToken();
       final response = await dio.get(
         '${ApiEndpoints.baseUrl}get-sent-invitations',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': 'Bearer ${sl<CacheService>().getToken()}',
+            'Authorization': 'Bearer ${token ?? ""}',
           },
         ),
       );

@@ -112,21 +112,18 @@ class PackagesView extends StatelessWidget {
                       else if (ownsTeam)
                         Center(child: const InviteParticipantsSection())
                       else
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Center(
-                            child: CreateTeamPrompt(
-                              onPressed: () async {
-                                final result = await Navigator.pushNamed(
-                                  context,
-                                  CreateTeamView.routeName,
-                                );
-                                if (result == true) {
-                                  // Refresh team state after team creation
-                                  context.read<TeamCubit>().fetchTeamInfo();
-                                }
-                              },
-                            ),
+                        Center(
+                          child: CreateTeamPrompt(
+                            onPressed: () async {
+                              final result = await Navigator.pushNamed(
+                                context,
+                                CreateTeamView.routeName,
+                              );
+                              if (result == true) {
+                                // Refresh team state after team creation
+                                context.read<TeamCubit>().fetchTeamInfo();
+                              }
+                            },
                           ),
                         ),
                     ],

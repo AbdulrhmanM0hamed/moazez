@@ -4,6 +4,7 @@ import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/common/custom_button.dart';
 import 'package:moazez/core/utils/common/custom_text_field.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
+import 'package:moazez/core/utils/validators/form_validators.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/feature/send_invitations/presentation/cubit/invitation_cubit.dart';
 import 'package:moazez/feature/send_invitations/presentation/cubit/invitation_state.dart';
@@ -40,12 +41,14 @@ class _SendInvitationsViewState extends State<SendInvitationsView> {
                 context: context,
                 message: 'تم إرسال الدعوة بنجاح',
               );
-              Navigator.pop(context);
             } else if (state is InvitationError) {
               String errorMessage = state.message;
-
-              errorMessage = 'حدث خطأ أثناء إرسال الدعوة: $errorMessage';
-              CustomSnackbar.show(context: context, message: errorMessage);
+              if (errorMessage.contains('422')) {
+                errorMessage = 'تم إرسال دعوة بالفعل لهذا البريد الإلكتروني';
+              } else if (errorMessage.contains('401')) {
+                errorMessage = 'خطأ في التحقق: يرجى تسجيل الدخول مرة أخرى';
+              }
+              CustomSnackbar.showError(context: context, message: errorMessage);
             }
           },
           child: Padding(
@@ -68,18 +71,7 @@ class _SendInvitationsViewState extends State<SendInvitationsView> {
                     controller: _emailController,
                     hint: 'البريد الإلكتروني',
                     keyboardType: TextInputType.emailAddress,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'الرجاء إدخال البريد الإلكتروني';
-                      }
-                      // Basic email validation
-                      if (!RegExp(
-                        r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                      ).hasMatch(value)) {
-                        return 'الرجاء إدخال بريد إلكتروني صحيح';
-                      }
-                      return null;
-                    },
+                    validator: FormValidators.validateEmail,
                     prefix: const Icon(Icons.email),
                   ),
                   const SizedBox(height: 24),

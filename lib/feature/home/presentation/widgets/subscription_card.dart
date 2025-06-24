@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:moazez/core/utils/constant/font_manger.dart';
+import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/feature/home/domain/entities/subscription_entity.dart';
 import 'package:moazez/feature/profile/data/models/profile_model.dart'
     show ActiveSubscription;
@@ -44,20 +46,21 @@ class SubscriptionCard extends StatelessWidget {
     // Map data to the new UI parameters
     final bool isTrial = sub.package.isTrial == 1;
     final String planName = sub.package.name;
-    final String price = sub.pricePaid == '0' ? 'مجاني' : '\$${sub.pricePaid}';
     final String billingCycle =
         isTrial ? 'فترة تجريبية' : 'شهرياً'; // Placeholder
     final String status = sub.status;
     final int remainingTasks = sub.usage.remainingTasks;
     final int totalTasks = sub.usage.tasksCreated + sub.usage.remainingTasks;
     final String trialPeriod =
-        sub.daysRemaining != null ? '${sub.daysRemaining} يوم متبقي' : 'غير محدد';
+        sub.daysRemaining != null
+            ? '${sub.daysRemaining} يوم متبقي'
+            : 'غير محدد';
 
     // Now, return the new UI using these variables
     return Directionality(
       textDirection: TextDirection.rtl, // Set to RTL for Arabic
       child: Container(
-        margin: const EdgeInsets.all(16.0),
+        margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: Card(
           elevation: 8.0,
           shape: RoundedRectangleBorder(
@@ -86,23 +89,13 @@ class SubscriptionCard extends StatelessWidget {
                           ), // Medium Green
                         ]
                         : [
-                          const Color.fromARGB(
-                            255,
-                            56,
-                            74,
-                            235,
-                          ), // Light Blue
-                          const Color.fromARGB(
-                            255,
-                            56,
-                            74,
-                            235,
-                          ), // Dark Blue
+                          const Color.fromARGB(255, 56, 74, 235), // Light Blue
+                          const Color.fromARGB(255, 56, 74, 235), // Dark Blue
                         ],
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -136,12 +129,11 @@ class SubscriptionCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              planName,
-              style: const TextStyle(
+              "انت الان على الباقة ${planName} ",
+              style: getBoldStyle(
+                fontFamily: FontConstant.cairo,
+                fontSize: 16.0,
                 color: Colors.white,
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 0.5,
               ),
             ),
           ],
@@ -150,32 +142,6 @@ class SubscriptionCard extends StatelessWidget {
           isTrial ? Icons.star_rounded : Icons.card_membership_rounded,
           color: Colors.white,
           size: 32.0,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPricing(String price, String billingCycle, bool isTrial) {
-    if (isTrial) return const SizedBox.shrink();
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.baseline,
-      textBaseline: TextBaseline.alphabetic,
-      children: [
-        Text(
-          price,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 36.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(width: 8.0),
-        Text(
-          '/ ${billingCycle.toLowerCase()}',
-          style: TextStyle(
-            color: Colors.white.withOpacity(0.8),
-            fontSize: 16.0,
-          ),
         ),
       ],
     );
@@ -190,19 +156,20 @@ class SubscriptionCard extends StatelessWidget {
           children: [
             Text(
               'تقدم المهام',
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.9),
-                fontSize: 16.0,
-                fontWeight: FontWeight.w500,
+              style: getSemiBoldStyle(
+                fontFamily: FontConstant.cairo,
+                fontSize: 14.0,
+                color: Colors.white,
               ),
             ),
             Text(
               totalTasks > 0
                   ? '$tasksRemaining من $totalTasks متبقي'
                   : '$tasksRemaining متبقي',
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.7),
+              style: getSemiBoldStyle(
+                fontFamily: FontConstant.cairo,
                 fontSize: 14.0,
+                color: Colors.white.withValues(alpha: 0.7),
               ),
             ),
           ],
@@ -213,7 +180,7 @@ class SubscriptionCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.0),
             child: LinearProgressIndicator(
               value: (totalTasks - tasksRemaining) / totalTasks,
-              backgroundColor: Colors.white.withOpacity(0.2),
+              backgroundColor: Colors.white.withValues(alpha: 0.2),
               valueColor: AlwaysStoppedAnimation<Color>(
                 isTrial ? Colors.white : const Color(0xFF2ECC71),
               ),
@@ -238,10 +205,10 @@ class SubscriptionCard extends StatelessWidget {
           const SizedBox(width: 6.0),
           Text(
             status,
-            style: const TextStyle(
+            style: getSemiBoldStyle(
+              fontFamily: FontConstant.cairo,
               color: Colors.white,
               fontSize: 14.0,
-              fontWeight: FontWeight.w500,
             ),
           ),
         ],
