@@ -39,4 +39,18 @@ class TeamCubit extends Cubit<TeamState> {
       (team) => emit(TeamLoaded(team: team)),
     );
   }
+
+  Future<void> removeTeamMember(int memberId) async {
+    emit(TeamLoading());
+    final result = await teamRepository.removeTeamMember(memberId);
+    result.fold(
+      (failure) => emit(TeamError(message: failure.message)),
+      (team) async {
+        // Emit a TeamLoaded state immediately to trigger Snackbar
+        emit(TeamLoaded(team: team));
+        // Then fetch updated team info
+        await fetchTeamInfo();
+      },
+    );
+  }
 }

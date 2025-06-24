@@ -6,4 +6,5 @@ abstract class TeamRepository {
   Future<Either<Failure, TeamEntity>> getTeamInfo();
   Future<Either<Failure, TeamEntity>> createTeam(String teamName);
   Future<Either<Failure, TeamEntity>> updateTeamName(String newName);
+  Future<Either<Failure, TeamEntity>> removeTeamMember(int memberId);
 }

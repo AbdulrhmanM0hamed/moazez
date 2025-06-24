@@ -69,4 +69,22 @@ class TeamRepositoryImpl implements TeamRepository {
       return const Left(NetworkFailure(message: 'لا يوجد اتصال بالإنترنت'));
     }
   }
+
+  @override
+  Future<Either<Failure, TeamEntity>> removeTeamMember(int memberId) async {
+    if (await networkInfo.isConnected) {
+      try {
+        debugPrint('Removing team member with ID: $memberId');
+        final remoteTeam = await remoteDataSource.removeTeamMember(memberId);
+        debugPrint('Team member removed successfully');
+        return Right(remoteTeam);
+      } on ServerException catch (e) {
+        debugPrint('ServerException while removing team member: ${e.message}');
+        return Left(ServerFailure(message: e.message ?? 'خطأ في الخادم'));
+      }
+    } else {
+      debugPrint('No internet connection while removing team member');
+      return const Left(NetworkFailure(message: 'لا يوجد اتصال بالإنترنت'));
+    }
+  }
 }

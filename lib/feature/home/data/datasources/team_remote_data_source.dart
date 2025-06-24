@@ -11,6 +11,7 @@ abstract class TeamRemoteDataSource {
   Future<TeamModel> getTeamInfo();
   Future<TeamModel> createTeam(String teamName);
   Future<TeamModel> updateTeamName(String newName);
+  Future<TeamModel> removeTeamMember(int memberId);
 }
 
 class TeamRemoteDataSourceImpl implements TeamRemoteDataSource {
@@ -112,6 +113,52 @@ class TeamRemoteDataSourceImpl implements TeamRemoteDataSource {
         }
       } else {
         debugPrint('Team Name Update Failed: ${response.data['message']}');
+        throw ServerException(
+          message: response.data['message'] ?? 'حدث خطأ غير معروف',
+        );
+      }
+    } on DioException catch (e) {
+      throw handleDioException(e);
+    }
+  }
+
+  @override
+  Future<TeamModel> removeTeamMember(int memberId) async {
+    try {
+      final response = await dio.post(
+        ApiEndpoints.removeTeamMember,
+        data: {
+          'member_id': memberId,
+        },
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ${await sl<CacheService>().getToken()}',
+          },
+        ),
+      );
+      debugPrint('Remove Team Member Response: ${response.data}');
+      if (response.data['status'] == 'success' || response.data['status'] == true || (response.data['message']?.contains('تم حذف العضو بنجاح') == true) || (response.data['message']?.contains('تم إزالة العضو من فريقك بنجاح') == true)) {
+        debugPrint('Team Member Removed Successfully: ${response.data['data']}');
+        if (response.data['data'] != null && response.data['data'] is Map<String, dynamic>) {
+          return TeamModel.fromJson(response.data['data']);
+        } else {
+          // Return a placeholder TeamModel to indicate success without data
+          return TeamModel(
+            id: 0,
+            name: '',
+            membersCount: 0,
+            isOwner: false,
+            members: [],
+            ownerId: 0,
+            owner: {},
+            tasksSummary: {},
+            createdAt: '',
+            updatedAt: ''
+          );
+        }
+      } else {
+        debugPrint('Team Member Removal Failed: ${response.data['message']}');
         throw ServerException(
           message: response.data['message'] ?? 'حدث خطأ غير معروف',
         );
