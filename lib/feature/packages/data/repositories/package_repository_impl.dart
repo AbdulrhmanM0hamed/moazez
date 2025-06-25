@@ -22,10 +22,10 @@ class PackageRepositoryImpl implements PackageRepository {
         final remotePackages = await remoteDataSource.getPackages();
         return Right(remotePackages);
       } on ServerException catch (e) {
-        return Left(ServerFailure(message: e.message ?? 'Server error occurred'));
+        return Left(ServerFailure(message: e.message ?? 'فشل في تحميل البيانات'));
       }
     } else {
-      return Left(NetworkFailure(message: 'No internet connection'));
+      return Left(NetworkFailure(message: 'لا يوجد اتصال بالانترنت'));
     }
   }
 }

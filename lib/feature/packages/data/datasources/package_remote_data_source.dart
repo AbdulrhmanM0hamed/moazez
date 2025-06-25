@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:moazez/core/error/dio_exception_handler.dart';
 import 'package:moazez/core/error/exceptions.dart';
 import 'package:moazez/core/utils/constant/api_endpoints.dart';
 import 'package:moazez/feature/packages/data/models/package_model.dart';
@@ -20,10 +21,12 @@ class PackageRemoteDataSourceImpl implements PackageRemoteDataSource {
         final data = response.data['data'] as List<dynamic>;
         return data.map((json) => PackageModel.fromJson(json)).toList();
       } else {
-        throw ServerException(message: 'Failed to load packages');
+        throw ServerException(message: 'فشل في تحميل البيانات');
       }
+    } on DioException catch (e) {
+      throw handleDioException(e);
     } catch (e) {
-      throw ServerException(message: e.toString());
+      throw ServerException(message: 'فشل في تحميل البيانات');
     }
   }
 }

@@ -45,6 +45,11 @@ import 'package:moazez/feature/profile/data/repositories/profile_repository_impl
 import 'package:moazez/feature/profile/domain/repositories/profile_repository.dart';
 import 'package:moazez/feature/profile/domain/usecases/get_profile_usecase.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
+import 'package:moazez/feature/rewards/data/datasources/reward_remote_data_source.dart';
+import 'package:moazez/feature/rewards/data/repositories/reward_repository_impl.dart';
+import 'package:moazez/feature/rewards/domain/repositories/reward_repository.dart';
+import 'package:moazez/feature/rewards/domain/usecases/get_team_rewards_usecase.dart';
+import 'package:moazez/feature/rewards/presentation/cubit/reward_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
@@ -90,23 +95,30 @@ Future<void> init() async {
   sl.registerFactory(
     () => TeamCubit(getTeamInfoUseCase: sl(), teamRepository: sl()),
   );
-    sl.registerFactory(
-      () => InvitationCubit(
-        sendInvitationUseCase: sl(),
-        getSentInvitationsUseCase: sl(),
-        getReceivedInvitationsUseCase: sl(),
-        respondToInvitationUseCase: sl(),
-      ),
-    );
-    // Package Cubit
-    sl.registerFactory(
-      () => PackageCubit(getPackagesUseCase: sl()),
-    );
+  sl.registerFactory(
+    () => InvitationCubit(
+      sendInvitationUseCase: sl(),
+      getSentInvitationsUseCase: sl(),
+      getReceivedInvitationsUseCase: sl(),
+      respondToInvitationUseCase: sl(),
+    ),
+  );
+  // Package Cubit
+  sl.registerFactory(() => PackageCubit(getPackagesUseCase: sl()));
+  // Rewards
+  sl.registerFactory(() => RewardCubit(getTeamRewardsUseCase: sl()));
+  sl.registerLazySingleton(() => GetTeamRewardsUseCase(sl()));
+  sl.registerLazySingleton<RewardRepository>(
+    () => RewardRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()),
+  );
+  sl.registerLazySingleton<RewardRemoteDataSource>(
+    () => RewardRemoteDataSourceImpl(dio: sl()),
+  );
   sl.registerLazySingleton(() => GetTeamInfoUseCase(repository: sl()));
   sl.registerLazySingleton(() => SendInvitationUseCase(sl()));
   sl.registerLazySingleton(() => GetSentInvitationsUseCase(sl()));
-    sl.registerLazySingleton(() => GetReceivedInvitationsUseCase(sl()));
-    sl.registerLazySingleton(() => RespondToInvitationUseCase(sl()));
+  sl.registerLazySingleton(() => GetReceivedInvitationsUseCase(sl()));
+  sl.registerLazySingleton(() => RespondToInvitationUseCase(sl()));
 
   // Repository
   sl.registerLazySingleton<TeamRepository>(

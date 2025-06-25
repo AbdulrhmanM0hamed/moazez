@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:moazez/core/error/dio_exception_handler.dart';
 import 'package:moazez/core/error/exceptions.dart';
 import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/services/service_locator.dart';
@@ -52,11 +53,7 @@ class InvitationRemoteDataSourceImpl implements InvitationRemoteDataSource {
         throw ServerException(message: 'فشل في إرسال الدعوة');
       }
     } on DioException catch (e) {
-      final serverMessage = (e.response?.data is Map &&
-              (e.response?.data as Map).containsKey('message'))
-          ? (e.response?.data['message'] as String)
-          : null;
-      throw ServerException(message: serverMessage ?? 'خطأ في الاتصال بالخادم');
+      throw handleDioException(e);
     } catch (e) {
       throw ServerException(message: e.toString());
     }
@@ -89,11 +86,7 @@ class InvitationRemoteDataSourceImpl implements InvitationRemoteDataSource {
         throw ServerException(message: 'فشل في جلب الدعوات المرسلة');
       }
     } on DioException catch (e) {
-      final serverMessage = (e.response?.data is Map &&
-              (e.response?.data as Map).containsKey('message'))
-          ? (e.response?.data['message'] as String)
-          : null;
-      throw ServerException(message: serverMessage ?? 'خطأ في الاتصال بالخادم');
+      throw handleDioException(e);
     } catch (e) {
       throw ServerException(message: e.toString());
     }
@@ -130,11 +123,7 @@ class InvitationRemoteDataSourceImpl implements InvitationRemoteDataSource {
         throw ServerException(message: 'فشل في جلب طلبات الانضمام المستلمة');
       }
     } on DioException catch (e) {
-      final serverMessage = (e.response?.data is Map &&
-              (e.response?.data as Map).containsKey('message'))
-          ? (e.response?.data['message'] as String)
-          : null;
-      throw ServerException(message: serverMessage ?? 'خطأ في الاتصال بالخادم');
+      throw handleDioException(e);
     } catch (e) {
       throw ServerException(message: e.toString());
     }
@@ -163,11 +152,7 @@ class InvitationRemoteDataSourceImpl implements InvitationRemoteDataSource {
         throw ServerException(message: 'فشل في الرد على الدعوة: ${response.data?.toString() ?? "لا توجد تفاصيل"}');
       }
     } on DioException catch (e) {
-      final serverMessage = (e.response?.data is Map &&
-              (e.response?.data as Map).containsKey('message'))
-          ? (e.response?.data['message'] as String)
-          : null;
-      throw ServerException(message: serverMessage ?? 'خطأ في الاتصال بالخادم');
+      throw handleDioException(e);
     } catch (e) {
       throw ServerException(message: e.toString());
     }

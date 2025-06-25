@@ -9,6 +9,7 @@ import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/profile/presentation/view/edit_profile_info.dart';
 import 'package:moazez/feature/packages/presentation/view/packages_view.dart';
 import 'package:moazez/feature/profile/presentation/view/team_view.dart';
+import 'package:moazez/feature/rewards/presentation/view/rewards_view.dart';
 
 class MenuItemsCard extends StatelessWidget {
   const MenuItemsCard({super.key});
@@ -56,28 +57,28 @@ class MenuItemsCard extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => BlocProvider(
-                  create: (context) => sl<InvitationCubit>()..getSentInvitations(),
-                  child: const SentInvitationsView(),
-                ),
+                builder:
+                    (context) => BlocProvider(
+                      create:
+                          (context) =>
+                              sl<InvitationCubit>()..getSentInvitations(),
+                      child: const SentInvitationsView(),
+                    ),
               ),
             );
           }),
 
           _buildMenuItem(
             context,
-            'مكافآتك',
+            'مكافآت فريقك',
             Icons.card_giftcard_outlined,
-            () {},
-          ),
-          _buildMenuItem(
-            context,
-            'الباقات',
-            Icons.local_offer_outlined,
             () {
-              Navigator.pushNamed(context, PackagesView.routeName);
+              Navigator.pushNamed(context, RewardsView.routeName);
             },
           ),
+          _buildMenuItem(context, 'الباقات', Icons.local_offer_outlined, () {
+            Navigator.pushNamed(context, PackagesView.routeName);
+          }),
           _buildMenuItem(context, 'الإعدادات', Icons.settings_outlined, () {}),
           _buildMenuItem(context, 'الدعم والمساعدة', Icons.help_outline, () {}),
           _buildMenuItem(context, 'تسجيل الخروج', Icons.logout, () {

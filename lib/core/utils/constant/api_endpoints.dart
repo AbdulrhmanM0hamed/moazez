@@ -15,4 +15,5 @@ class ApiEndpoints {
   static const String removeTeamMember = 'team/remove-member';
   static const String myInvitations = 'my-invitations';
   static const String invitationRespond = 'invitations/respond';
+  static const String teamRewards = 'team/rewards';
 }

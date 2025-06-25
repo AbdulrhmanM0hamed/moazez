@@ -18,7 +18,7 @@ class PackageCubit extends Cubit<PackageState> {
         } else if (failure is NetworkFailure) {
           emit(PackageError(message: failure.message));
         } else {
-          emit(const PackageError(message: 'Unexpected error occurred'));
+          emit(PackageError(message: failure.message));
         }
       },
       (packages) {
