@@ -47,8 +47,8 @@ class InviteParticipantsSection extends StatelessWidget {
                       0.7,
                       0.6,
                       0.5,
+                      0.7,
                       0.4,
-                      0.3,
                       0.9,
                     ];
                     return Container(
@@ -79,7 +79,7 @@ class InviteParticipantsSection extends StatelessWidget {
                     style: getSemiBoldStyle(
                       fontFamily: FontConstant.cairo,
                       fontSize: 16,
-                      color: Colors.grey[800],
+                      
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -88,7 +88,7 @@ class InviteParticipantsSection extends StatelessWidget {
                     style: getRegularStyle(
                       fontFamily: FontConstant.cairo,
                       fontSize: 14,
-                      color: Colors.grey[600],
+                      color: Colors.grey[300],
                     ),
                   ),
                   const SizedBox(height: 20),

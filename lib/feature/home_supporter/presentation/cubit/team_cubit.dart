@@ -7,19 +7,18 @@ import 'package:moazez/feature/home_supporter/presentation/cubit/team_state.dart
 class TeamCubit extends Cubit<TeamState> {
   final GetTeamInfoUseCase getTeamInfoUseCase;
   final TeamRepository teamRepository;
-  
-  TeamCubit({
-    required this.getTeamInfoUseCase,
-    required this.teamRepository,
-  }) : super(TeamInitial());
+
+  TeamCubit({required this.getTeamInfoUseCase, required this.teamRepository})
+    : super(TeamInitial());
 
   Future<void> fetchTeamInfo() async {
     emit(TeamLoading());
     final result = await getTeamInfoUseCase(NoParams());
-    result.fold(
-      (failure) => emit(TeamError(message: failure.message)),
-      (team) => emit(TeamLoaded(team: team)),
-    );
+    result.fold((failure) => emit(TeamError(message: failure.message)), (team) {
+      if (!isClosed) {
+        emit(TeamLoaded(team: team));
+      }
+    });
   }
 
   Future<void> createTeam(String teamName) async {
@@ -43,14 +42,15 @@ class TeamCubit extends Cubit<TeamState> {
   Future<void> removeTeamMember(int memberId) async {
     emit(TeamLoading());
     final result = await teamRepository.removeTeamMember(memberId);
-    result.fold(
-      (failure) => emit(TeamError(message: failure.message)),
-      (team) async {
-        // Emit a TeamLoaded state immediately to trigger Snackbar
+    result.fold((failure) => emit(TeamError(message: failure.message)), (
+      team,
+    ) async {
+      // Emit a TeamLoaded state immediately to trigger Snackbar only if not closed
+      if (!isClosed) {
         emit(TeamLoaded(team: team));
-        // Then fetch updated team info
-        await fetchTeamInfo();
-      },
-    );
+      }
+      // Then fetch updated team info
+      await fetchTeamInfo();
+    });
   }
 }

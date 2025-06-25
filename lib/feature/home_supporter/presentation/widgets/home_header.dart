@@ -6,6 +6,8 @@ import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
+import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
+import 'package:moazez/feature/home_supporter/presentation/cubit/team_state.dart';
 import 'package:moazez/feature/invitations/presentation/cubit/invitation_cubit.dart';
 import 'package:moazez/feature/invitations/presentation/received_invitations_view.dart';
 import 'package:moazez/feature/invitations/presentation/sent_invitations_view.dart';
@@ -112,65 +114,115 @@ class HomeHeader extends StatelessWidget {
                             ReceivedInvitationsView.routeName,
                           );
                         },
-                        child: SvgPicture.asset(
-                          'assets/images/request.svg', // Ensure this asset exists or replace with an appropriate icon
-                          width: 28,
-                          height: 28,
-                        ),
-                      ),
-                      Positioned(
-                        top: -4,
-                        right: 8,
                         child: Container(
-                          width: 8,
-                          height: 8,
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: AppColors.info.withValues(alpha: 0.2),
+                            border: Border.all(
+                              color: AppColors.info.withValues(alpha: 0.5),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                "دعوات الانضمام",
+                                style: getMediumStyle(
+                                  color: Colors.white,
+                                  fontFamily: FontConstant.cairo,
+                                  fontSize: FontSize.size14,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              SvgPicture.asset(
+                                'assets/images/request.svg', // Ensure this asset exists or replace with an appropriate icon
+                                width: 24,
+                                height: 24,
+                                color: Colors.white,
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ],
                   );
                 } else if (snapshot.data == 'Supporter') {
-                  return Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) => BlocProvider(
-                                    create:
-                                        (context) =>
-                                            sl<InvitationCubit>()
-                                              ..getSentInvitations(),
-                                    child: const SentInvitationsView(),
+                  return BlocBuilder<TeamCubit, TeamState>(
+                    builder: (context, teamState) {
+                      bool ownsTeam = false;
+                      if (teamState is TeamLoaded) {
+                        final loadedState = teamState as TeamLoaded;
+                        ownsTeam = loadedState.team.isOwner;
+                      } else if (teamState is TeamError) {
+                        final errorState = teamState as TeamError;
+                        if (errorState.message.contains("لا تملك فريقاً")) {
+                          ownsTeam = false;
+                        }
+                      }
+                      if (ownsTeam) {
+                        return Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => BlocProvider(
+                                          create:
+                                              (context) =>
+                                                  sl<InvitationCubit>()
+                                                    ..getSentInvitations(),
+                                          child: const SentInvitationsView(),
+                                        ),
                                   ),
+                                );
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: AppColors.info.withValues(alpha: 0.2),
+                                  border: Border.all(
+                                    color: AppColors.info.withValues(
+                                      alpha: 0.5,
+                                    ),
+                                  ),
+                                ),
+
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "الدعوات المُرسلة",
+                                      style: getMediumStyle(
+                                        color: Colors.white,
+                                        fontFamily: FontConstant.cairo,
+                                        fontSize: FontSize.size14,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Icon(
+                                      Icons.send_outlined,
+                                      color: Colors.white,
+                                      size: 24,
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          );
-                        },
-                        child: Icon(
-                          Icons.send_outlined,
-                          color: Colors.white,
-                          size: 28,
-                        ),
-                      ),
-                      Positioned(
-                        top: -4,
-                        right: 8,
-                        child: Container(
-                          width: 8,
-                          height: 8,
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
-                    ],
+                          ],
+                        );
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    },
                   );
                 }
               }
