@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
 
 import 'package:moazez/feature/home_supporter/presentation/view/create_team_view.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/create_team_prompt.dart';
@@ -53,7 +54,7 @@ class PackagesView extends StatelessWidget {
                 child: BlocBuilder<SubscriptionCubit, SubscriptionState>(
                   builder: (context, subState) {
                     if (subState is SubscriptionLoading) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(child: CustomProgressIndcator());
                     } else if (subState is SubscriptionLoaded) {
                       return SubscriptionCard(subscription: subState.subscription);
                     } else if (subState is SubscriptionError) {

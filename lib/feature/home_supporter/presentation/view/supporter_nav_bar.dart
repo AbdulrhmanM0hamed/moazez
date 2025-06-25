@@ -5,7 +5,7 @@ import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moazez/core/utils/constant/app_assets.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/home_supporter_view_body.dart';
-import 'package:moazez/feature/home_supporter/presentation/view/agreements_view.dart';
+import 'package:moazez/feature/agreements/presentation/view/agreements_view.dart';
 import 'package:moazez/feature/profile/presentation/view/account_view.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';

@@ -11,6 +11,8 @@ class RewardModel extends RewardEntity {
     required String createdAt,
     String? updatedAt,
     UserEntity? user,
+    required String rewardType,
+    required String rewardDescription,
   }) : super(
           id: id,
           amount: amount,
@@ -21,6 +23,8 @@ class RewardModel extends RewardEntity {
           createdAt: createdAt,
           updatedAt: updatedAt,
           user: user,
+          rewardType: rewardType,
+          rewardDescription: rewardDescription,
         );
 
   factory RewardModel.fromJson(Map<String, dynamic> json) {
@@ -40,6 +44,8 @@ class RewardModel extends RewardEntity {
       distributedBy: DistributorModel.fromJson(json['distributed_by'] ?? {}),
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'],
+      rewardType: json['reward_type'] ?? 'cash',
+      rewardDescription: json['reward_description'] ?? '',
     );
   }
 

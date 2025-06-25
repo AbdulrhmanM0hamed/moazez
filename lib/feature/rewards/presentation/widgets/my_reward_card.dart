@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moazez/core/utils/common/cached_network_image.dart';
+import 'package:moazez/core/utils/constant/font_manger.dart';
+import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/feature/rewards/domain/entities/reward_entity.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'dart:ui';
@@ -53,7 +55,9 @@ class MyRewardCard extends StatelessWidget {
                   child: InkWell(
                     borderRadius: borderRadius,
                     onTap: () {},
-                    splashColor: theme.colorScheme.primary.withValues(alpha: 0.07),
+                    splashColor: theme.colorScheme.primary.withValues(
+                      alpha: 0.07,
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(20),
                       child: Column(
@@ -73,32 +77,54 @@ class MyRewardCard extends StatelessWidget {
                                     height: 56,
                                     decoration: BoxDecoration(
                                       color: theme.colorScheme.primaryContainer,
-                                      border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.3), width: 2),
+                                      border: Border.all(
+                                        color: theme.colorScheme.primary
+                                            .withValues(alpha: 0.3),
+                                        width: 2,
+                                      ),
                                     ),
-                                    child: reward.distributedBy.avatarUrl != null && reward.distributedBy.avatarUrl!.isNotEmpty
-                                        ? CustomCachedNetworkImage(
-                                            imageUrl: reward.distributedBy.avatarUrl!,
-                                            fit: BoxFit.cover,
-                                            placeholder: Icon(
-                                              Icons.person,
-                                              color: Colors.grey[600],
-                                              size: 30,
+                                    child:
+                                        reward.distributedBy.avatarUrl !=
+                                                    null &&
+                                                reward
+                                                    .distributedBy
+                                                    .avatarUrl!
+                                                    .isNotEmpty
+                                            ? CustomCachedNetworkImage(
+                                              imageUrl:
+                                                  reward
+                                                      .distributedBy
+                                                      .avatarUrl!,
+                                              fit: BoxFit.cover,
+                                              placeholder: Icon(
+                                                Icons.person,
+                                                color: Colors.grey[600],
+                                                size: 30,
+                                              ),
+                                              errorWidget: Icon(
+                                                Icons.person,
+                                                color: Colors.grey[600],
+                                                size: 30,
+                                              ),
+                                            )
+                                            : Text(
+                                              reward
+                                                      .distributedBy
+                                                      .name
+                                                      .isNotEmpty
+                                                  ? reward.distributedBy.name
+                                                      .substring(0, 1)
+                                                      .toUpperCase()
+                                                  : '?',
+                                              style: theme.textTheme.titleLarge
+                                                  ?.copyWith(
+                                                    color:
+                                                        theme
+                                                            .colorScheme
+                                                            .onPrimaryContainer,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                             ),
-                                            errorWidget: Icon(
-                                              Icons.person,
-                                              color: Colors.grey[600],
-                                              size: 30,
-                                            ),
-                                          )
-                                        : Text(
-                                            reward.distributedBy.name.isNotEmpty
-                                                ? reward.distributedBy.name.substring(0, 1).toUpperCase()
-                                                : '?',
-                                            style: theme.textTheme.titleLarge?.copyWith(
-                                              color: theme.colorScheme.onPrimaryContainer,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
                                   ),
                                 ),
                               ),
@@ -109,39 +135,49 @@ class MyRewardCard extends StatelessWidget {
                                   children: [
                                     Text(
                                       reward.distributedBy.name,
-                                      style: theme.textTheme.titleLarge?.copyWith(
-                                        fontWeight: FontWeight.w800,
-                                        letterSpacing: -0.6,
-                                      ),
+                                      style: theme.textTheme.titleLarge
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w800,
+                                            letterSpacing: -0.6,
+                                          ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     const SizedBox(height: 4),
                                     AnimatedSwitcher(
-                                      duration: const Duration(milliseconds: 350),
+                                      duration: const Duration(
+                                        milliseconds: 350,
+                                      ),
                                       child: Text(
-                                        timeago.format(DateTime.parse(reward.createdAt)),
-                                        style: theme.textTheme.bodySmall?.copyWith(
-                                          color: theme.colorScheme.outline,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                                        _formatDate(reward.createdAt),
+                                        style: theme.textTheme.bodySmall
+                                            ?.copyWith(
+                                              color: theme.colorScheme.outline,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                         key: ValueKey(reward.createdAt),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              const SizedBox(width: 10),
+
                               AnimatedContainer(
                                 duration: const Duration(milliseconds: 400),
                                 curve: Curves.easeOutCubic,
-                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                  vertical: 6,
+                                ),
                                 decoration: BoxDecoration(
                                   color: _getStatusColor(reward.status, theme),
                                   borderRadius: BorderRadius.circular(14),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: _getStatusColor(reward.status, theme).withValues(alpha: 0.18),
+                                      color: _getStatusColor(
+                                        reward.status,
+                                        theme,
+                                      ).withValues(alpha: 0.18),
                                       blurRadius: 8,
                                       offset: const Offset(0, 2),
                                     ),
@@ -159,21 +195,18 @@ class MyRewardCard extends StatelessWidget {
                             ],
                           ),
 
-                          const SizedBox(height: 16),
-
                           // Reward notes with improved typography
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 12),
                           Text(
                             reward.notes,
-                            style: theme.textTheme.bodyLarge?.copyWith(
-                              height: 1.7,
-                              fontWeight: FontWeight.w500,
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.94),
+                            style: getSemiBoldStyle(
+                              fontFamily: FontConstant.cairo,
+                              fontSize: FontSize.size14,
                             ),
                           ),
-                          const SizedBox(height: 28),
+                          const SizedBox(height: 8),
 
-                          // Amount with visual emphasis
+                          // Amount or Description based on whether amount is non-zero
                           Row(
                             children: [
                               AnimatedContainer(
@@ -181,19 +214,29 @@ class MyRewardCard extends StatelessWidget {
                                 padding: const EdgeInsets.all(13),
                                 decoration: BoxDecoration(
                                   color:
-                                      isPositiveAmount
-                                          ? Colors.green.withValues(alpha: 0.15)
-                                          : Colors.red.withValues(alpha: 0.16),
+                                      amount != 0.0
+                                          ? (isPositiveAmount
+                                              ? Colors.green.withValues(
+                                                alpha: 0.15,
+                                              )
+                                              : Colors.red.withValues(
+                                                alpha: 0.16,
+                                              ))
+                                          : Colors.blue.withValues(alpha: 0.15),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(
-                                  isPositiveAmount
-                                      ? Icons.arrow_upward_rounded
-                                      : Icons.arrow_downward_rounded,
+                                  amount != 0.0
+                                      ? (isPositiveAmount
+                                          ? Icons.arrow_upward_rounded
+                                          : Icons.arrow_downward_rounded)
+                                      : Icons.card_giftcard,
                                   color:
-                                      isPositiveAmount
-                                          ? Colors.green
-                                          : Colors.red,
+                                      amount != 0.0
+                                          ? (isPositiveAmount
+                                              ? Colors.green
+                                              : Colors.red)
+                                          : Colors.blue,
                                   size: 24,
                                 ),
                               ),
@@ -202,52 +245,39 @@ class MyRewardCard extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'المبلغ',
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: theme.colorScheme.outline,
-                                      fontWeight: FontWeight.w600,
+                                    amount != 0.0 ? 'المبلغ' : 'الوصف',
+                                    style: getMediumStyle(
+                                      fontFamily: FontConstant.cairo,
+                                      fontSize: FontSize.size14,
                                     ),
                                   ),
+                                  const SizedBox(height: 6),
                                   Text(
-                                    '${isPositiveAmount ? '+' : '-'}\$${amount.abs().toStringAsFixed(2)}',
-                                    style: theme.textTheme.headlineSmall
-                                        ?.copyWith(
-                                          color:
-                                              isPositiveAmount
+                                    amount != 0.0
+                                        ? '${isPositiveAmount ? '+' : '-'}\$${amount.abs().toStringAsFixed(2)}'
+                                        : reward.rewardDescription,
+                                    style: getSemiBoldStyle(
+                                      fontFamily: FontConstant.cairo,
+                                      fontSize: FontSize.size14,
+                                    )?.copyWith(
+                                      color:
+                                          amount != 0.0
+                                              ? (isPositiveAmount
                                                   ? Colors.green
-                                                  : Colors.red,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 0.1,
-                                        ),
+                                                  : Colors.red)
+                                              : Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 0.1,
+                                    ),
                                   ),
                                 ],
                               ),
                               const Spacer(),
-                              Chip(
-                                avatar: Icon(
-                                  Icons.task_alt,
-                                  color: theme.colorScheme.secondary,
-                                  size: 18,
-                                ),
-                                label: Text(
-                                  reward.task.title,
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: theme.colorScheme.secondary,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                backgroundColor: theme.colorScheme.secondary
-                                    .withValues(alpha: 0.13),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 2,
-                                ),
-                              ),
                             ],
                           ),
 
                           // Divider with subtle appearance
-                         
+
                           // Optional: Add footer actions or icons here
                         ],
                       ),
@@ -275,5 +305,16 @@ class MyRewardCard extends StatelessWidget {
       default:
         return theme.colorScheme.primary;
     }
+  }
+
+  String _formatDate(String dateStr) {
+    try {
+      if (dateStr.isNotEmpty) {
+        return timeago.format(DateTime.parse(dateStr));
+      }
+    } catch (e) {
+      // Handle parsing error
+    }
+    return 'Unknown date';
   }
 }

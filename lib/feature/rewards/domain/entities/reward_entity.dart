@@ -10,6 +10,8 @@ class RewardEntity extends Equatable {
   final UserEntity? user;
   final String createdAt;
   final String? updatedAt;
+  final String rewardType;
+  final String rewardDescription;
 
   const RewardEntity({
     required this.id,
@@ -20,7 +22,9 @@ class RewardEntity extends Equatable {
     required this.distributedBy,
     required this.createdAt,
     this.updatedAt,
-     this.user,
+    this.user,
+    required this.rewardType,
+    required this.rewardDescription,
   });
 
   @override
@@ -33,6 +37,8 @@ class RewardEntity extends Equatable {
         distributedBy,
         createdAt,
         updatedAt,
+        rewardType,
+        rewardDescription,
       ];
 }
 
