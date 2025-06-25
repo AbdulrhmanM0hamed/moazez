@@ -4,7 +4,7 @@ import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
-import 'package:moazez/feature/home/presentation/cubit/team_cubit.dart';
+import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
 import 'package:moazez/feature/profile/data/models/profile_model.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/profile/presentation/widgets/info_card.dart';

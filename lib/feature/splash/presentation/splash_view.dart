@@ -3,7 +3,7 @@ import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/feature/onboarding/presentation/onboarding_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/login_view.dart';
-import 'package:moazez/feature/home/presentation/view/home_view.dart';
+import 'package:moazez/feature/home_supporter/presentation/view/supporter_nav_bar.dart';
 import '../../../core/utils/constant/app_assets.dart';
 import '../../../core/utils/animations/custom_animations.dart';
 

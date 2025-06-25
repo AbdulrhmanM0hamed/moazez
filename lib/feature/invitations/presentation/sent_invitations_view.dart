@@ -7,20 +7,15 @@ import 'package:moazez/feature/invitations/domain/entities/invitation_entity.dar
 import 'package:moazez/feature/invitations/presentation/cubit/invitation_cubit.dart';
 import 'package:moazez/feature/invitations/presentation/cubit/invitation_state.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
-import 'package:moazez/core/utils/common/cached_network_image.dart';
 
 class SentInvitationsView extends StatelessWidget {
   const SentInvitationsView({super.key});
   static const routeName = '/sent_invitations';
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'الدعوات المرسلة',
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(title: 'الدعوات المرسلة', centerTitle: true),
       body: BlocBuilder<InvitationCubit, InvitationState>(
         builder: (context, state) {
           if (state is InvitationLoading) {
@@ -31,7 +26,10 @@ class SentInvitationsView extends StatelessWidget {
               return const Center(
                 child: Text(
                   'لا توجد دعوات مرسلة',
-                  style: TextStyle(fontSize: 18, color: AppColors.textSecondary),
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: AppColors.textSecondary,
+                  ),
                 ),
               );
             }
@@ -67,23 +65,25 @@ class InvitationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isAccepted = invitation.status == "accepted";
     final isPending = invitation.status == "pending";
-    final isRejected = invitation.status == "rejected";
 
-    final Color statusColor = isAccepted
-        ? AppColors.success
-        : isPending
+    final Color statusColor =
+        isAccepted
+            ? AppColors.success
+            : isPending
             ? AppColors.warning
             : AppColors.error;
 
-    final IconData statusIcon = isAccepted
-        ? Icons.check_circle_outline
-        : isPending
+    final IconData statusIcon =
+        isAccepted
+            ? Icons.check_circle_outline
+            : isPending
             ? Icons.hourglass_bottom
             : Icons.cancel_outlined;
 
-    final String statusText = isAccepted
-        ? "مقبول"
-        : isPending
+    final String statusText =
+        isAccepted
+            ? "مقبول"
+            : isPending
             ? "قيد الانتظار"
             : "مرفوض";
 
@@ -91,11 +91,11 @@ class InvitationCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: statusColor.withOpacity(0.4), width: 1.5),
+        border: Border.all(color: statusColor.withValues(alpha: 0.4), width: 1.5),
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -108,36 +108,28 @@ class InvitationCard extends StatelessWidget {
             // Avatar or Icon section
             invitation.user.avatarUrl.isNotEmpty
                 ? CustomCachedNetworkImage(
-                    imageUrl: invitation.user.avatarUrl,
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.cover,
-                    borderRadius: BorderRadius.circular(25),
-                    errorWidget: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: statusColor.withOpacity(0.1),
-                      ),
-                      child: Icon(
-                        statusIcon,
-                        color: statusColor,
-                        size: 30,
-                      ),
-                    ),
-                  )
-                : Container(
+                  imageUrl: invitation.user.avatarUrl,
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
+                  borderRadius: BorderRadius.circular(25),
+                  errorWidget: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: statusColor.withOpacity(0.1),
+                      color: statusColor.withValues(alpha: 0.1),
                     ),
-                    child: Icon(
-                      statusIcon,
-                      color: statusColor,
-                      size: 30,
-                    ),
+                    child: Icon(statusIcon, color: statusColor, size: 30),
                   ),
+                )
+                : Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: statusColor.withValues(alpha: 0.1),
+                  ),
+                  child: Icon(statusIcon, color: statusColor, size: 30),
+                ),
             const SizedBox(width: 16),
 
             // Info section
@@ -156,7 +148,11 @@ class InvitationCard extends StatelessWidget {
                   const SizedBox(height: 6),
                   Row(
                     children: [
-                      const Icon(Icons.group, size: 16, color: AppColors.textSecondary),
+                      const Icon(
+                        Icons.group,
+                        size: 16,
+                        color: AppColors.textSecondary,
+                      ),
                       const SizedBox(width: 6),
                       Text(
                         'الفريق: ${invitation.team.name}',
@@ -170,7 +166,11 @@ class InvitationCard extends StatelessWidget {
                   const SizedBox(height: 6),
                   Row(
                     children: [
-                      const Icon(Icons.info_outline, size: 16, color: AppColors.textSecondary),
+                      const Icon(
+                        Icons.info_outline,
+                        size: 16,
+                        color: AppColors.textSecondary,
+                      ),
                       const SizedBox(width: 6),
                       Text(
                         'الحالة: $statusText',

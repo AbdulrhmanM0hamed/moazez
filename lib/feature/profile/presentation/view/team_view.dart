@@ -5,11 +5,11 @@ import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
-import 'package:moazez/feature/home/presentation/cubit/team_cubit.dart';
-import 'package:moazez/feature/home/presentation/cubit/team_state.dart';
-import 'package:moazez/feature/home/domain/entities/team_entity.dart';
-import 'package:moazez/feature/home/presentation/view/create_team_view.dart';
-import 'package:moazez/feature/home/presentation/widgets/create_team_prompt.dart';
+import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
+import 'package:moazez/feature/home_supporter/presentation/cubit/team_state.dart';
+import 'package:moazez/feature/home_supporter/domain/entities/team_entity.dart';
+import 'package:moazez/feature/home_supporter/presentation/view/create_team_view.dart';
+import 'package:moazez/feature/home_supporter/presentation/widgets/create_team_prompt.dart';
 import 'package:moazez/feature/profile/presentation/widgets/team_info_card.dart';
 import 'package:moazez/feature/profile/presentation/widgets/team_members_card.dart';
 

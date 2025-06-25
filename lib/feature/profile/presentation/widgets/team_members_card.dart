@@ -5,9 +5,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:moazez/core/utils/common/custom_dialog_button.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
-import 'package:moazez/feature/home/domain/entities/team_entity.dart';
-import 'package:moazez/feature/home/presentation/cubit/team_cubit.dart';
-import 'package:moazez/feature/home/presentation/cubit/team_state.dart';
+import 'package:moazez/feature/home_supporter/domain/entities/team_entity.dart';
+import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
+import 'package:moazez/feature/home_supporter/presentation/cubit/team_state.dart';
 
 class TeamMembersCard extends StatefulWidget {
   final TeamEntity? team;

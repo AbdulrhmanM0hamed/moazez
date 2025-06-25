@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/utils/common/custom_text_field.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
-import 'package:moazez/feature/home/presentation/cubit/team_cubit.dart';
-import 'package:moazez/feature/home/presentation/cubit/team_state.dart';
+import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
+import 'package:moazez/feature/home_supporter/presentation/cubit/team_state.dart';
 
 class TeamInfoCard extends StatelessWidget {
   final String teamName;
