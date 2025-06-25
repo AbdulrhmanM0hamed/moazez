@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/services/service_locator.dart';
+import 'package:moazez/core/utils/constant/font_manger.dart';
+import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
@@ -23,7 +25,6 @@ class MenuItemsCard extends StatelessWidget {
         String? role = snapshot.data;
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
@@ -173,21 +174,18 @@ class MenuItemsCard extends StatelessWidget {
     VoidCallback onTap, {
     bool isLogout = false,
   }) {
-    final color = isLogout ? AppColors.error : AppColors.textPrimary;
+    final color = isLogout ? AppColors.error : AppColors.primary;
     return ListTile(
       leading: Icon(icon, color: color),
       title: Text(
         title,
-        style: TextStyle(color: color, fontWeight: FontWeight.w500),
+        style: getSemiBoldStyle(
+          fontFamily: FontConstant.cairo,
+          fontSize: FontSize.size16,
+        ),
       ),
-      trailing:
-          isLogout
-              ? null
-              : const Icon(
-                Icons.arrow_forward_ios,
-                size: 16,
-                color: AppColors.textSecondary,
-              ),
+
+      trailing: isLogout ? null : const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: onTap,
     );
   }

@@ -12,7 +12,6 @@ class InfoCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -25,28 +24,56 @@ class InfoCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('المعلومات الشخصية', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const Text(
+            'المعلومات الشخصية',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
           const Divider(height: 24),
           _buildInfoRow(Icons.phone_outlined, 'الهاتف', user.phone ?? '--'),
-          _buildInfoRow(Icons.cake_outlined, 'تاريخ الميلاد', user.birthdate ?? '--'),
-          _buildInfoRow(user.gender == 'male' ? Icons.male : Icons.female, 'النوع', user.gender == 'male' ? 'ذكر' : 'أنثى'),
-          _buildInfoRow(Icons.location_on_outlined, 'المنطقة', user.area?.name ?? 'غير محدد'),
-          _buildInfoRow(Icons.location_city_outlined, 'المدينة', user.city?.name ?? 'غير محدد', hasDivider: false),
+          _buildInfoRow(
+            Icons.cake_outlined,
+            'تاريخ الميلاد',
+            user.birthdate ?? '--',
+          ),
+          _buildInfoRow(
+            user.gender == 'male' ? Icons.male : Icons.female,
+            'النوع',
+            user.gender == 'male' ? 'ذكر' : 'أنثى',
+          ),
+          _buildInfoRow(
+            Icons.location_on_outlined,
+            'المنطقة',
+            user.area?.name ?? 'غير محدد',
+          ),
+          _buildInfoRow(
+            Icons.location_city_outlined,
+            'المدينة',
+            user.city?.name ?? 'غير محدد',
+            hasDivider: false,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String label, String value, {bool hasDivider = true}) {
+  Widget _buildInfoRow(
+    IconData icon,
+    String label,
+    String value, {
+    bool hasDivider = true,
+  }) {
     return Column(
       children: [
         Row(
           children: [
             Icon(icon, color: AppColors.primary, size: 24),
             const SizedBox(width: 16),
-            Text(label, style: const TextStyle(fontSize: 16, color: AppColors.textSecondary)),
+            Text(label, style: const TextStyle(fontSize: 16)),
             const Spacer(),
-            Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.textPrimary)),
+            Text(
+              value,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
           ],
         ),
         if (hasDivider) const Divider(height: 24),

@@ -44,7 +44,6 @@ class _RoleSwitcherState extends State<RoleSwitcher> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(30),
         border: Border.all(color: AppColors.border, width: 1),
       ),
@@ -53,7 +52,7 @@ class _RoleSwitcherState extends State<RoleSwitcher> {
         onPressed: (index) => _handleRoleSwitch(index),
         borderRadius: BorderRadius.circular(30),
         selectedColor: Colors.white,
-        color: AppColors.textPrimary,
+      
         fillColor: AppColors.primary,
         splashColor: AppColors.primary.withOpacity(0.12),
         hoverColor: AppColors.primary.withOpacity(0.04),

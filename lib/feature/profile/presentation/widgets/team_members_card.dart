@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/utils/common/cached_network_image.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moazez/core/utils/common/custom_dialog_button.dart';
+import 'package:moazez/core/utils/constant/font_manger.dart';
+import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/feature/home_supporter/domain/entities/team_entity.dart';
@@ -69,11 +71,7 @@ class _TeamMembersCardState extends State<TeamMembersCard> {
               children: [
                 const Text(
                   'قائمة الأعضاء',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
                 IconButton(
                   icon: const Icon(
@@ -123,31 +121,12 @@ class _TeamMembersCardState extends State<TeamMembersCard> {
               children: [
                 member.avatarUrl != null && member.avatarUrl!.isNotEmpty
                     ? CustomCachedNetworkImage(
-                        imageUrl: _fixAvatarUrl(member.avatarUrl!),
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                        borderRadius: BorderRadius.circular(25),
-                        errorWidget: Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.primary.withValues(alpha: 0.2),
-                          ),
-                          child: Center(
-                            child: Text(
-                              (member.name ?? 'ع').substring(0, 1).toUpperCase(),
-                              style: const TextStyle(
-                                color: AppColors.primary,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    : Container(
+                      imageUrl: _fixAvatarUrl(member.avatarUrl!),
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                      borderRadius: BorderRadius.circular(25),
+                      errorWidget: Container(
                         width: 50,
                         height: 50,
                         decoration: BoxDecoration(
@@ -165,6 +144,24 @@ class _TeamMembersCardState extends State<TeamMembersCard> {
                           ),
                         ),
                       ),
+                    )
+                    : Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.primary.withValues(alpha: 0.2),
+                      ),
+                      child: Center(
+                        child: Text(
+                          (member.name ?? 'ع').substring(0, 1).toUpperCase(),
+                          style: getSemiBoldStyle(
+                            fontFamily: FontConstant.cairo,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
@@ -172,18 +169,18 @@ class _TeamMembersCardState extends State<TeamMembersCard> {
                     children: [
                       Text(
                         member.name ?? 'عضو بدون اسم',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
+                        style: getSemiBoldStyle(
+                          fontFamily: FontConstant.cairo,
+                          fontSize: 14,
                         ),
                       ),
+                      SizedBox(height: 8),
                       if (member.email != null)
                         Text(
                           member.email!,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: AppColors.textSecondary,
+                          style: getSemiBoldStyle(
+                            fontFamily: FontConstant.cairo,
+                            fontSize: FontSize.size14,
                           ),
                         ),
                     ],
@@ -195,7 +192,6 @@ class _TeamMembersCardState extends State<TeamMembersCard> {
                       context: context,
                       builder: (BuildContext dialogContext) {
                         return AlertDialog(
-                          backgroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),

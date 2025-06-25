@@ -41,7 +41,6 @@ class _TeamViewBodyState extends State<_TeamViewBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBackground,
       appBar: CustomAppBar(title: 'الفريق'),
       body: BlocConsumer<TeamCubit, TeamState>(
         listener: (context, state) {

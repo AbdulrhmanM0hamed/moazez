@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/utils/common/custom_text_field.dart';
+import 'package:moazez/core/utils/constant/font_manger.dart';
+import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_state.dart';
+import 'package:moazez/core/utils/common/custom_dialog_button.dart';
 
 class TeamInfoCard extends StatelessWidget {
   final String teamName;
@@ -36,14 +39,6 @@ class TeamInfoCard extends StatelessWidget {
             offset: const Offset(0, 5),
           ),
         ],
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Theme.of(context).cardColor,
-            Theme.of(context).cardColor.withValues(alpha: 0.9),
-          ],
-        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,11 +48,7 @@ class TeamInfoCard extends StatelessWidget {
             children: [
               const Text(
                 'معلومات الفريق',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
-                ),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               // Infer ownership from TeamCubit state if possible
               Builder(
@@ -88,29 +79,33 @@ class TeamInfoCard extends StatelessWidget {
                                 hint: 'اسم الفريق الجديد',
                               ),
                               actions: [
-                                TextButton(
+                                CustomDialogButton(
+                                  text: 'إلغاء',
                                   onPressed: () {
                                     Navigator.of(dialogContext).pop();
                                   },
-                                  child: const Text(
-                                    'إلغاء',
-                                    style: TextStyle(
-                                      color: AppColors.textSecondary,
-                                    ),
-                                  ),
+                                  isDestructive: true,
                                 ),
-                                TextButton(
+                                CustomDialogButton(
+                                  text: 'حفظ',
+                                  backgroundColor: AppColors.success,
                                   onPressed: () {
                                     if (teamNameController.text.isNotEmpty) {
-                                      final teamCubit = BlocProvider.of<TeamCubit>(context);
-                                      teamCubit.updateTeamName(teamNameController.text);
+                                      final teamCubit =
+                                          BlocProvider.of<TeamCubit>(context);
+                                      teamCubit.updateTeamName(
+                                        teamNameController.text,
+                                      );
                                       Navigator.of(dialogContext).pop();
                                       // Set updating state to show loading indicator
                                       onUpdatingStateChange(true);
                                       // Fetch team info after a short delay to refresh data
-                                      Future.delayed(const Duration(seconds: 1), () {
-                                        teamCubit.fetchTeamInfo();
-                                      });
+                                      Future.delayed(
+                                        const Duration(seconds: 1),
+                                        () {
+                                          teamCubit.fetchTeamInfo();
+                                        },
+                                      );
                                     } else {
                                       CustomSnackbar.show(
                                         context: dialogContext,
@@ -119,10 +114,7 @@ class TeamInfoCard extends StatelessWidget {
                                       );
                                     }
                                   },
-                                  child: const Text(
-                                    'حفظ',
-                                    style: TextStyle(color: AppColors.primary),
-                                  ),
+                                  textColor: AppColors.white,
                                 ),
                               ],
                             );
@@ -156,19 +148,18 @@ class TeamInfoCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'اسم الفريق',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.textSecondary,
+                      style: getBoldStyle(
+                        fontFamily: FontConstant.cairo,
+                        fontSize: FontSize.size16,
                       ),
                     ),
                     Text(
                       teamName,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.bold,
+                      style: getSemiBoldStyle(
+                        fontFamily: FontConstant.cairo,
+                        fontSize: FontSize.size16,
                       ),
                     ),
                   ],
@@ -196,19 +187,18 @@ class TeamInfoCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'عدد الأعضاء',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.textSecondary,
+                      style: getBoldStyle(
+                        fontFamily: FontConstant.cairo,
+                        fontSize: FontSize.size16,
                       ),
                     ),
                     Text(
                       membersCount.toString(),
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.bold,
+                      style: getSemiBoldStyle(
+                        fontFamily: FontConstant.cairo,
+                        fontSize: FontSize.size16,
                       ),
                     ),
                   ],

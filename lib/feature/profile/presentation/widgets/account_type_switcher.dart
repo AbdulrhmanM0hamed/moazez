@@ -20,7 +20,7 @@ class _AccountTypeSwitcherState extends State<AccountTypeSwitcher> {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: AppColors.scaffoldBackground,
+      
         borderRadius: BorderRadius.circular(30),
       ),
       child: Row(

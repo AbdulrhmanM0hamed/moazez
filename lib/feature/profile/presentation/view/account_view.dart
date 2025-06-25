@@ -37,7 +37,6 @@ class _AccountViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return LogoutListener(
       child: Scaffold(
-        backgroundColor: AppColors.scaffoldBackground,
         appBar: CustomAppBar(
           automaticallyImplyLeading: false,
           elevation: 0,
