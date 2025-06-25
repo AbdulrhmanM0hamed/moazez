@@ -48,6 +48,7 @@ import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/rewards/data/datasources/reward_remote_data_source.dart';
 import 'package:moazez/feature/rewards/data/repositories/reward_repository_impl.dart';
 import 'package:moazez/feature/rewards/domain/repositories/reward_repository.dart';
+import 'package:moazez/feature/rewards/domain/usecases/get_my_rewards_usecase.dart';
 import 'package:moazez/feature/rewards/domain/usecases/get_team_rewards_usecase.dart';
 import 'package:moazez/feature/rewards/presentation/cubit/reward_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -106,8 +107,9 @@ Future<void> init() async {
   // Package Cubit
   sl.registerFactory(() => PackageCubit(getPackagesUseCase: sl()));
   // Rewards
-  sl.registerFactory(() => RewardCubit(getTeamRewardsUseCase: sl()));
+  sl.registerFactory(() => RewardCubit(getTeamRewardsUseCase: sl(), getMyRewardsUseCase: sl()));
   sl.registerLazySingleton(() => GetTeamRewardsUseCase(sl()));
+  sl.registerLazySingleton(() => GetMyRewardsUseCase(sl()));
   sl.registerLazySingleton<RewardRepository>(
     () => RewardRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()),
   );

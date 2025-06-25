@@ -9,6 +9,7 @@ import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/profile/presentation/view/edit_profile_info.dart';
 import 'package:moazez/feature/packages/presentation/view/packages_view.dart';
 import 'package:moazez/feature/profile/presentation/view/team_view.dart';
+import 'package:moazez/feature/rewards/presentation/view/my_rewards_view.dart';
 import 'package:moazez/feature/rewards/presentation/view/rewards_view.dart';
 
 class MenuItemsCard extends StatelessWidget {
@@ -76,6 +77,9 @@ class MenuItemsCard extends StatelessWidget {
               Navigator.pushNamed(context, RewardsView.routeName);
             },
           ),
+          _buildMenuItem(context, 'مكافآتي', Icons.card_giftcard_outlined, () {
+            Navigator.pushNamed(context, MyRewardsView.routeName);
+          }),
           _buildMenuItem(context, 'الباقات', Icons.local_offer_outlined, () {
             Navigator.pushNamed(context, PackagesView.routeName);
           }),

@@ -6,43 +6,40 @@ class RewardModel extends RewardEntity {
     required String amount,
     required String notes,
     required String status,
-    required UserModel user,
-    required TaskModel task,
-    required UserModel distributedBy,
+    required TaskEntity task,
+    required DistributorEntity distributedBy,
     required String createdAt,
     String? updatedAt,
-    String? rewardType,
-    String? expirationDate,
-    String priority = "Low",
+    UserEntity? user,
   }) : super(
           id: id,
           amount: amount,
           notes: notes,
           status: status,
-          user: user,
           task: task,
           distributedBy: distributedBy,
           createdAt: createdAt,
           updatedAt: updatedAt,
-          rewardType: rewardType,
-          expirationDate: expirationDate,
-          priority: priority,
+          user: user,
         );
 
   factory RewardModel.fromJson(Map<String, dynamic> json) {
     return RewardModel(
+      user: json['user'] != null
+          ? UserEntity(
+              id: json['user']['id'] ?? 0,
+              name: json['user']['name'] ?? '',
+              avatarUrl: json['user']['avatar_url'] ?? '',
+            )
+          : null,
       id: json['id'] ?? 0,
-      amount: (json['amount'] != null) ? json['amount'].toString() : '0.0',
+      amount: json['amount'] ?? '0.00',
       notes: json['notes'] ?? '',
-      status: json['status'] ?? '',
-      user: json['user'] != null ? UserModel.fromJson(json['user']) : UserModel(id: 0, name: '', avatarUrl: ''),
-      task: json['task'] != null ? TaskModel.fromJson(json['task']) : TaskModel(id: 0, title: ''),
-      distributedBy: json['distributed_by'] != null ? UserModel.fromJson(json['distributed_by']) : UserModel(id: 0, name: '', avatarUrl: ''),
+      status: json['status'] ?? 'pending',
+      task: TaskModel.fromJson(json['task'] ?? {}),
+      distributedBy: DistributorModel.fromJson(json['distributed_by'] ?? {}),
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'],
-      rewardType: json['reward_type'],
-      expirationDate: json['expiration_date'],
-      priority: json['priority'] ?? 'Low',
     );
   }
 
@@ -52,38 +49,10 @@ class RewardModel extends RewardEntity {
       'amount': amount,
       'notes': notes,
       'status': status,
-      'user': (user as UserModel).toJson(),
       'task': (task as TaskModel).toJson(),
-      'distributed_by': (distributedBy as UserModel).toJson(),
+      'distributed_by': (distributedBy as DistributorModel).toJson(),
       'created_at': createdAt,
       'updated_at': updatedAt,
-      'reward_type': rewardType,
-      'expiration_date': expirationDate,
-      'priority': priority,
-    };
-  }
-}
-
-class UserModel extends UserEntity {
-  const UserModel({
-    required int id,
-    required String name,
-    String? avatarUrl,
-  }) : super(id: id, name: name, avatarUrl: avatarUrl);
-
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
-      id: json['id'],
-      name: json['name'],
-      avatarUrl: json['avatar_url'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'avatar_url': avatarUrl,
     };
   }
 }
@@ -96,8 +65,8 @@ class TaskModel extends TaskEntity {
 
   factory TaskModel.fromJson(Map<String, dynamic> json) {
     return TaskModel(
-      id: json['id'],
-      title: json['title'],
+      id: json['id'] ?? 0,
+      title: json['title'] ?? '',
     );
   }
 
@@ -105,6 +74,30 @@ class TaskModel extends TaskEntity {
     return {
       'id': id,
       'title': title,
+    };
+  }
+}
+
+class DistributorModel extends DistributorEntity {
+  const DistributorModel({
+    required int id,
+    required String name,
+    String? avatarUrl,
+  }) : super(id: id, name: name, avatarUrl: avatarUrl);
+
+  factory DistributorModel.fromJson(Map<String, dynamic> json) {
+    return DistributorModel(
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      avatarUrl: json['avatar_url'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'avatar_url': avatarUrl,
     };
   }
 }

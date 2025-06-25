@@ -23,7 +23,7 @@ class PackageCard extends StatelessWidget {
 
   Color get _secondaryColor {
     if (package.name.contains('الأساسية'))
-      return const  Color(0xFF1976D2); // Darker Blue
+      return const Color(0xFF1976D2); // Darker Blue
     if (package.name.contains('المتقدمة'))
       return const Color(0xFFF57C00); // Darker Orange
     if (package.name.contains('الاحترافية'))
@@ -41,6 +41,8 @@ class PackageCard extends StatelessWidget {
         return Icon(Icons.task_alt, color: _primaryColor, size: 24);
       case 'members':
         return Icon(Icons.group, color: _primaryColor, size: 24);
+      case 'stages':
+        return Icon(Icons.layers, color: _primaryColor, size: 24);
       default:
         return Icon(Icons.check, color: _primaryColor, size: 20);
     }
@@ -49,12 +51,15 @@ class PackageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
       elevation: 8,
       shadowColor: Colors.black12,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: BorderSide(color: _primaryColor.withOpacity(0.25), width: 1.3),
+        side: BorderSide(
+          color: _primaryColor.withValues(alpha: 0.25),
+          width: 1.3,
+        ),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -89,59 +94,38 @@ class PackageCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
               color: _backgroundColor,
-              child: Row(
+              child: Column(
                 children: [
-                  _buildInfoItem('price', 'السعر', package.priceFormatted),
-                  _verticalDivider(),
-                  _buildInfoItem('tasks', 'المهام', package.maxTasksText),
-                  _verticalDivider(),
-                  _buildInfoItem(
-                    'members',
-                    'الأعضاء',
-                    package.maxTeamMembersText,
+                  Row(
+                    children: [
+                      _buildInfoItem('price', 'السعر', package.priceFormatted),
+                      _verticalDivider(),
+                      _buildInfoItem(
+                        'tasks',
+                        'المهام',
+                        package.maxTasks.toString(),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      _buildInfoItem('members', 'الأعضاء', "غير محدود"),
+                      _verticalDivider(),
+                      _buildInfoItem(
+                        'stages',
+                        'المراحل لكل مهمة',
+                        package.maxStagesPerTask != null
+                            ? package.maxStagesPerTask.toString()
+                            : 'غير محدد',
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
 
             // Features
-            if (package.features.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'المميزات',
-                      style: getSemiBoldStyle(fontFamily: FontConstant.cairo),
-                    ),
-                    const SizedBox(height: 12),
-                    ...package.features.map((feature) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.check_circle_outline,
-                              color: Colors.green,
-                              size: 20,
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                feature,
-                                style: getSemiBoldStyle(
-                                  fontFamily: FontConstant.cairo,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ],
-                ),
-              ),
 
             // Button
             Padding(
@@ -185,7 +169,7 @@ class PackageCard extends StatelessWidget {
   Widget _verticalDivider() => Container(
     height: 60,
     width: 1,
-    color: Colors.grey.withOpacity(0.3),
+    color: Colors.grey.withValues(alpha: 0.3),
     margin: const EdgeInsets.symmetric(horizontal: 6),
   );
 }

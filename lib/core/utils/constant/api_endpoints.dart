@@ -16,4 +16,6 @@ class ApiEndpoints {
   static const String myInvitations = 'my-invitations';
   static const String invitationRespond = 'invitations/respond';
   static const String teamRewards = 'team/rewards';
+  static const String myRewards = 'my-rewards';
+  
 }

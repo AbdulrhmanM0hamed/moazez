@@ -21,11 +21,25 @@ class RewardRepositoryImpl implements RewardRepository {
       try {
         final remoteRewards = await remoteDataSource.getTeamRewards();
         return Right(remoteRewards);
-      } on ServerException {
-        return Left(ServerFailure(message: 'Server error occurred'));
+      } on ServerException catch (e) {
+        return Left(ServerFailure(message: e.message ?? 'خطأ في الخادم'));
       }
     } else {
-      return Left(NetworkFailure(message: 'No internet connection'));
+      return Left(ServerFailure(message: 'لا يوجد اتصال بالإنترنت'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<RewardEntity>>> getMyRewards() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final remoteRewards = await remoteDataSource.getMyRewards();
+        return Right(remoteRewards);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(message: e.message ?? 'خطأ في الخادم'));
+      }
+    } else {
+      return Left(ServerFailure(message: 'لا يوجد اتصال بالإنترنت'));
     }
   }
 }
