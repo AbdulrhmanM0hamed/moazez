@@ -6,6 +6,18 @@ class AgreementsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: const AgreementsViewBody());
+    return Scaffold(
+      body: const AgreementsViewBody(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Add task functionality to be implemented
+        },
+        backgroundColor: Theme.of(context).primaryColor,
+        elevation: 6,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        tooltip: 'إضافة مهمة',
+        child: Icon(Icons.add_task, color: Colors.white, size: 28),
+      ),
+    );
   }
 }

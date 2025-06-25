@@ -13,6 +13,7 @@ import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/feature/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:moazez/feature/auth/presentation/cubit/login/login_state.dart';
 import 'package:moazez/feature/auth/presentation/pages/signup_view.dart';
+import 'package:moazez/feature/home_participant/presentation/widgets/home_participants_view_body.dart';
 import 'package:moazez/feature/home_supporter/presentation/view/supporter_nav_bar.dart';
 
 class LoginView extends StatefulWidget {
@@ -76,7 +77,7 @@ class _LoginViewState extends State<LoginView> {
                 if (context.mounted) {
                   Navigator.of(
                     context,
-                  ).pushReplacementNamed(HomeView.routeName);
+                  ).pushReplacementNamed(HomeParticipantsViewBody.routeName);
                 }
               });
             } else if (state is LoginError) {

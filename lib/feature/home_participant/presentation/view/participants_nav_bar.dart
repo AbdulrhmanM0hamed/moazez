@@ -4,28 +4,28 @@ import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moazez/core/utils/constant/app_assets.dart';
-import 'package:moazez/feature/home_supporter/presentation/widgets/home_supporter_view_body.dart';
-import 'package:moazez/feature/agreements/presentation/view/agreements_view.dart';
+import 'package:moazez/feature/MyTasks/presentation/view/my_tasks_view.dart';
+import 'package:moazez/feature/home_participant/presentation/widgets/home_participants_view_body.dart';
 import 'package:moazez/feature/profile/presentation/view/account_view.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
 
-class SupporterNavBar extends StatefulWidget {
-  const SupporterNavBar({super.key});
+class ParticipantsNavBar extends StatefulWidget {
+  const ParticipantsNavBar({super.key});
 
-  static const String routeName = '/supporter-nav-bar';
+  static const String routeName = '/participants-nav-bar';
 
   @override
-  State<SupporterNavBar> createState() => _HomeViewState();
+  State<ParticipantsNavBar> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<SupporterNavBar> {
+class _HomeViewState extends State<ParticipantsNavBar> {
   int _currentIndex = 0;
 
   late final List<Widget> _pages = [
-    const HomeSupporterViewBody(),
-    const AgreementsView(),
+    const HomeParticipantsViewBody(),
+    const MyTasksView(),
     const AccountView(),
   ];
 
@@ -107,7 +107,7 @@ class _HomeViewState extends State<SupporterNavBar> {
                         BlendMode.srcIn,
                       ),
                     ),
-                    label: 'اتفاقياتى',
+                    label: 'المهام',
                   ),
                   BottomNavigationBarItem(
                     icon: SvgPicture.asset(

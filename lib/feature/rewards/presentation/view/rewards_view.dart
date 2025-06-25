@@ -5,7 +5,6 @@ import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/feature/rewards/presentation/cubit/reward_cubit.dart';
 import 'package:moazez/feature/rewards/presentation/cubit/reward_state.dart';
-import 'package:moazez/feature/rewards/presentation/widgets/my_reward_card.dart';
 import 'package:moazez/feature/rewards/presentation/widgets/team_reward_card.dart';
 
 class RewardsView extends StatelessWidget {
@@ -22,7 +21,11 @@ class RewardsView extends StatelessWidget {
           builder: (context, state) {
             if (state is RewardLoading) {
               return const Center(child: CustomProgressIndcator());
+              
             } else if (state is RewardLoaded) {
+              if (state.rewards.isEmpty) {
+                return const Center(child: Text('لا يوجد مكافآت تابعة لفريقك'));
+              }
               return ListView.builder(
                 padding: const EdgeInsets.all(16),
                 itemCount: state.rewards.length,
@@ -33,7 +36,7 @@ class RewardsView extends StatelessWidget {
             } else if (state is RewardError) {
               return Center(child: Text(state.message));
             } else {
-              return const Center(child: Text('لا يوجد مكافآت'));
+              return const Center(child: Text('لا يوجد مكافآت تابعة لفريقك'));
             }
           },
         ),

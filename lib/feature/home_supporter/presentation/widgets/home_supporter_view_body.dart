@@ -10,14 +10,15 @@ import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_state.dart';
 import 'package:moazez/feature/invitations/presentation/send_invitations_view.dart';
 
-class HomeViewBody extends StatefulWidget {
-  const HomeViewBody({super.key});
+class HomeSupporterViewBody extends StatefulWidget {
+  const HomeSupporterViewBody({super.key});
+  
 
   @override
-  State<HomeViewBody> createState() => _HomeViewBodyState();
+  State<HomeSupporterViewBody> createState() => _HomeViewBodyState();
 }
 
-class _HomeViewBodyState extends State<HomeViewBody> {
+class _HomeViewBodyState extends State<HomeSupporterViewBody> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
 

@@ -32,7 +32,7 @@ class _SplashViewState extends State<SplashView> {
 
     String route;
     if (!isFirstTime && token != null) {
-      route = HomeView.routeName;
+      route = SupporterNavBar.routeName;
     } else if (!isFirstTime) {
       route = LoginView.routeName;
     } else {
