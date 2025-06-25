@@ -22,6 +22,11 @@ import 'package:moazez/feature/invitations/domain/usecases/respond_to_invitation
 import 'package:moazez/feature/invitations/domain/usecases/get_received_invitations_usecase.dart';
 import 'package:moazez/feature/invitations/domain/usecases/send_invitation_usecase.dart';
 import 'package:moazez/feature/invitations/presentation/cubit/invitation_cubit.dart';
+import 'package:moazez/feature/packages/data/datasources/package_remote_data_source.dart';
+import 'package:moazez/feature/packages/data/repositories/package_repository_impl.dart';
+import 'package:moazez/feature/packages/domain/repositories/package_repository.dart';
+import 'package:moazez/feature/packages/domain/usecases/get_packages_usecase.dart';
+import 'package:moazez/feature/packages/presentation/cubit/package_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/subscription_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
 import 'package:moazez/feature/profile/domain/usecases/edit_profile_usecase.dart';
@@ -93,6 +98,10 @@ Future<void> init() async {
         respondToInvitationUseCase: sl(),
       ),
     );
+    // Package Cubit
+    sl.registerFactory(
+      () => PackageCubit(getPackagesUseCase: sl()),
+    );
   sl.registerLazySingleton(() => GetTeamInfoUseCase(repository: sl()));
   sl.registerLazySingleton(() => SendInvitationUseCase(sl()));
   sl.registerLazySingleton(() => GetSentInvitationsUseCase(sl()));
@@ -149,6 +158,13 @@ Future<void> init() async {
   //############################################################################
   //                           Features - Packages
   //############################################################################
+  sl.registerLazySingleton<PackageRemoteDataSource>(
+    () => PackageRemoteDataSourceImpl(dio: sl()),
+  );
+  sl.registerLazySingleton<PackageRepository>(
+    () => PackageRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()),
+  );
+  sl.registerLazySingleton(() => GetPackagesUseCase(sl()));
   sl.registerLazySingleton<SubscriptionRemoteDataSource>(
     () => SubscriptionRemoteDataSourceImpl(dio: sl()),
   );
