@@ -79,4 +79,16 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(ServerFailure(message: e.message ?? 'حدث خطأ غير معروف'));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> sendPasswordResetLink(String email) async {
+    try {
+      final message = await remoteDataSource.sendPasswordResetLink(email);
+      return Right(message);
+    } on Failure catch (f) {
+      return Left(f);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message ?? 'حدث خطأ غير معروف'));
+    }
+  }
 }

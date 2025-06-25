@@ -19,6 +19,7 @@ abstract class AuthRemoteDataSource {
   Future<void> logout();
   Future<UserProfile> completeProfile(CompleteProfileParams params);
   Future<void> subscribeToTrialPackage(String token);
+  Future<String> sendPasswordResetLink(String email);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -150,6 +151,30 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           },
         ),
       );
+    } on DioException catch (e) {
+      throw handleDioException(e);
+    }
+  }
+
+  @override
+  Future<String> sendPasswordResetLink(String email) async {
+    try {
+      final response = await dio.post(
+        ApiEndpoints.passwordResetLink,
+        data: {'email': email},
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+          },
+        ),
+      );
+      if (response.data['success'] == true) {
+        return response.data['message'] as String;
+      } else {
+        throw ServerException(
+          message: response.data['message'] ?? 'حدث خطأ غير معروف',
+        );
+      }
     } on DioException catch (e) {
       throw handleDioException(e);
     }

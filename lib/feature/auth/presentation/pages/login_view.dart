@@ -12,6 +12,7 @@ import 'package:moazez/core/utils/validators/form_validators.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/feature/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:moazez/feature/auth/presentation/cubit/login/login_state.dart';
+import 'package:moazez/feature/auth/presentation/pages/password_reset_link_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/signup_view.dart';
 import 'package:moazez/feature/home_participant/presentation/widgets/home_participants_view_body.dart';
 
@@ -115,7 +116,9 @@ class _LoginViewState extends State<LoginView> {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () {
-                            // TODO: Implement forgot password
+                            Navigator.of(
+                              context,
+                            ).pushNamed(PasswordResetLinkView.routeName);
                           },
                           child: Text(
                             'نسيت كلمة المرور؟',

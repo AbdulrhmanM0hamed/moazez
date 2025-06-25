@@ -17,5 +17,6 @@ class ApiEndpoints {
   static const String invitationRespond = 'invitations/respond';
   static const String teamRewards = 'team/rewards';
   static const String myRewards = 'my-rewards';
+  static const String passwordResetLink = 'password/reset-link';
   
 }

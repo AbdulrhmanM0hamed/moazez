@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moazez/feature/auth/presentation/pages/complete_profile_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/login_view.dart';
+import 'package:moazez/feature/auth/presentation/pages/password_reset_link_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/signup_view.dart';
 import 'package:moazez/feature/home_participant/presentation/view/participants_nav_bar.dart';
 import 'package:moazez/feature/home_supporter/presentation/view/create_team_view.dart';
@@ -44,6 +45,9 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const TeamView());
     case PackagesView.routeName:
       return MaterialPageRoute(builder: (context) => const PackagesView());
+    case PasswordResetLinkView.routeName:
+      return MaterialPageRoute(builder: (context) => PasswordResetLinkView());
+
     case SentInvitationsView.routeName:
       return MaterialPageRoute(
         builder: (context) => const SentInvitationsView(),

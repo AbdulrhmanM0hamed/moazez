@@ -6,6 +6,7 @@ import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/services/cache/cache_service_impl.dart';
 import 'package:moazez/core/utils/constant/api_endpoints.dart';
 import 'package:moazez/feature/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:moazez/feature/auth/domain/usecases/send_password_reset_link_usecase.dart';
 import 'package:moazez/feature/home_supporter/data/datasources/subscription_remote_data_source.dart';
 import 'package:moazez/feature/home_supporter/data/datasources/team_remote_data_source.dart';
 import 'package:moazez/feature/home_supporter/data/repositories/subscription_repository_impl.dart';
@@ -35,6 +36,7 @@ import 'package:moazez/feature/auth/domain/repositories/auth_repository.dart';
 import 'package:moazez/feature/auth/domain/usecases/login_usecase.dart';
 import 'package:moazez/feature/auth/domain/usecases/logout_usecase.dart';
 import 'package:moazez/feature/auth/domain/usecases/register_usecase.dart';
+import 'package:moazez/feature/auth/domain/usecases/send_password_reset_link_usecase.dart';
 import 'package:moazez/feature/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
 import 'package:moazez/feature/auth/presentation/cubit/register/register_cubit.dart';
@@ -71,6 +73,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => RegisterUseCase(sl()));
   sl.registerLazySingleton(() => CompleteProfileUseCase(sl()));
   sl.registerLazySingleton(() => LogoutUseCase(sl()));
+  sl.registerLazySingleton(() => SendPasswordResetLinkUseCase(sl()));
 
   // Repository
   sl.registerLazySingleton<AuthRepository>(
@@ -107,7 +110,9 @@ Future<void> init() async {
   // Package Cubit
   sl.registerFactory(() => PackageCubit(getPackagesUseCase: sl()));
   // Rewards
-  sl.registerFactory(() => RewardCubit(getTeamRewardsUseCase: sl(), getMyRewardsUseCase: sl()));
+  sl.registerFactory(
+    () => RewardCubit(getTeamRewardsUseCase: sl(), getMyRewardsUseCase: sl()),
+  );
   sl.registerLazySingleton(() => GetTeamRewardsUseCase(sl()));
   sl.registerLazySingleton(() => GetMyRewardsUseCase(sl()));
   sl.registerLazySingleton<RewardRepository>(
