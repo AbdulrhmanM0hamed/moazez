@@ -4,6 +4,7 @@ import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/feature/onboarding/presentation/onboarding_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/login_view.dart';
 import 'package:moazez/feature/home_supporter/presentation/view/supporter_nav_bar.dart';
+import 'package:moazez/feature/home_participant/presentation/view/participants_nav_bar.dart';
 import '../../../core/utils/constant/app_assets.dart';
 import '../../../core/utils/animations/custom_animations.dart';
 
@@ -29,10 +30,11 @@ class _SplashViewState extends State<SplashView> {
     final cache = sl<CacheService>();
     final bool isFirstTime = await cache.getIsFirstTime();
     final String? token = await cache.getToken();
+    final String? role = await cache.getUserRole();
 
     String route;
     if (!isFirstTime && token != null) {
-      route = SupporterNavBar.routeName;
+      route = role == 'Participant' ? ParticipantsNavBar.routeName : SupporterNavBar.routeName;
     } else if (!isFirstTime) {
       route = LoginView.routeName;
     } else {

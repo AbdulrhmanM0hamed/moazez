@@ -25,4 +25,6 @@ abstract class CacheService {
   Future<void> setIsFirstTime(bool isFirstTime);
   Future<void> setGuestMode(bool isGuest);
   Future<bool> isGuestMode();
+  Future<void> saveUserRole(String role);
+  Future<String?> getUserRole();
 }

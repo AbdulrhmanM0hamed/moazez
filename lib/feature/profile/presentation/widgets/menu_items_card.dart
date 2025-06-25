@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
-import 'package:moazez/feature/invitations/presentation/cubit/invitation_cubit.dart';
-import 'package:moazez/feature/invitations/presentation/sent_invitations_view.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/profile/presentation/view/edit_profile_info.dart';
 import 'package:moazez/feature/packages/presentation/view/packages_view.dart';
@@ -17,131 +16,127 @@ class MenuItemsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          _buildMenuItem(
-            context,
-            'تعديل الملف الشخصي',
-            Icons.edit_outlined,
-            () {
-              // TODO: Navigate to edit profile screen
-              final profileCubit = context.read<ProfileCubit>();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder:
-                      (context) => BlocProvider.value(
-                        value: profileCubit,
-                        child: const EditProfileInfo(),
-                      ),
-                ),
-              );
-            },
-          ),
-
-          _buildMenuItem(context, 'فريقي', Icons.group_outlined, () {
-            Navigator.pushNamed(context, TeamView.routeName);
-          }),
-          _buildMenuItem(context, 'الدعوات المرسلة', Icons.send_outlined, () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder:
-                    (context) => BlocProvider(
-                      create:
-                          (context) =>
-                              sl<InvitationCubit>()..getSentInvitations(),
-                      child: const SentInvitationsView(),
-                    ),
+    final CacheService cacheService = sl<CacheService>();
+    return FutureBuilder<String?>(
+      future: cacheService.getUserRole(),
+      builder: (context, snapshot) {
+        String? role = snapshot.data;
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
               ),
-            );
-          }),
-
-          _buildMenuItem(
-            context,
-            'مكافآت فريقك',
-            Icons.card_giftcard_outlined,
-            () {
-              Navigator.pushNamed(context, RewardsView.routeName);
-            },
+            ],
           ),
-          _buildMenuItem(context, 'مكافآتي', Icons.card_giftcard_outlined, () {
-            Navigator.pushNamed(context, MyRewardsView.routeName);
-          }),
-          _buildMenuItem(context, 'الباقات', Icons.local_offer_outlined, () {
-            Navigator.pushNamed(context, PackagesView.routeName);
-          }),
-          _buildMenuItem(context, 'الإعدادات', Icons.settings_outlined, () {}),
-          _buildMenuItem(context, 'الدعم والمساعدة', Icons.help_outline, () {}),
-          _buildMenuItem(context, 'تسجيل الخروج', Icons.logout, () {
-            showDialog(
-              context: context,
-              builder: (BuildContext dialogContext) {
-                return AlertDialog(
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  title: const Text(
-                    'تأكيد تسجيل الخروج',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  content: const Text(
-                    'هل أنت متأكد أنك تريد تسجيل الخروج؟',
-                    textAlign: TextAlign.center,
-                  ),
-                  actionsAlignment: MainAxisAlignment.center,
-                  actions: <Widget>[
-                    TextButton(
-                      child: const Text(
-                        'إلغاء',
-                        style: TextStyle(color: AppColors.textSecondary),
-                      ),
-                      onPressed: () {
-                        Navigator.of(dialogContext).pop(); // Close the dialog
-                      },
+          child: Column(
+            children: [
+              _buildMenuItem(
+                context,
+                'تعديل الملف الشخصي',
+                Icons.edit_outlined,
+                () {
+                  // TODO: Navigate to edit profile screen
+                  final profileCubit = context.read<ProfileCubit>();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => BlocProvider.value(
+                            value: profileCubit,
+                            child: const EditProfileInfo(),
+                          ),
                     ),
-                    const SizedBox(width: 16),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.error,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 12,
-                        ),
+                  );
+                },
+              ),
+
+              _buildMenuItem(context, 'فريقي', Icons.group_outlined, () {
+                Navigator.pushNamed(context, TeamView.routeName);
+              }),
+
+              if (role == 'Supporter')
+                _buildMenuItem(
+                  context,
+                  'مكافآت فريقك',
+                  Icons.card_giftcard_outlined,
+                  () {
+                    Navigator.pushNamed(context, RewardsView.routeName);
+                  },
+                ),
+              if (role == 'Participant')
+                _buildMenuItem(context, 'مكافآتي', Icons.card_giftcard_outlined, () {
+                  Navigator.pushNamed(context, MyRewardsView.routeName);
+                }),
+              if (role == 'Supporter')
+                _buildMenuItem(context, 'الباقات', Icons.local_offer_outlined, () {
+                  Navigator.pushNamed(context, PackagesView.routeName);
+                }),
+              _buildMenuItem(context, 'الإعدادات', Icons.settings_outlined, () {}),
+              _buildMenuItem(context, 'الدعم والمساعدة', Icons.help_outline, () {}),
+              _buildMenuItem(context, 'تسجيل الخروج', Icons.logout, () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext dialogContext) {
+                    return AlertDialog(
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      child: const Text(
-                        'تأكيد',
-                        style: TextStyle(color: Colors.white),
+                      title: const Text(
+                        'تأكيد تسجيل الخروج',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      onPressed: () {
-                        Navigator.of(dialogContext).pop(); // Close the dialog
-                        context.read<LogoutCubit>().logout(); // Perform logout
-                      },
-                    ),
-                  ],
+                      content: const Text(
+                        'هل أنت متأكد أنك تريد تسجيل الخروج؟',
+                        textAlign: TextAlign.center,
+                      ),
+                      actionsAlignment: MainAxisAlignment.center,
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text(
+                            'إلغاء',
+                            style: TextStyle(color: AppColors.textSecondary),
+                          ),
+                          onPressed: () {
+                            Navigator.of(dialogContext).pop(); // Close the dialog
+                          },
+                        ),
+                        const SizedBox(width: 16),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.error,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                          ),
+                          child: const Text(
+                            'تأكيد',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            Navigator.of(dialogContext).pop(); // Close the dialog
+                            context.read<LogoutCubit>().logout(); // Perform logout
+                          },
+                        ),
+                      ],
+                    );
+                  },
                 );
-              },
-            );
-          }, isLogout: true),
-        ],
-      ),
+              }, isLogout: true),
+            ],
+          ),
+        );
+      },
     );
   }
 

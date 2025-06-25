@@ -190,5 +190,14 @@ class CacheServiceImpl implements CacheService {
   Future<void> setGuestMode(bool isGuest) async {
     await _prefs.setBool(_isGuestKey, isGuest);
   }
-}
 
+  @override
+  Future<void> saveUserRole(String role) async {
+    await _prefs.setString('user_role', role);
+  }
+
+  @override
+  Future<String?> getUserRole() async {
+    return _prefs.getString('user_role');
+  }
+}

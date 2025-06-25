@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moazez/feature/home_supporter/presentation/widgets/home_top_section.dart';
 
 class HomeParticipantsViewBody extends StatelessWidget {
   const HomeParticipantsViewBody({super.key});
@@ -8,7 +9,7 @@ class HomeParticipantsViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Column(
       children: [
-        // TODO: Add widgets for home participants view body
+        HomeTopSection()        // TODO: Add widgets for home participants view body
       ],
     );
   }

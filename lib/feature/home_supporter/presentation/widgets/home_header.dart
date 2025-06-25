@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moazez/core/services/cache/cache_service.dart';
+import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
+import 'package:moazez/feature/invitations/presentation/cubit/invitation_cubit.dart';
 import 'package:moazez/feature/invitations/presentation/received_invitations_view.dart';
+import 'package:moazez/feature/invitations/presentation/sent_invitations_view.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 
 class HomeHeader extends StatelessWidget {
@@ -92,36 +96,86 @@ class HomeHeader extends StatelessWidget {
             },
           ),
           const Spacer(),
-          // Invitations icon with badge
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    ReceivedInvitationsView.routeName,
+          // Invitations icon with badge for both Participant and Supporter
+          FutureBuilder<String?>(
+            future: sl<CacheService>().getUserRole(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data == 'Participant') {
+                  return Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            ReceivedInvitationsView.routeName,
+                          );
+                        },
+                        child: SvgPicture.asset(
+                          'assets/images/request.svg', // Ensure this asset exists or replace with an appropriate icon
+                          width: 28,
+                          height: 28,
+                        ),
+                      ),
+                      Positioned(
+                        top: -4,
+                        right: 8,
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ],
                   );
-                },
-                child: SvgPicture.asset(
-                  'assets/images/request.svg', // Ensure this asset exists or replace with an appropriate icon
-                  width: 28,
-                  height: 28,
-                ),
-              ),
-              Positioned(
-                top: -4,
-                right: 8,
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            ],
+                } else if (snapshot.data == 'Supporter') {
+                  return Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) => BlocProvider(
+                                    create:
+                                        (context) =>
+                                            sl<InvitationCubit>()
+                                              ..getSentInvitations(),
+                                    child: const SentInvitationsView(),
+                                  ),
+                            ),
+                          );
+                        },
+                        child: Icon(
+                          Icons.send_outlined,
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                      ),
+                      Positioned(
+                        top: -4,
+                        right: 8,
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+              }
+              return const SizedBox.shrink();
+            },
           ),
         ],
       ),

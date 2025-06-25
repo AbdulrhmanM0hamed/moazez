@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:moazez/core/services/cache/cache_service.dart';
+import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
+import 'package:moazez/feature/home_participant/presentation/view/participants_nav_bar.dart';
+import 'package:moazez/feature/home_supporter/presentation/view/supporter_nav_bar.dart';
+import 'package:moazez/feature/splash/presentation/splash_view.dart';
 
 class RoleSwitcher extends StatefulWidget {
   const RoleSwitcher({super.key});
@@ -10,6 +15,32 @@ class RoleSwitcher extends StatefulWidget {
 
 class _RoleSwitcherState extends State<RoleSwitcher> {
   int _selectedRoleIndex = 0; // 0 for Participant, 1 for Supporter
+  final CacheService _cacheService = sl<CacheService>();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedRole();
+  }
+
+  Future<void> _loadSavedRole() async {
+    String? savedRole = await _cacheService.getUserRole();
+    if (savedRole != null) {
+      setState(() {
+        _selectedRoleIndex = savedRole == 'Supporter' ? 1 : 0;
+      });
+    }
+  }
+
+  Future<void> _handleRoleSwitch(int index) async {
+    String role = index == 0 ? 'Participant' : 'Supporter';
+    await _cacheService.saveUserRole(role);
+    setState(() {
+      _selectedRoleIndex = index;
+    });
+    // Navigate to splash screen to restart app flow based on role
+    Navigator.of(context).pushReplacementNamed(SplashView.routeName);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +52,7 @@ class _RoleSwitcherState extends State<RoleSwitcher> {
       ),
       child: ToggleButtons(
         isSelected: [_selectedRoleIndex == 0, _selectedRoleIndex == 1],
-        onPressed: (index) {
-          setState(() {
-            _selectedRoleIndex = index;
-          });
-        },
+        onPressed: (index) => _handleRoleSwitch(index),
         borderRadius: BorderRadius.circular(30),
         selectedColor: Colors.white,
         color: AppColors.textPrimary,

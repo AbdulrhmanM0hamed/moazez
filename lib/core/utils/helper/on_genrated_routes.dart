@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moazez/feature/auth/presentation/pages/complete_profile_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/login_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/signup_view.dart';
+import 'package:moazez/feature/home_participant/presentation/view/participants_nav_bar.dart';
 import 'package:moazez/feature/home_supporter/presentation/view/create_team_view.dart';
 import 'package:moazez/feature/home_supporter/presentation/view/supporter_nav_bar.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/home_supporter_view_body.dart';
@@ -32,6 +33,10 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       );
     case SupporterNavBar.routeName:
       return MaterialPageRoute(builder: (context) => const SupporterNavBar());
+    case ParticipantsNavBar.routeName:
+      return MaterialPageRoute(
+        builder: (context) => const ParticipantsNavBar(),
+      );
     case EditProfileInfo.routeName:
       return MaterialPageRoute(builder: (context) => const EditProfileInfo());
     case CreateTeamView.routeName:
