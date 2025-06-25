@@ -5,7 +5,6 @@ import 'package:moazez/feature/auth/presentation/pages/signup_view.dart';
 import 'package:moazez/feature/home_participant/presentation/view/participants_nav_bar.dart';
 import 'package:moazez/feature/home_supporter/presentation/view/create_team_view.dart';
 import 'package:moazez/feature/home_supporter/presentation/view/supporter_nav_bar.dart';
-import 'package:moazez/feature/home_supporter/presentation/widgets/home_supporter_view_body.dart';
 import 'package:moazez/feature/invitations/presentation/received_invitations_view.dart';
 import 'package:moazez/feature/invitations/presentation/sent_invitations_view.dart';
 import 'package:moazez/feature/packages/presentation/view/packages_view.dart';

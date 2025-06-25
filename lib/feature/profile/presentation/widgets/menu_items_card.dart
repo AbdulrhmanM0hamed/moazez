@@ -54,10 +54,10 @@ class MenuItemsCard extends StatelessWidget {
                   );
                 },
               ),
-
-              _buildMenuItem(context, 'فريقي', Icons.group_outlined, () {
-                Navigator.pushNamed(context, TeamView.routeName);
-              }),
+              if (role == 'Supporter')
+                _buildMenuItem(context, 'فريقي', Icons.group_outlined, () {
+                  Navigator.pushNamed(context, TeamView.routeName);
+                }),
 
               if (role == 'Supporter')
                 _buildMenuItem(
@@ -69,15 +69,35 @@ class MenuItemsCard extends StatelessWidget {
                   },
                 ),
               if (role == 'Participant')
-                _buildMenuItem(context, 'مكافآتي', Icons.card_giftcard_outlined, () {
-                  Navigator.pushNamed(context, MyRewardsView.routeName);
-                }),
+                _buildMenuItem(
+                  context,
+                  'مكافآتي',
+                  Icons.card_giftcard_outlined,
+                  () {
+                    Navigator.pushNamed(context, MyRewardsView.routeName);
+                  },
+                ),
               if (role == 'Supporter')
-                _buildMenuItem(context, 'الباقات', Icons.local_offer_outlined, () {
-                  Navigator.pushNamed(context, PackagesView.routeName);
-                }),
-              _buildMenuItem(context, 'الإعدادات', Icons.settings_outlined, () {}),
-              _buildMenuItem(context, 'الدعم والمساعدة', Icons.help_outline, () {}),
+                _buildMenuItem(
+                  context,
+                  'الباقات',
+                  Icons.local_offer_outlined,
+                  () {
+                    Navigator.pushNamed(context, PackagesView.routeName);
+                  },
+                ),
+              _buildMenuItem(
+                context,
+                'الإعدادات',
+                Icons.settings_outlined,
+                () {},
+              ),
+              _buildMenuItem(
+                context,
+                'الدعم والمساعدة',
+                Icons.help_outline,
+                () {},
+              ),
               _buildMenuItem(context, 'تسجيل الخروج', Icons.logout, () {
                 showDialog(
                   context: context,
@@ -104,7 +124,9 @@ class MenuItemsCard extends StatelessWidget {
                             style: TextStyle(color: AppColors.textSecondary),
                           ),
                           onPressed: () {
-                            Navigator.of(dialogContext).pop(); // Close the dialog
+                            Navigator.of(
+                              dialogContext,
+                            ).pop(); // Close the dialog
                           },
                         ),
                         const SizedBox(width: 16),
@@ -124,8 +146,12 @@ class MenuItemsCard extends StatelessWidget {
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
-                            Navigator.of(dialogContext).pop(); // Close the dialog
-                            context.read<LogoutCubit>().logout(); // Perform logout
+                            Navigator.of(
+                              dialogContext,
+                            ).pop(); // Close the dialog
+                            context
+                                .read<LogoutCubit>()
+                                .logout(); // Perform logout
                           },
                         ),
                       ],

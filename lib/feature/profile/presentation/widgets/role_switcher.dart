@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
-import 'package:moazez/feature/home_participant/presentation/view/participants_nav_bar.dart';
-import 'package:moazez/feature/home_supporter/presentation/view/supporter_nav_bar.dart';
 import 'package:moazez/feature/splash/presentation/splash_view.dart';
 
 class RoleSwitcher extends StatefulWidget {
@@ -62,7 +60,10 @@ class _RoleSwitcherState extends State<RoleSwitcher> {
         renderBorder: false,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24.0,
+              vertical: 12.0,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
@@ -73,7 +74,10 @@ class _RoleSwitcherState extends State<RoleSwitcher> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24.0,
+              vertical: 12.0,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
