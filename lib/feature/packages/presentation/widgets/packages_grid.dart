@@ -30,7 +30,6 @@ class PackagesGrid extends StatelessWidget {
       itemBuilder: (context, index) {
         return PackageCard(
           package: paidPackages[index],
-          isTrial: false,
         );
       },
       itemCount: paidPackages.length,

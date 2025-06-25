@@ -7,23 +7,31 @@ import 'package:moazez/feature/packages/domain/entities/package_entity.dart';
 
 class PackageCard extends StatelessWidget {
   final PackageEntity package;
-  final bool isTrial;
   final VoidCallback? onTap;
 
-  const PackageCard({
-    super.key,
-    required this.package,
-    this.isTrial = false,
-    this.onTap,
-  });
+  const PackageCard({super.key, required this.package, this.onTap});
 
-  Color get _primaryColor =>
-      isTrial ? const Color(0xFF4CAF50) : AppColors.primary;
-  Color get _secondaryColor =>
-      isTrial ? const Color(0xFF388E3C) : AppColors.secondary;
+  Color get _primaryColor {
+    if (package.name.contains('الأساسية'))
+      return const Color(0xFF2196F3); // Blue for Basic
+    if (package.name.contains('المتقدمة'))
+      return const Color(0xFFFF9800); // Orange for Advanced
+    if (package.name.contains('الاحترافية'))
+      return const Color(0xFF9C27B0); // Purple for Professional
+    return AppColors.primary;
+  }
+
+  Color get _secondaryColor {
+    if (package.name.contains('الأساسية'))
+      return const  Color(0xFF1976D2); // Darker Blue
+    if (package.name.contains('المتقدمة'))
+      return const Color(0xFFF57C00); // Darker Orange
+    if (package.name.contains('الاحترافية'))
+      return const Color(0xFF7C4DFF); // Darker Purple
+    return AppColors.secondary;
+  }
+
   Color get _backgroundColor => Colors.white;
-  Color get _textColor => const Color(0xFF333333);
-  Color get _labelColor => const Color(0xFF666666);
 
   Icon _getIcon(String type) {
     switch (type) {
@@ -143,8 +151,8 @@ class PackageCard extends StatelessWidget {
                 height: 52,
                 child: CustomButton(
                   onPressed: onTap ?? () {},
-                  text: isTrial ? 'جرب الآن' : 'اشترك الآن',
-                  backgroundColor: isTrial ? Colors.green : AppColors.primary,
+                  text: 'اشترك الآن',
+                  backgroundColor: _primaryColor,
                 ),
               ),
             ),
