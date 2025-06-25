@@ -43,11 +43,7 @@ class _SendInvitationsViewState extends State<SendInvitationsView> {
               );
             } else if (state is InvitationError) {
               String errorMessage = state.message;
-              if (errorMessage.contains('422')) {
-                errorMessage = 'تم إرسال دعوة بالفعل لهذا البريد الإلكتروني';
-              } else if (errorMessage.contains('401')) {
-                errorMessage = 'خطأ في التحقق: يرجى تسجيل الدخول مرة أخرى';
-              }
+
               CustomSnackbar.showError(context: context, message: errorMessage);
             }
           },
