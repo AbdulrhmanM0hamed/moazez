@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
-import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';

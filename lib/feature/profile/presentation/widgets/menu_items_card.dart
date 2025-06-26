@@ -56,7 +56,7 @@ class MenuItemsCard extends StatelessWidget {
                 },
               ),
               if (role == 'Supporter')
-                _buildMenuItem(context, 'فريقي', Icons.group_outlined, () {
+                _buildMenuItem(context, 'مشاركينى', Icons.group_outlined, () {
                   Navigator.pushNamed(context, TeamView.routeName);
                 }),
 

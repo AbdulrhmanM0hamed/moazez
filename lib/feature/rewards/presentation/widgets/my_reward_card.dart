@@ -259,7 +259,7 @@ class MyRewardCard extends StatelessWidget {
                                     style: getSemiBoldStyle(
                                       fontFamily: FontConstant.cairo,
                                       fontSize: FontSize.size14,
-                                    )?.copyWith(
+                                    ).copyWith(
                                       color:
                                           amount != 0.0
                                               ? (isPositiveAmount

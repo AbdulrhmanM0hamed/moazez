@@ -66,73 +66,55 @@ class InvitationCard extends StatelessWidget {
     final isAccepted = invitation.status == "accepted";
     final isPending = invitation.status == "pending";
 
-    final Color statusColor =
-        isAccepted
-            ? AppColors.success
-            : isPending
-            ? AppColors.warning
-            : AppColors.error;
+    final Color statusColor;
+    final String statusText;
+    final IconData statusIcon;
 
-    final IconData statusIcon =
-        isAccepted
-            ? Icons.check_circle_outline
-            : isPending
-            ? Icons.hourglass_bottom
-            : Icons.cancel_outlined;
+    if (isAccepted) {
+      statusColor = AppColors.success;
+      statusText = "مقبول";
+      statusIcon = Icons.check_circle;
+    } else if (isPending) {
+      statusColor = AppColors.warning;
+      statusText = "قيد الانتظار";
+      statusIcon = Icons.hourglass_empty;
+    } else {
+      statusColor = AppColors.error;
+      statusText = "مرفوض";
+      statusIcon = Icons.cancel;
+    }
 
-    final String statusText =
-        isAccepted
-            ? "مقبول"
-            : isPending
-            ? "قيد الانتظار"
-            : "مرفوض";
-
-    return Container(
+    return Card(
       margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
+      elevation: 2,
+      shadowColor: Colors.black.withOpacity(0.08),
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: statusColor.withValues(alpha: 0.4), width: 1.5),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12.0),
         child: Row(
           children: [
-            // Avatar or Icon section
-            invitation.user.avatarUrl.isNotEmpty
-                ? CustomCachedNetworkImage(
-                  imageUrl: invitation.user.avatarUrl,
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.cover,
-                  borderRadius: BorderRadius.circular(25),
-                  errorWidget: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: statusColor.withValues(alpha: 0.1),
-                    ),
-                    child: Icon(statusIcon, color: statusColor, size: 30),
-                  ),
-                )
-                : Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: statusColor.withValues(alpha: 0.1),
-                  ),
-                  child: Icon(statusIcon, color: statusColor, size: 30),
+            // Avatar
+            CustomCachedNetworkImage(
+              imageUrl: invitation.user.avatarUrl,
+              width: 60,
+              height: 60,
+              fit: BoxFit.cover,
+              borderRadius: BorderRadius.circular(32),
+              errorWidget: Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: AppColors.textSecondary.withOpacity(0.1),
                 ),
+                child: const Icon(Icons.person_off_outlined,
+                    color: AppColors.textSecondary, size: 30),
+              ),
+            ),
             const SizedBox(width: 16),
-
-            // Info section
+            // Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,53 +122,72 @@ class InvitationCard extends StatelessWidget {
                   Text(
                     invitation.user.name,
                     style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 6),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.group,
-                        size: 16,
-                        color: AppColors.textSecondary,
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        'الفريق: ${invitation.team.name}',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.info_outline,
-                        size: 16,
-                        color: AppColors.textSecondary,
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        'الحالة: $statusText',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: statusColor,
-                        ),
-                      ),
-                    ],
+                  const SizedBox(height: 8),
+                  Text(
+                    'الفريق: ${invitation.team.name}',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.textSecondary,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
             ),
+            const SizedBox(width: 8),
+            // Status
+            _StatusIndicator(
+              statusText: statusText,
+              statusColor: statusColor,
+              statusIcon: statusIcon,
+            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _StatusIndicator extends StatelessWidget {
+  final String statusText;
+  final Color statusColor;
+  final IconData statusIcon;
+
+  const _StatusIndicator({
+    required this.statusText,
+    required this.statusColor,
+    required this.statusIcon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: statusColor.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(statusIcon, color: statusColor, size: 16),
+          const SizedBox(width: 6),
+          Text(
+            statusText,
+            style: TextStyle(
+              color: statusColor,
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
+          ),
+        ],
       ),
     );
   }

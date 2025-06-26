@@ -53,6 +53,15 @@ class InvitationRemoteDataSourceImpl implements InvitationRemoteDataSource {
         throw ServerException(message: 'فشل في إرسال الدعوة');
       }
     } on DioException catch (e) {
+      print(e);
+      if (e.response?.statusCode == 422 && e.response?.data != null) {
+        final errorData = e.response?.data;
+        String errorMessage = 'فشل في إرسال الدعوة: المستخدم غير موجود';
+        if (errorData is Map && errorData.containsKey('message')) {
+          errorMessage = errorData['message'] ?? errorMessage;
+        }
+        throw ServerException(message: errorMessage);
+      }
       throw handleDioException(e);
     } catch (e) {
       throw ServerException(message: e.toString());

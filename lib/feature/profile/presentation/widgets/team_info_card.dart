@@ -47,7 +47,7 @@ class TeamInfoCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'معلومات الفريق',
+                'معلومات المشاركين',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               // Infer ownership from TeamCubit state if possible
@@ -148,13 +148,7 @@ class TeamInfoCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'اسم الفريق',
-                      style: getBoldStyle(
-                        fontFamily: FontConstant.cairo,
-                        fontSize: FontSize.size16,
-                      ),
-                    ),
+                   
                     Text(
                       teamName,
                       style: getSemiBoldStyle(

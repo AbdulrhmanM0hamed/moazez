@@ -9,13 +9,13 @@ class MemberStatsModel extends MemberStatsEntity {
     required StatsModel stats,
     required List<TaskModel> tasks,
   }) : super(
-          id: id,
-          name: name,
-          email: email,
-          avatarUrl: avatarUrl,
-          stats: stats,
-          tasks: tasks,
-        );
+         id: id,
+         name: name,
+         email: email,
+         avatarUrl: avatarUrl,
+         stats: stats,
+         tasks: tasks,
+       );
 
   factory MemberStatsModel.fromJson(Map<String, dynamic> json) {
     return MemberStatsModel(
@@ -24,9 +24,13 @@ class MemberStatsModel extends MemberStatsEntity {
       email: json['email'] as String,
       avatarUrl: json['avatar_url'] as String,
       stats: StatsModel.fromJson(json['stats'] as Map<String, dynamic>),
-      tasks: (json['tasks'] as List<dynamic>)
-          .map((taskJson) => TaskModel.fromJson(taskJson as Map<String, dynamic>))
-          .toList(),
+      tasks:
+          (json['tasks'] as List<dynamic>)
+              .map(
+                (taskJson) =>
+                    TaskModel.fromJson(taskJson as Map<String, dynamic>),
+              )
+              .toList(),
     );
   }
 
@@ -43,20 +47,18 @@ class MemberStatsModel extends MemberStatsEntity {
 }
 
 class StatsModel extends StatsEntity {
-  const StatsModel({
-    required String completionPercentageMargin,
-  }) : super(completionPercentageMargin: completionPercentageMargin);
+  const StatsModel({required String completionPercentageMargin})
+    : super(completionPercentageMargin: completionPercentageMargin);
 
   factory StatsModel.fromJson(Map<String, dynamic> json) {
     return StatsModel(
-      completionPercentageMargin: json['completion_percentage_margin'] as String,
+      completionPercentageMargin:
+          json['completion_percentage_margin'] as String,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'completion_percentage_margin': completionPercentageMargin,
-    };
+    return {'completion_percentage_margin': completionPercentageMargin};
   }
 }
 
@@ -68,12 +70,12 @@ class TaskModel extends TaskEntity {
     required int progress,
     required int stagesCount,
   }) : super(
-          id: id,
-          title: title,
-          status: status,
-          progress: progress,
-          stagesCount: stagesCount,
-        );
+         id: id,
+         title: title,
+         status: status,
+         progress: progress,
+         stagesCount: stagesCount,
+       );
 
   factory TaskModel.fromJson(Map<String, dynamic> json) {
     return TaskModel(
@@ -104,12 +106,12 @@ class TeamSummaryModel extends TeamSummaryEntity {
     required int inProgressTasks,
     required double completionRate,
   }) : super(
-          totalTasks: totalTasks,
-          completedTasks: completedTasks,
-          pendingTasks: pendingTasks,
-          inProgressTasks: inProgressTasks,
-          completionRate: completionRate,
-        );
+         totalTasks: totalTasks,
+         completedTasks: completedTasks,
+         pendingTasks: pendingTasks,
+         inProgressTasks: inProgressTasks,
+         completionRate: completionRate,
+       );
 
   factory TeamSummaryModel.fromJson(Map<String, dynamic> json) {
     return TeamSummaryModel(
@@ -139,11 +141,11 @@ class PaginationModel extends PaginationEntity {
     required int currentPage,
     required int lastPage,
   }) : super(
-          total: total,
-          perPage: perPage,
-          currentPage: currentPage,
-          lastPage: lastPage,
-        );
+         total: total,
+         perPage: perPage,
+         currentPage: currentPage,
+         lastPage: lastPage,
+       );
 
   factory PaginationModel.fromJson(Map<String, dynamic> json) {
     return PaginationModel(
@@ -170,37 +172,61 @@ class MemberTaskStatsResponseModel extends MemberTaskStatsResponseEntity {
     required TeamSummaryModel teamSummary,
     required PaginationModel pagination,
   }) : super(
-          members: members,
-          teamSummary: teamSummary,
-          pagination: pagination,
-        );
+         members: members,
+         teamSummary: teamSummary,
+         pagination: pagination,
+       );
 
   factory MemberTaskStatsResponseModel.fromJson(Map<String, dynamic> json) {
     return MemberTaskStatsResponseModel(
-      members: (json['members'] as List<dynamic>)
-          .map((memberJson) => MemberStatsModel.fromJson(memberJson as Map<String, dynamic>))
-          .toList(),
-      teamSummary: TeamSummaryModel.fromJson(json['team_summary'] as Map<String, dynamic>),
-      pagination: PaginationModel.fromJson(json['pagination'] as Map<String, dynamic>),
+      members:
+          (json['members'] as List<dynamic>)
+              .map(
+                (memberJson) => MemberStatsModel.fromJson(
+                  memberJson as Map<String, dynamic>,
+                ),
+              )
+              .toList(),
+      teamSummary: TeamSummaryModel.fromJson(
+        json['team_summary'] as Map<String, dynamic>,
+      ),
+      pagination: PaginationModel.fromJson(
+        json['pagination'] as Map<String, dynamic>,
+      ),
     );
   }
 
-  factory MemberTaskStatsResponseModel.fromEntity(MemberTaskStatsResponseEntity entity) {
+  factory MemberTaskStatsResponseModel.fromEntity(
+    MemberTaskStatsResponseEntity entity,
+  ) {
     return MemberTaskStatsResponseModel(
-      members: entity.members.map((e) => MemberStatsModel(
-        id: e.id,
-        name: e.name,
-        email: e.email,
-        avatarUrl: e.avatarUrl,
-        stats: StatsModel(completionPercentageMargin: e.stats.completionPercentageMargin),
-        tasks: e.tasks.map((t) => TaskModel(
-          id: t.id,
-          title: t.title,
-          status: t.status,
-          progress: t.progress,
-          stagesCount: t.stagesCount,
-        )).toList(),
-      )).toList() as List<MemberStatsModel>,
+      members:
+          entity.members
+              .map(
+                (e) => MemberStatsModel(
+                  id: e.id,
+                  name: e.name,
+                  email: e.email,
+                  avatarUrl: e.avatarUrl,
+                  stats: StatsModel(
+                    completionPercentageMargin:
+                        e.stats.completionPercentageMargin,
+                  ),
+                  tasks:
+                      e.tasks
+                          .map(
+                            (t) => TaskModel(
+                              id: t.id,
+                              title: t.title,
+                              status: t.status,
+                              progress: t.progress,
+                              stagesCount: t.stagesCount,
+                            ),
+                          )
+                          .toList(),
+                ),
+              )
+              .toList(),
       teamSummary: TeamSummaryModel(
         totalTasks: entity.teamSummary.totalTasks,
         completedTasks: entity.teamSummary.completedTasks,
@@ -219,7 +245,10 @@ class MemberTaskStatsResponseModel extends MemberTaskStatsResponseEntity {
 
   Map<String, dynamic> toJson() {
     return {
-      'members': members.map((member) => (member as MemberStatsModel).toJson()).toList(),
+      'members':
+          members
+              .map((member) => (member as MemberStatsModel).toJson())
+              .toList(),
       'team_summary': (teamSummary as TeamSummaryModel).toJson(),
       'pagination': (pagination as PaginationModel).toJson(),
     };

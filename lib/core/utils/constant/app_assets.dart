@@ -2,7 +2,6 @@ class AppAssets {
   // Images Path
   static const String _imagesPath = 'assets/images';
   static const String _iconsPath = 'assets/icons';
-  static const String _lottiePath = 'assets/lottie';
 
   // Logo
   static const String logo = '$_imagesPath/logo.png';
