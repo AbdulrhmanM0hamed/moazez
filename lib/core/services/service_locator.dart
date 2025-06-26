@@ -15,6 +15,8 @@ import 'package:moazez/feature/home_supporter/domain/repositories/subscription_r
 import 'package:moazez/feature/home_supporter/domain/repositories/team_repository.dart';
 import 'package:moazez/feature/home_supporter/domain/usecases/get_current_subscription_usecase.dart';
 import 'package:moazez/feature/home_supporter/domain/usecases/get_team_info_usecase.dart';
+import 'package:moazez/feature/home_supporter/domain/usecases/get_member_task_stats_usecase.dart';
+import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_cubit.dart';
 import 'package:moazez/feature/invitations/data/datasources/invitation_remote_data_source.dart';
 import 'package:moazez/feature/invitations/data/repositories/invitation_repository_impl.dart';
 import 'package:moazez/feature/invitations/domain/repositories/invitation_repository.dart';
@@ -36,7 +38,6 @@ import 'package:moazez/feature/auth/domain/repositories/auth_repository.dart';
 import 'package:moazez/feature/auth/domain/usecases/login_usecase.dart';
 import 'package:moazez/feature/auth/domain/usecases/logout_usecase.dart';
 import 'package:moazez/feature/auth/domain/usecases/register_usecase.dart';
-import 'package:moazez/feature/auth/domain/usecases/send_password_reset_link_usecase.dart';
 import 'package:moazez/feature/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
 import 'package:moazez/feature/auth/presentation/cubit/register/register_cubit.dart';
@@ -99,6 +100,7 @@ Future<void> init() async {
   sl.registerFactory(
     () => TeamCubit(getTeamInfoUseCase: sl(), teamRepository: sl()),
   );
+  sl.registerFactory(() => MemberStatsCubit(getMemberTaskStatsUseCase: sl()));
   sl.registerFactory(
     () => InvitationCubit(
       sendInvitationUseCase: sl(),
@@ -122,6 +124,9 @@ Future<void> init() async {
     () => RewardRemoteDataSourceImpl(dio: sl()),
   );
   sl.registerLazySingleton(() => GetTeamInfoUseCase(repository: sl()));
+  sl.registerLazySingleton(
+    () => GetMemberTaskStatsUseCase(teamRepository: sl()),
+  );
   sl.registerLazySingleton(() => SendInvitationUseCase(sl()));
   sl.registerLazySingleton(() => GetSentInvitationsUseCase(sl()));
   sl.registerLazySingleton(() => GetReceivedInvitationsUseCase(sl()));

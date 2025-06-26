@@ -18,11 +18,11 @@ class SubscriptionRemoteDataSourceImpl implements SubscriptionRemoteDataSource {
       final response = await dio.get(
         '${ApiEndpoints.currentSubscription}',
       );
-      print('🔵 Status Code: ${response.statusCode}');
-      print('🔵 Full Response: ${response.data}');
+   //   print('🔵 Status Code: ${response.statusCode}');
+   //   print('🔵 Full Response: ${response.data}');
       if (response.statusCode == 200 && response.data != null) {
         final data = response.data['data'];
-        print('🟢 Extracted data: $data');
+       // print('🟢 Extracted data: $data');
         if (data != null) {
           return SubscriptionModel.fromJson(data);
         } else {

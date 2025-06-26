@@ -15,6 +15,8 @@ import 'package:moazez/feature/home_supporter/presentation/widgets/progress_char
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_state.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
+import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_cubit.dart';
+import 'package:moazez/core/services/service_locator.dart';
 
 class PackagesView extends StatelessWidget {
   final ProfileLoaded profileState;
@@ -48,90 +50,70 @@ class PackagesView extends StatelessWidget {
       children: [
         const HomeTopSection(),
         Expanded(
-          child: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: BlocBuilder<SubscriptionCubit, SubscriptionState>(
-                  builder: (context, subState) {
-                    if (subState is SubscriptionLoading) {
-                      return const Center(child: CustomProgressIndcator());
-                    } else if (subState is SubscriptionLoaded) {
-                      return SubscriptionCard(subscription: subState.subscription);
-                    } else if (subState is SubscriptionError) {
-                      return Center(child: Text(subState.message));
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                ),
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                sliver: SliverToBoxAdapter(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (ownsTeam &&
-                          teamState is TeamLoaded &&
-                          (teamState as TeamLoaded).team.membersCount != null &&
-                          (teamState as TeamLoaded).team.membersCount! >= 1)
-                        Column(
-                          children: [
-                            TitleWithIcon(
-                              title: 'تقدم المشاركين',
-                              icon: Icons.bar_chart_rounded,
-                            ),
-                            const SizedBox(height: 16),
-                            ProgressChart(
-                              items: const [
-                                ParticipantProgress(
-                                  percent: 0.8,
-                                  avatarPath: 'assets/images/avatar.jpg',
-                                ),
-                                ParticipantProgress(
-                                  percent: 0.6,
-                                  avatarPath: 'assets/images/avatar.jpg',
-                                ),
-                                ParticipantProgress(
-                                  percent: 1.0,
-                                  avatarPath: 'assets/images/avatar.jpg',
-                                ),
-                                ParticipantProgress(
-                                  percent: 0.4,
-                                  avatarPath: 'assets/images/avatar.jpg',
-                                ),
-                                ParticipantProgress(
-                                  percent: 0.9,
-                                  avatarPath: 'assets/images/avatar.jpg',
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            ParticipantsSection(),
-                          ],
-                        )
-                      else if (ownsTeam)
-                        Center(child: const InviteParticipantsSection())
-                      else
-                        Center(
-                          child: CreateTeamPrompt(
-                            onPressed: () async {
-                              final result = await Navigator.pushNamed(
-                                context,
-                                CreateTeamView.routeName,
-                              );
-                              if (result == true) {
-                                // Refresh team state after team creation
-                                context.read<TeamCubit>().fetchTeamInfo();
-                              }
-                            },
-                          ),
-                        ),
-                    ],
+          child: BlocProvider<MemberStatsCubit>(
+            create: (context) => sl<MemberStatsCubit>()..fetchMemberTaskStats(),
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: BlocBuilder<SubscriptionCubit, SubscriptionState>(
+                    builder: (context, subState) {
+                      if (subState is SubscriptionLoading) {
+                        return const Center(child: CustomProgressIndcator());
+                      } else if (subState is SubscriptionLoaded) {
+                        return SubscriptionCard(subscription: subState.subscription);
+                      } else if (subState is SubscriptionError) {
+                        return Center(child: Text(subState.message));
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    },
                   ),
                 ),
-              ),
-            ],
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  sliver: SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (ownsTeam &&
+                            teamState is TeamLoaded &&
+                            (teamState as TeamLoaded).team.membersCount != null &&
+                            (teamState as TeamLoaded).team.membersCount! >= 1)
+                          Column(
+                            children: [
+                              TitleWithIcon(
+                                title: 'تقدم المشاركين',
+                                icon: Icons.bar_chart_rounded,
+                              ),
+                              const SizedBox(height: 16),
+                              const ProgressChart(),
+                              const SizedBox(height: 20),
+                              const ParticipantsSection(),
+                            ],
+                          )
+                        else if (ownsTeam)
+                          const Center(child: InviteParticipantsSection())
+                        else
+                          Center(
+                            child: CreateTeamPrompt(
+                              onPressed: () async {
+                                final result = await Navigator.pushNamed(
+                                  context,
+                                  CreateTeamView.routeName,
+                                );
+                                if (result == true) {
+                                  // Refresh team state after team creation
+                                  context.read<TeamCubit>().fetchTeamInfo();
+                                }
+                              },
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],

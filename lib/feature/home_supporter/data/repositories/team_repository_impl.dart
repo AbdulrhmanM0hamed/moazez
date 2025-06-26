@@ -4,6 +4,7 @@ import 'package:moazez/core/error/exceptions.dart';
 import 'package:moazez/core/error/failures.dart';
 import 'package:moazez/core/network/network_info.dart';
 import 'package:moazez/feature/home_supporter/data/datasources/team_remote_data_source.dart';
+import 'package:moazez/feature/home_supporter/domain/entities/member_stats_entity.dart';
 import 'package:moazez/feature/home_supporter/domain/entities/team_entity.dart';
 import 'package:moazez/feature/home_supporter/domain/repositories/team_repository.dart';
 
@@ -85,6 +86,24 @@ class TeamRepositoryImpl implements TeamRepository {
     } else {
       debugPrint('No internet connection while removing team member');
       return const Left(NetworkFailure(message: 'لا يوجد اتصال بالإنترنت'));
+    }
+  }
+
+  @override
+  Future<Either<Exception, MemberTaskStatsResponseEntity>> getMemberTaskStats(int page) async {
+    if (await networkInfo.isConnected) {
+      try {
+        debugPrint('Fetching member task stats for page: $page');
+        final remoteStats = await remoteDataSource.getMemberTaskStats(page);
+        debugPrint('Member task stats fetched successfully');
+        return Right(remoteStats);
+      } on ServerException catch (e) {
+        debugPrint('ServerException while fetching member task stats: ${e.message}');
+        return Left(ServerException(message: e.message ?? 'خطأ في الخادم'));
+      }
+    } else {
+      debugPrint('No internet connection while fetching member task stats');
+      return Left(NetworkException(message: 'لا يوجد اتصال بالإنترنت'));
     }
   }
 }

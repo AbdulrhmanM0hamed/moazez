@@ -40,7 +40,7 @@ class TaskSummaryCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               title,
-              style: getMediumStyle(
+              style: getBoldStyle(
                 fontFamily: FontConstant.cairo,
                 fontSize: FontSize.size14,
                 color: AppColors.primary,

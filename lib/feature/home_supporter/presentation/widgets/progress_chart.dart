@@ -1,165 +1,216 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
-
-class ParticipantProgress {
-  final double percent; // value between 0 and 1
-  final String avatarPath;
-  const ParticipantProgress({required this.percent, required this.avatarPath});
-}
+import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_cubit.dart';
+import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_state.dart';
 
 class ProgressChart extends StatelessWidget {
-  const ProgressChart({super.key, required this.items});
-
-  final List<ParticipantProgress> items;
+  const ProgressChart({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Height of chart area for bars only (exclude avatars and labels)
-    const double chartHeight = 180;
-    const double avatarSize = 32;
-    const double avatarSpacing = 8;
-
-    return SizedBox(
+    return Container(
       height:
-          chartHeight +
-          avatarSpacing +
-          avatarSize, // Total height calculated from components
-      child: Directionality(
-        textDirection: TextDirection.ltr,
-        child: Stack(
-          children: [
-            
-            // Grid background behind the bars
-            Positioned.fill(
-              child: CustomPaint(painter: _ChartGridPainter(chartHeight)),
-            ),
-            // Main content (labels + bars) shifted a bit to the right to leave room for Y-axis labels
-            Padding(
-              padding: const EdgeInsets.only(left: 32),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  // Y-axis labels 100%, 80%, … 0%
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: chartHeight,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: List.generate(6, (i) {
-                            final percentText = (100 - i * 20).toString();
-                            return Text(
-                              '$percentText%',
-                              style: const TextStyle(fontSize: 12),
+          280, // Adjusted height to accommodate the chart, labels, and avatars
+      padding: const EdgeInsets.all(16.0),
+      child: BlocBuilder<MemberStatsCubit, MemberStatsState>(
+        builder: (context, state) {
+          if (state is MemberStatsLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is MemberStatsLoaded) {
+            final members = state.response.members;
+            if (members.isEmpty) {
+              return const Center(child: Text('لا يوجد بيانات للمشاركين'));
+            }
+
+            // Prepare data for the chart - Treat each task as a separate group for precise alignment
+            List<BarChartGroupData> barGroups = [];
+            List<String> taskLabels = [];
+            List<String> avatarUrls = [];
+            int taskIndex = 0;
+
+            for (var member in members) {
+              for (var task in member.tasks) {
+                final percent = task.progress / 100.0;
+                barGroups.add(
+                  BarChartGroupData(
+                    x: taskIndex,
+                    barRods: [
+                      BarChartRodData(
+                        toY: percent * 100, // Scale to 0-100 for display
+                        color: percent == 0 ? Colors.red : null, // Highlight 0 progress with red color
+                        gradient: percent != 0 ? const LinearGradient(
+                          colors: [Color(0xFF0DD0F4), Color(0xFF006E82)],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                        ) : null,
+                        width: 12,
+                        borderRadius: BorderRadius.circular(4),
+                        backDrawRodData: BackgroundBarChartRodData(
+                          show: true,
+                          toY:
+                              0, // Ensure bars with 0 progress are visible at the zero line
+                          color: Colors.transparent,
+                        ),
+                        rodStackItems:
+                            percent == 0
+                                ? [
+                                  BarChartRodStackItem(
+                                    -2,
+                                    2,
+                                    Colors.red, // Add a more noticeable red dot at the base for 0 progress
+                                  ),
+                                ]
+                                : [],
+                      ),
+                    ],
+                    showingTooltipIndicators: [],
+                  ),
+                );
+                taskLabels.add('${member.name} - ${task.title}');
+                avatarUrls.add(member.avatarUrl);
+                taskIndex++;
+              }
+            }
+
+            return Directionality(
+              textDirection: TextDirection.ltr,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SizedBox(
+                  width:
+                      barGroups.length *
+                      45.0, // Approximate width per bar group
+                  child: BarChart(
+                    BarChartData(
+                      alignment: BarChartAlignment.spaceEvenly,
+                      groupsSpace: 20, // Spacing between task bars
+                      maxY: 100, // Keep maxY at 100
+                      borderData: FlBorderData(
+                        show: false,
+                      ), // Remove outer border of the chart
+                      barTouchData: BarTouchData(
+                        enabled: true,
+                        touchTooltipData: BarTouchTooltipData(
+                          tooltipPadding: const EdgeInsets.all(8),
+                          tooltipMargin: 8,
+                          getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                            return BarTooltipItem(
+                              '${taskLabels[group.x]}\n${rod.toY.toStringAsFixed(1)}%',
+                              const TextStyle(color: Colors.white),
                             );
-                          }),
+                          },
                         ),
                       ),
-                      const SizedBox(height: avatarSpacing),
-                      SizedBox(height: avatarSize), // Spacer for avatar
-                    ],
-                  ),
-                  const SizedBox(width: 12),
-                  // Bars list with participant avatars underneath
-                  Expanded(
-                    child: ListView.separated(
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      separatorBuilder:
-                          (context, _) => const SizedBox(width: 15.7),
-                      itemCount: items.length,
-                      itemBuilder: (context, index) {
-                        final item = items[index];
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            // Progress bar
-                            SizedBox(
-                              height: chartHeight,
-                              width: 12,
-                              child: Stack(
-                                clipBehavior:
-                                    Clip.none, // Allow the dot to overflow
-                                alignment: Alignment.bottomCenter,
-                                children: [
-                                  Container(
-                                    width: 12,
-                                    height: chartHeight * item.percent,
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.bottomCenter,
-                                        end: Alignment.topCenter,
-                                        colors: [
-                                          AppColors.primary.withValues(
-                                            alpha: 0.4,
+                      titlesData: FlTitlesData(
+                        show: true,
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            getTitlesWidget: (value, meta) {
+                              int index = value.toInt();
+                              if (index >= 0 && index < taskLabels.length) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Column(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(16),
+                                        child: Image.network(
+                                          avatarUrls[index],
+                                          width: 24,
+                                          height: 24,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (
+                                            context,
+                                            error,
+                                            stackTrace,
+                                          ) {
+                                            return Image.asset(
+                                              'assets/images/avatar.jpg',
+                                              width: 24,
+                                              height: 24,
+                                              fit: BoxFit.cover,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                    
+                                      SizedBox(
+                                        width: 50,
+                                        child: Text(
+                                          taskLabels[index].split(
+                                            ' - ',
+                                          )[0], // Show only member name
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          AppColors.primary,
-                                        ],
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
+                                    ],
                                   ),
-                                  if (item.percent == 1)
-                                    const Positioned(
-                                      top:
-                                          -3, // Position the dot on top of the bar
-                                      left: 1,
-                                      child: Icon(
-                                        Icons.circle,
-                                        size: 10,
-                                        color: Color.fromARGB(255, 5, 226, 12),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 15),
-                            // Participant avatar
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Image.asset(
-                                item.avatarPath,
-                                width: 20,
-                                height: 20,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ],
-                        );
-                      },
+                                );
+                              }
+                              return const SizedBox.shrink();
+                            },
+                            reservedSize:
+                                70, // Increased space for avatar and text
+                          ),
+                        ),
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            getTitlesWidget: (value, meta) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Text(
+                                  '${value.toInt()}%',
+                                  style: const TextStyle(fontSize: 10),
+                                  textAlign: TextAlign.right,
+                                ),
+                              );
+                            },
+                            interval: 20,
+                            reservedSize: 100, // Further increase reserved space for y-axis labels to ensure 100% is fully visible
+                          ),
+                        ),
+                        topTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        rightTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                      ),
+                      gridData: FlGridData(
+                        show: true,
+                        checkToShowHorizontalLine: (value) => value % 20 == 0,
+                        horizontalInterval: 20,
+                        getDrawingHorizontalLine: (value) {
+                          return FlLine(
+                            color: Colors.grey.withValues(alpha: 0.2),
+                            strokeWidth: 1,
+                          );
+                        },
+                        drawVerticalLine: false,
+                      ),
+                      barGroups: barGroups,
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
-          ],
-        ),
+            );
+          } else if (state is MemberStatsError) {
+            return Center(child: Text(state.message));
+          } else {
+            return const Center(child: Text('يرجى تحميل البيانات'));
+          }
+        },
       ),
     );
   }
-}
-
-class _ChartGridPainter extends CustomPainter {
-  const _ChartGridPainter(this.chartHeight);
-
-  final double chartHeight;
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint =
-        Paint()
-          ..color = Colors.grey.withValues(alpha: 0.2)
-          ..strokeWidth = 1;
-
-    // draw horizontal grid lines each 20%
-    for (int i = 0; i <= 5; i++) {
-      final y = (chartHeight) * i / 5;
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
-    }
-  }
-
-  @override
-  @override
-  bool shouldRepaint(covariant _ChartGridPainter oldDelegate) =>
-      oldDelegate.chartHeight != chartHeight;
 }
