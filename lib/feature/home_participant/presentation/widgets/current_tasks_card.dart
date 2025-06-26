@@ -64,11 +64,9 @@ class CurrentTasksCard extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            
             Column(
               children: [
                 Container(
@@ -83,7 +81,6 @@ class CurrentTasksCard extends StatelessWidget {
                     horizontal: 8,
                     vertical: 4,
                   ),
-                  
 
                   child: Text(
                     status,
@@ -143,9 +140,8 @@ class CurrentTasksCard extends StatelessWidget {
         const SizedBox(height: 8),
         GradientProgressIndicator(
           progress: progress,
-          backgroundColor: theme.scaffoldBackgroundColor,
           gradient: const LinearGradient(
-            colors: [Color(0xFF0DD0F4), Color(0xFF006E82)],
+            colors: [Color(0xFF006E82), Color(0xFF0DD0F4)],
           ),
         ),
       ],

@@ -15,7 +15,11 @@ class MemberStatsCubit extends Cubit<MemberStatsState> {
     final result = await getMemberTaskStatsUseCase(page);
     result.fold(
       (failure) => emit(MemberStatsError(message: failure.toString())),
-      (response) => emit(MemberStatsLoaded(response: MemberTaskStatsResponseModel.fromEntity(response))),
+      (response) {
+        if (!isClosed) {
+          emit(MemberStatsLoaded(response: MemberTaskStatsResponseModel.fromEntity(response)));
+        }
+      },
     );
   }
 }

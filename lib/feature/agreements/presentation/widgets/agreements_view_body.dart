@@ -1,66 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:moazez/feature/agreements/domain/entities/agreement_entity.dart';
-import 'package:moazez/feature/agreements/presentation/widgets/agreement_card.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moazez/core/services/service_locator.dart';
+import 'package:moazez/feature/agreements/presentation/widgets/member_task_card.dart';
+import 'package:moazez/feature/agreements/presentation/widgets/member_task_card_shimmer.dart';
+import 'package:moazez/feature/home_supporter/domain/entities/member_stats_entity.dart';
+import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_cubit.dart';
+import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_state.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/agreement_filter_tabs.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/home_top_section.dart';
 
-class AgreementsViewBody extends StatefulWidget {
+class AgreementsViewBody extends StatelessWidget {
   const AgreementsViewBody({super.key});
 
   @override
-  State<AgreementsViewBody> createState() => _AgreementsViewBodyState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => sl<MemberStatsCubit>()..fetchMemberTaskStats(),
+      child: const _AgreementsContent(),
+    );
+  }
 }
 
-class _AgreementsViewBodyState extends State<AgreementsViewBody> {
+class _AgreementsContent extends StatefulWidget {
+  const _AgreementsContent();
+
+  @override
+  State<_AgreementsContent> createState() => _AgreementsContentState();
+}
+
+class _AgreementsContentState extends State<_AgreementsContent> {
   int _selectedFilterIndex = 0;
+  List<_TaskWithMemberInfo> _tasks = [];
 
-  // Dummy data for demonstration
-  final List<AgreementEntity> _currentAgreements = [
-    const AgreementEntity(
-      id: '1',
-      title: 'حفظ سورة النبأ',
-      dateRange: '17/6 - 24/6',
-      progress: 0.7,
-      totalStages: 5,
-      completedStages: 3,
-      participantImageUrls: [
-        'https://randomuser.me/api/portraits/women/1.jpg',
-        'https://randomuser.me/api/portraits/men/2.jpg',
-        'https://randomuser.me/api/portraits/women/3.jpg',
-      ],
-    ),
-    const AgreementEntity(
-      id: '2',
-      title: 'مراجعة التقارير الشهرية',
-      dateRange: '17/6 - 24/6',
-      progress: 0.76,
-      totalStages: 3,
-      completedStages: 2,
-      participantImageUrls: [
-        'https://randomuser.me/api/portraits/men/4.jpg',
-        'https://randomuser.me/api/portraits/women/5.jpg',
-      ],
-    ),
-  ];
+  List<_TaskWithMemberInfo> _getFilteredTasks() {
+    if (_selectedFilterIndex == 0) return _tasks; // ALL
 
-  final List<AgreementEntity> _pastAgreements = [
-    const AgreementEntity(
-      id: '3',
-      title: 'تصميم الهوية البصرية',
-      dateRange: '1/5 - 30/5',
-      progress: 1.0,
-      totalStages: 4,
-      completedStages: 4,
-      participantImageUrls: [
-        'https://randomuser.me/api/portraits/men/6.jpg',
-      ],
-    ),
-  ];
+    return _tasks.where((taskWithInfo) {
+      final status = taskWithInfo.task.status;
+      switch (_selectedFilterIndex) {
+        case 1: // Completed
+          return status == 'completed';
+        case 2: // In Progress
+          return status == 'in_progress';
+        case 3: // Not Started
+          return status == 'pending';
+        default:
+          return true;
+      }
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final agreementsToShow = _selectedFilterIndex == 0 ? _currentAgreements : _pastAgreements;
-
     return Column(
       children: [
         const HomeTopSection(),
@@ -73,17 +64,45 @@ class _AgreementsViewBodyState extends State<AgreementsViewBody> {
             });
           },
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 16),
         Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: agreementsToShow.length,
-            itemBuilder: (context, index) {
-              return AgreementCard(
-                agreement: agreementsToShow[index],
-                onTap: () {
-                  // ignore: avoid_print
-                  print('Tapped on: ${agreementsToShow[index].title}');
+          child: BlocConsumer<MemberStatsCubit, MemberStatsState>(
+            listener: (context, state) {
+              if (state is MemberStatsLoaded) {
+                setState(() {
+                  _tasks = state.response.members
+                      .expand((member) => member.tasks
+                          .map((task) => _TaskWithMemberInfo(task: task, member: member)))
+                      .toList();
+                });
+              }
+            },
+            builder: (context, state) {
+                            if (state is MemberStatsLoading && _tasks.isEmpty) {
+                return const ShimmerTaskList();
+              }
+
+              if (state is MemberStatsError && _tasks.isEmpty) {
+                return Center(child: Text(state.message));
+              }
+
+              final filteredTasks = _getFilteredTasks();
+
+              if (filteredTasks.isEmpty) {
+                return const Center(
+                  child: Text('لا توجد مهام مطابقة لهذا الفلتر'),
+                );
+              }
+
+              return ListView.builder(
+                padding: const EdgeInsets.only(top: 8, bottom: 16),
+                itemCount: filteredTasks.length,
+                itemBuilder: (context, index) {
+                  final taskWithInfo = filteredTasks[index];
+                  return MemberTaskCard(
+                    task: taskWithInfo.task,
+                    member: taskWithInfo.member,
+                  );
                 },
               );
             },
@@ -94,3 +113,9 @@ class _AgreementsViewBodyState extends State<AgreementsViewBody> {
   }
 }
 
+class _TaskWithMemberInfo {
+  final TaskEntity task;
+  final MemberStatsEntity member;
+
+  _TaskWithMemberInfo({required this.task, required this.member});
+}

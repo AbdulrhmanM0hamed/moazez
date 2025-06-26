@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_state.dart';
@@ -21,7 +22,23 @@ class ParticipantsSection extends StatelessWidget {
         if (state is MemberStatsLoaded) {
           final members = state.response.members;
           if (members.isEmpty) {
-            return const SizedBox.shrink(); // Don't show anything if no members
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    'assets/images/epmtyData.svg',
+                    width: 150,
+                    height: 150,
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'لا توجد بيانات لعرضها حاليًا، حاول لاحقًا!',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+            );
           }
 
           return CustomAnimations.scaleIn(

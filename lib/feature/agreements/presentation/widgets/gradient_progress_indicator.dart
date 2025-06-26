@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 class GradientProgressIndicator extends StatelessWidget {
   final double progress;
   final Gradient gradient;
-  final Color backgroundColor;
 
   const GradientProgressIndicator({
     super.key,
     required this.progress,
     required this.gradient,
-    required this.backgroundColor,
   });
 
   @override
@@ -20,7 +18,7 @@ class GradientProgressIndicator extends StatelessWidget {
           width: constraints.maxWidth,
           height: 8,
           decoration: BoxDecoration(
-            color: backgroundColor,
+            color: Theme.of(context).dividerColor,
             borderRadius: BorderRadius.circular(4),
           ),
           child: FractionallySizedBox(

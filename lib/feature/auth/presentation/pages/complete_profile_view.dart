@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/common/custom_button.dart';
 import 'package:moazez/core/utils/common/custom_text_field.dart';
@@ -10,6 +11,7 @@ import 'package:moazez/core/services/service_locator.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:moazez/feature/auth/data/models/area_city_static.dart';
+import 'package:moazez/feature/home_participant/presentation/view/participants_nav_bar.dart';
 
 class CompleteProfileView extends StatefulWidget {
   static const String routeName = '/completeProfile';
@@ -31,8 +33,6 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
 
   @override
   void dispose() {
-
-
     super.dispose();
   }
 
@@ -43,7 +43,16 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
       child: BlocListener<CompleteProfileCubit, CompleteProfileState>(
         listener: (context, state) {
           if (state is CompleteProfileSuccess) {
-            Navigator.of(context).pushReplacementNamed('/home');
+            // Ensure default role is set to Participant if not already set
+            final cache = sl<CacheService>();
+            cache.getUserRole().then((role) {
+              if (role == null) {
+                cache.saveUserRole('Participant');
+              }
+            });
+            Navigator.of(
+              context,
+            ).pushReplacementNamed(ParticipantsNavBar.routeName);
           } else if (state is CompleteProfileError) {
             ScaffoldMessenger.of(
               context,
@@ -196,9 +205,13 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                     border: OutlineInputBorder(),
                   ),
                   value: _selectedArea,
-                  items: kAreas
-                      .map((a) => DropdownMenuItem(value: a, child: Text(a.name)))
-                      .toList(),
+                  items:
+                      kAreas
+                          .map(
+                            (a) =>
+                                DropdownMenuItem(value: a, child: Text(a.name)),
+                          )
+                          .toList(),
                   onChanged: (val) {
                     setState(() {
                       _selectedArea = val;
@@ -215,9 +228,13 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                     border: OutlineInputBorder(),
                   ),
                   value: _selectedCity,
-                  items: (_selectedArea?.cities ?? [])
-                      .map((c) => DropdownMenuItem(value: c, child: Text(c.name)))
-                      .toList(),
+                  items:
+                      (_selectedArea?.cities ?? [])
+                          .map(
+                            (c) =>
+                                DropdownMenuItem(value: c, child: Text(c.name)),
+                          )
+                          .toList(),
                   onChanged: (val) {
                     setState(() {
                       _selectedCity = val;
@@ -270,7 +287,9 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
   void _onFinish(BuildContext context) {
     if (_formKey.currentState?.validate() ?? false) {
       // Combine data and navigate further or show success
-      debugPrint('Submitting CompleteProfile with avatarPath: \\${_avatarImage?.path}');
+      debugPrint(
+        'Submitting CompleteProfile with avatarPath: \\${_avatarImage?.path}',
+      );
       context.read<CompleteProfileCubit>().submit(
         CompleteProfileParams(
           areaId: _selectedArea!.id,

@@ -27,6 +27,11 @@ class _RoleSwitcherState extends State<RoleSwitcher> {
       setState(() {
         _selectedRoleIndex = savedRole == 'Supporter' ? 1 : 0;
       });
+    } else {
+      // Default to Participant for new users
+      setState(() {
+        _selectedRoleIndex = 0;
+      });
     }
   }
 

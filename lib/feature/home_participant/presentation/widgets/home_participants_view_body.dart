@@ -5,7 +5,7 @@ import 'package:moazez/feature/home_participant/presentation/widgets/current_tas
 
 class HomeParticipantsViewBody extends StatelessWidget {
   const HomeParticipantsViewBody({super.key});
-  static const String routeName = '/home-participants-view-body';
+  
 
   @override
   Widget build(BuildContext context) {

@@ -65,7 +65,7 @@ Future<void> init() async {
 
   // Blocs & Cubits
   sl.registerFactory(() => LoginCubit(loginUseCase: sl()));
-  sl.registerFactory(() => RegisterCubit(registerUseCase: sl()));
+  sl.registerFactory(() => RegisterCubit(registerUseCase: sl(), teamCubit: sl()));
   sl.registerFactory(() => CompleteProfileCubit(sl()));
   sl.registerFactory(() => LogoutCubit(cacheHelper: sl(), logoutUseCase: sl()));
 

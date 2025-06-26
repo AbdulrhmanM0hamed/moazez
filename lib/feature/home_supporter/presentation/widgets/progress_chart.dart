@@ -2,10 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:moazez/feature/home_supporter/domain/entities/member_stats_entity.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_state.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/task_details_dialog.dart';
+import 'dart:math';
 import 'package:moazez/core/utils/animations/custom_animations.dart';
 
 class _ChartDataPoint {
@@ -30,7 +32,23 @@ class ProgressChart extends StatelessWidget {
         if (state is MemberStatsLoaded) {
           final members = state.response.members;
           if (members.isEmpty) {
-            return const Center(child: Text('لا توجد بيانات لعرضها'));
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    'assets/images/epmtyData.svg',
+                    width: 150,
+                    height: 150,
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'لا توجد بيانات لعرضها حاليًا، حاول لاحقًا!',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+            );
           }
 
           // 1. Prepare a flat list of data points (member + task)
@@ -141,12 +159,14 @@ class ProgressChart extends StatelessWidget {
                   Expanded(
                     child: LayoutBuilder(
                       builder: (context, constraints) {
+                        final chartWidth = max(constraints.maxWidth, chartDataPoints.length * 50.0);
+
                         return SizedBox(
                           height: constraints.maxHeight,
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: SizedBox(
-                              width: chartDataPoints.length * 50.0, // Dynamic width
+                              width: chartWidth,
                               child: Column(
                                 children: [
                                   Expanded(

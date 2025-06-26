@@ -181,7 +181,11 @@ class TeamRemoteDataSourceImpl implements TeamRemoteDataSource {
         );
       }
     } on DioException catch (e) {
-      print(e);
+      if (e.response?.statusCode == 403) {
+        throw ServerException(
+          message: 'ليس لديك الصلاحية للوصول إلى إحصائيات مهام أعضاء الفريق. (خطأ: 403)',
+        );
+      }
       throw handleDioException(e);
     }
   }

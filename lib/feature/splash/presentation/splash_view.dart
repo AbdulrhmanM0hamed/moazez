@@ -34,7 +34,8 @@ class _SplashViewState extends State<SplashView> {
 
     String route;
     if (!isFirstTime && token != null) {
-      route = role == 'Participant' ? ParticipantsNavBar.routeName : SupporterNavBar.routeName;
+      // Default to Participant if no role is set for logged-in users
+      route = (role == null || role == 'Participant') ? ParticipantsNavBar.routeName : SupporterNavBar.routeName;
     } else if (!isFirstTime) {
       route = LoginView.routeName;
     } else {

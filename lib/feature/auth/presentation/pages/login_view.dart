@@ -14,6 +14,7 @@ import 'package:moazez/feature/auth/presentation/cubit/login/login_cubit.dart';
 import 'package:moazez/feature/auth/presentation/cubit/login/login_state.dart';
 import 'package:moazez/feature/auth/presentation/pages/password_reset_link_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/signup_view.dart';
+import 'package:moazez/feature/home_participant/presentation/view/participants_nav_bar.dart';
 import 'package:moazez/feature/home_participant/presentation/widgets/home_participants_view_body.dart';
 
 class LoginView extends StatefulWidget {
@@ -68,6 +69,12 @@ class _LoginViewState extends State<LoginView> {
                 _emailController.text.trim(),
                 _passwordController.text,
               );
+              // Ensure default role is set to Participant if not already set
+              cache.getUserRole().then((role) {
+                if (role == null) {
+                  cache.saveUserRole('Participant');
+                }
+              });
               CustomSnackbar.showSuccess(
                 context: context,
                 message: 'تم تسجيل الدخول بنجاح',
@@ -77,7 +84,7 @@ class _LoginViewState extends State<LoginView> {
                 if (context.mounted) {
                   Navigator.of(
                     context,
-                  ).pushReplacementNamed(HomeParticipantsViewBody.routeName);
+                  ).pushReplacementNamed(ParticipantsNavBar.routeName);
                 }
               });
             } else if (state is LoginError) {
