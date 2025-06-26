@@ -88,7 +88,7 @@ class InviteParticipantsSection extends StatelessWidget {
                     style: getRegularStyle(
                       fontFamily: FontConstant.cairo,
                       fontSize: 14,
-                      color: Colors.grey[300],
+                      color: Colors.grey[600],
                     ),
                   ),
                   const SizedBox(height: 20),

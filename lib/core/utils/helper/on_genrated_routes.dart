@@ -3,6 +3,7 @@ import 'package:moazez/feature/auth/presentation/pages/complete_profile_view.dar
 import 'package:moazez/feature/auth/presentation/pages/login_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/password_reset_link_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/signup_view.dart';
+import 'package:moazez/feature/auth/presentation/pages/terms_and_privacy_view.dart';
 import 'package:moazez/feature/home_participant/presentation/view/participants_nav_bar.dart';
 import 'package:moazez/feature/home_supporter/presentation/view/create_team_view.dart';
 import 'package:moazez/feature/home_supporter/presentation/view/supporter_nav_bar.dart';
@@ -36,6 +37,10 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
     case ParticipantsNavBar.routeName:
       return MaterialPageRoute(
         builder: (context) => const ParticipantsNavBar(),
+      );
+    case TermsAndPrivacyView.routeName:
+      return MaterialPageRoute(
+        builder: (context) => const TermsAndPrivacyView(),
       );
     case EditProfileInfo.routeName:
       return MaterialPageRoute(builder: (context) => const EditProfileInfo());

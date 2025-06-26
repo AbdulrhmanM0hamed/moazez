@@ -6,6 +6,7 @@ import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/common/custom_button.dart';
 import 'package:moazez/core/utils/common/custom_text_field.dart';
+import 'package:moazez/core/utils/common/password_field.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/validators/form_validators.dart';
@@ -28,6 +29,28 @@ class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _rememberMe = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials();
+  }
+
+  Future<void> _loadSavedCredentials() async {
+    final cache = sl<CacheService>();
+    bool rememberMe = await cache.getRememberMe();
+    if (rememberMe) {
+      final credentials = await cache.getLoginCredentials();
+      if (credentials != null) {
+        setState(() {
+          _emailController.text = credentials['email'] ?? '';
+          _passwordController.text = credentials['password'] ?? '';
+          _rememberMe = true;
+        });
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -61,13 +84,18 @@ class _LoginViewState extends State<LoginView> {
                 builder: (_) => const Center(child: CustomProgressIndcator()),
               );
             } else if (state is LoginSuccess) {
-              // Save credentials for future auto-fill / remember me functionality
+              // Save credentials only if "Remember Me" is checked
               final cache = sl<CacheService>();
-              cache.setRememberMe(true);
-              cache.saveLoginCredentials(
-                _emailController.text.trim(),
-                _passwordController.text,
-              );
+              if (_rememberMe) {
+                cache.setRememberMe(true);
+                cache.saveLoginCredentials(
+                  _emailController.text.trim(),
+                  _passwordController.text,
+                );
+              } else {
+                cache.setRememberMe(false);
+                cache.clearLoginCredentials();
+              }
               // Ensure default role is set to Participant if not already set
               cache.getUserRole().then((role) {
                 if (role == null) {
@@ -110,30 +138,49 @@ class _LoginViewState extends State<LoginView> {
                         validator: FormValidators.validateEmail,
                       ),
                       const SizedBox(height: 16),
-                      CustomTextField(
+                      PasswordField(
                         controller: _passwordController,
-                        label: 'كلمة المرور',
-                        obscureText: true,
-                        prefix: const Icon(Icons.lock_outline),
+                        hintText: 'كلمة المرور',
                         validator: FormValidators.validatePasswordLogin,
                       ),
                       const SizedBox(height: 8),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(
-                              context,
-                            ).pushNamed(PasswordResetLinkView.routeName);
-                          },
-                          child: Text(
-                            'نسيت كلمة المرور؟',
-                            style: getSemiBoldStyle(
-                              fontFamily: FontConstant.cairo,
-                              fontSize: FontSize.size14,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: _rememberMe,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _rememberMe = value ?? true;
+                                  });
+                                },
+                              ),
+                              Text(
+                                'تذكرني',
+                                style: getSemiBoldStyle(
+                                  fontFamily: FontConstant.cairo,
+                                  fontSize: FontSize.size14,
+                                ),
+                              ),
+                            ],
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(
+                                context,
+                              ).pushNamed(PasswordResetLinkView.routeName);
+                            },
+                            child: Text(
+                              'نسيت كلمة المرور؟',
+                              style: getSemiBoldStyle(
+                                fontFamily: FontConstant.cairo,
+                                fontSize: FontSize.size14,
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
                       const SizedBox(height: 16),
                       CustomButton(

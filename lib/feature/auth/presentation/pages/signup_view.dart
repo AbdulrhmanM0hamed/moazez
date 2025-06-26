@@ -9,6 +9,7 @@ import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/validators/form_validators.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
+import 'package:moazez/feature/auth/presentation/widgets/terms_and_conditions_widget.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/feature/auth/presentation/cubit/register/register_cubit.dart';
 import 'package:moazez/feature/auth/presentation/pages/login_view.dart';
@@ -41,6 +42,7 @@ class _SignUpViewState extends State<_SignUpViewBody> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  bool _termsAccepted = false;
 
   @override
   void dispose() {
@@ -53,11 +55,18 @@ class _SignUpViewState extends State<_SignUpViewBody> {
   }
 
   void _onContinue() {
-    if (_formKey.currentState?.validate() ?? false) {
+    if (!_termsAccepted) {
+      CustomSnackbar.showError(
+        context: context,
+        message: 'يجب الموافقة على الشروط والأحكام أولاً',
+      );
+      return;
+    }
+    if (_formKey.currentState!.validate()) {
       context.read<RegisterCubit>().register(
-        name: _nameController.text,
-        email: _emailController.text,
-        phone: _phoneController.text,
+        name: _nameController.text.trim(),
+        phone: _phoneController.text.trim(),
+        email: _emailController.text.trim(),
         password: _passwordController.text,
       );
     }
@@ -66,7 +75,10 @@ class _SignUpViewState extends State<_SignUpViewBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'إنشاء حساب'),
+      appBar: CustomAppBar(
+        title: 'إنشاء حساب',
+        automaticallyImplyLeading: false,
+      ),
       body: SafeArea(
         child: BlocConsumer<RegisterCubit, RegisterState>(
           listener: (context, state) {
@@ -157,6 +169,15 @@ class _SignUpViewState extends State<_SignUpViewBody> {
                             value,
                             _passwordController.text,
                           ),
+                    ),
+                    const SizedBox(height: 16),
+                    TermsAndConditionsWidget(
+                      value: _termsAccepted,
+                      onChanged: (value) {
+                        setState(() {
+                          _termsAccepted = value ?? false;
+                        });
+                      },
                     ),
                     const SizedBox(height: 32),
                     CustomButton(
