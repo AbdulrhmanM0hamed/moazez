@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:moazez/core/services/service_locator.dart';
+import 'package:moazez/core/utils/constant/font_manger.dart';
+import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/member_task_card.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/member_task_card_shimmer.dart';
 import 'package:moazez/feature/home_supporter/domain/entities/member_stats_entity.dart';
@@ -70,15 +73,22 @@ class _AgreementsContentState extends State<_AgreementsContent> {
             listener: (context, state) {
               if (state is MemberStatsLoaded) {
                 setState(() {
-                  _tasks = state.response.members
-                      .expand((member) => member.tasks
-                          .map((task) => _TaskWithMemberInfo(task: task, member: member)))
-                      .toList();
+                  _tasks =
+                      state.response.members
+                          .expand(
+                            (member) => member.tasks.map(
+                              (task) => _TaskWithMemberInfo(
+                                task: task,
+                                member: member,
+                              ),
+                            ),
+                          )
+                          .toList();
                 });
               }
             },
             builder: (context, state) {
-                            if (state is MemberStatsLoading && _tasks.isEmpty) {
+              if (state is MemberStatsLoading && _tasks.isEmpty) {
                 return const ShimmerTaskList();
               }
 
@@ -89,8 +99,23 @@ class _AgreementsContentState extends State<_AgreementsContent> {
               final filteredTasks = _getFilteredTasks();
 
               if (filteredTasks.isEmpty) {
-                return const Center(
-                  child: Text('لا توجد مهام مطابقة لهذا الفلتر'),
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/images/tasks_empty.svg',
+                      height: 200,
+                      width: 200,
+                    ),
+                    Text(
+                      'لا توجد مهام ',
+                      style: getMediumStyle(
+                        fontFamily: FontConstant.cairo,
+                        fontSize: 18,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 );
               }
 

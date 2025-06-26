@@ -22,6 +22,8 @@ class LogoutCubit extends Cubit<LogoutState> {
       (failure) => emit(LogoutFailure(message: failure.message)),
       (_) async {
         await cacheHelper.clearCache();
+        // Explicitly clear the user role to ensure it defaults to Participant on next login
+        await cacheHelper.saveUserRole('Participant');
         emit(LogoutSuccess());
       },
     );
