@@ -64,18 +64,15 @@ class StatsModel extends StatsEntity {
 
 class TaskModel extends TaskEntity {
   const TaskModel({
-    required int id,
-    required String title,
-    required String status,
-    required int progress,
-    required int stagesCount,
-  }) : super(
-         id: id,
-         title: title,
-         status: status,
-         progress: progress,
-         stagesCount: stagesCount,
-       );
+    required super.id,
+    required super.title,
+    required super.status,
+    required super.progress,
+    required super.dueDate,
+    required super.createdAt,
+    required super.stagesCount,
+    required super.completedStages,
+  });
 
   factory TaskModel.fromJson(Map<String, dynamic> json) {
     return TaskModel(
@@ -83,7 +80,10 @@ class TaskModel extends TaskEntity {
       title: json['title'] as String,
       status: json['status'] as String,
       progress: json['progress'] as int,
+      dueDate: json['due_date'] as String,
+      createdAt: json['created_at'] as String,
       stagesCount: json['stages_count'] as int,
+      completedStages: json['completed_stages'] as int,
     );
   }
 
@@ -93,7 +93,10 @@ class TaskModel extends TaskEntity {
       'title': title,
       'status': status,
       'progress': progress,
+      'due_date': dueDate,
+      'created_at': createdAt,
       'stages_count': stagesCount,
+      'completed_stages': completedStages,
     };
   }
 }
@@ -221,6 +224,9 @@ class MemberTaskStatsResponseModel extends MemberTaskStatsResponseEntity {
                               status: t.status,
                               progress: t.progress,
                               stagesCount: t.stagesCount,
+                              completedStages: t.completedStages,
+                              dueDate: t.dueDate,
+                              createdAt: t.createdAt,
                             ),
                           )
                           .toList(),

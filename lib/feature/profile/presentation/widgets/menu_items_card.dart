@@ -26,13 +26,7 @@ class MenuItemsCard extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
+          
           ),
           child: Column(
             children: [
@@ -63,7 +57,7 @@ class MenuItemsCard extends StatelessWidget {
               if (role == 'Supporter')
                 _buildMenuItem(
                   context,
-                  'مكافآت فريقك',
+                  'معززات فريقك',
                   Icons.card_giftcard_outlined,
                   () {
                     Navigator.pushNamed(context, RewardsView.routeName);
@@ -72,7 +66,7 @@ class MenuItemsCard extends StatelessWidget {
               if (role == 'Participant')
                 _buildMenuItem(
                   context,
-                  'مكافآتي',
+                  'معززاتى',
                   Icons.card_giftcard_outlined,
                   () {
                     Navigator.pushNamed(context, MyRewardsView.routeName);

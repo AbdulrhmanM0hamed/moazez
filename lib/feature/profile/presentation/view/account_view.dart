@@ -88,7 +88,7 @@ class _AccountViewBody extends StatelessWidget {
           const RoleSwitcher(),
           const SizedBox(height: 24),
           InfoCard(user: user),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
           const MenuItemsCard(),
           const SizedBox(height: 24),
         ],

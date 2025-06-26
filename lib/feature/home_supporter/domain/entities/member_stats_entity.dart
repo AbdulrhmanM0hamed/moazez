@@ -50,14 +50,20 @@ class TaskEntity {
   final String title;
   final String status;
   final int progress;
+  final String dueDate;
+  final String createdAt;
   final int stagesCount;
+  final int completedStages;
 
   const TaskEntity({
     required this.id,
     required this.title,
     required this.status,
     required this.progress,
+    required this.dueDate,
+    required this.createdAt,
     required this.stagesCount,
+    required this.completedStages,
   });
 
   factory TaskEntity.fromJson(Map<String, dynamic> json) {
@@ -66,7 +72,10 @@ class TaskEntity {
       title: json['title'] as String,
       status: json['status'] as String,
       progress: json['progress'] as int,
+      dueDate: json['due_date'] as String,
+      createdAt: json['created_at'] as String,
       stagesCount: json['stages_count'] as int,
+      completedStages: json['completed_stages'] as int,
     );
   }
 }

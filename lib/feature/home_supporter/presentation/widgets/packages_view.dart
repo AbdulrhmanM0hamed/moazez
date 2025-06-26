@@ -66,13 +66,19 @@ class PackagesView extends StatelessWidget {
                             (teamState as TeamLoaded).team.membersCount! >= 1)
                           Column(
                             children: [
+                              const SizedBox(height: 20),
                               TitleWithIcon(
                                 title: 'تقدم المشاركين',
                                 icon: Icons.bar_chart_rounded,
                               ),
-                              const SizedBox(height: 20),
+                              const SizedBox(height: 24),
                               const ProgressChart(),
-                              const SizedBox(height: 20),
+                              const SizedBox(height: 16),
+                              const TitleWithIcon(
+                                title: 'المشاركين لديك',
+                                icon: Icons.group,
+                              ),
+                              const SizedBox(height: 24),
                               const ParticipantsSection(),
                             ],
                           )
