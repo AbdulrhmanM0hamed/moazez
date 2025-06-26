@@ -16,6 +16,8 @@ import 'package:moazez/feature/auth/presentation/cubit/login/login_state.dart';
 import 'package:moazez/feature/auth/presentation/pages/password_reset_link_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/signup_view.dart';
 import 'package:moazez/feature/home_participant/presentation/view/participants_nav_bar.dart';
+import 'package:flutter/services.dart';
+
 
 class LoginView extends StatefulWidget {
   static const String routeName = '/login';
@@ -63,168 +65,174 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<LoginCubit>(),
-      child: Scaffold(
-        appBar: CustomAppBar(
-          automaticallyImplyLeading: false,
-          title: 'تسجيل الدخول',
-        ),
-        body: BlocConsumer<LoginCubit, LoginState>(
-          listener: (context, state) {
-            // First, handle hiding the loading indicator if it's showing.
-            // This should happen for both success and error states.
-            if (state is! LoginLoading && Navigator.of(context).canPop()) {
-              Navigator.of(context).pop();
-            }
-
-            // Now, handle the specific states
-            if (state is LoginLoading) {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) => const Center(child: CustomProgressIndcator()),
-              );
-            } else if (state is LoginSuccess) {
-              // Save credentials only if "Remember Me" is checked
-              final cache = sl<CacheService>();
-              if (_rememberMe) {
-                cache.setRememberMe(true);
-                cache.saveLoginCredentials(
-                  _emailController.text.trim(),
-                  _passwordController.text,
-                );
-              } else {
-                cache.setRememberMe(false);
-                cache.clearLoginCredentials();
+      child: WillPopScope(
+        onWillPop: () async {
+          SystemNavigator.pop();
+          return false;
+        },
+        child: Scaffold(
+          appBar: CustomAppBar(
+            automaticallyImplyLeading: false,
+            title: 'تسجيل الدخول',
+          ),
+          body: BlocConsumer<LoginCubit, LoginState>(
+            listener: (context, state) {
+              // First, handle hiding the loading indicator if it's showing.
+              // This should happen for both success and error states.
+              if (state is! LoginLoading && Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
               }
-              // Ensure default role is set to Participant if not already set
-              cache.getUserRole().then((role) {
-                if (role == null) {
-                  cache.saveUserRole('Participant');
+
+              // Now, handle the specific states
+              if (state is LoginLoading) {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) => const Center(child: CustomProgressIndcator()),
+                );
+              } else if (state is LoginSuccess) {
+                // Save credentials only if "Remember Me" is checked
+                final cache = sl<CacheService>();
+                if (_rememberMe) {
+                  cache.setRememberMe(true);
+                  cache.saveLoginCredentials(
+                    _emailController.text.trim(),
+                    _passwordController.text,
+                  );
+                } else {
+                  cache.setRememberMe(false);
+                  cache.clearLoginCredentials();
                 }
-              });
-              CustomSnackbar.showSuccess(
-                context: context,
-                message: 'تم تسجيل الدخول بنجاح',
-              );
-              // Delay navigation to allow the snackbar to be seen
-              Future.delayed(const Duration(milliseconds: 800), () {
-                if (context.mounted) {
-                  Navigator.of(
-                    context,
-                  ).pushReplacementNamed(ParticipantsNavBar.routeName);
-                }
-              });
-            } else if (state is LoginError) {
-              CustomSnackbar.showError(
-                context: context,
-                message: state.message,
-              );
-            }
-          },
-          builder: (context, state) {
-            return SafeArea(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(24),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      CustomTextField(
-                        controller: _emailController,
-                        label: 'البريد الإلكتروني',
-                        keyboardType: TextInputType.emailAddress,
-                        prefix: const Icon(Icons.email_outlined),
-                        validator: FormValidators.validateEmail,
-                      ),
-                      const SizedBox(height: 16),
-                      PasswordField(
-                        controller: _passwordController,
-                        hintText: 'كلمة المرور',
-                        validator: FormValidators.validatePasswordLogin,
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: _rememberMe,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _rememberMe = value ?? true;
-                                  });
-                                },
-                              ),
-                              Text(
-                                'تذكرني',
+                // Ensure default role is set to Participant if not already set
+                cache.getUserRole().then((role) {
+                  if (role == null) {
+                    cache.saveUserRole('Participant');
+                  }
+                });
+                CustomSnackbar.showSuccess(
+                  context: context,
+                  message: 'تم تسجيل الدخول بنجاح',
+                );
+                // Delay navigation to allow the snackbar to be seen
+                Future.delayed(const Duration(milliseconds: 800), () {
+                  if (context.mounted) {
+                    Navigator.of(
+                      context,
+                    ).pushReplacementNamed(ParticipantsNavBar.routeName);
+                  }
+                });
+              } else if (state is LoginError) {
+                CustomSnackbar.showError(
+                  context: context,
+                  message: state.message,
+                );
+              }
+            },
+            builder: (context, state) {
+              return SafeArea(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        CustomTextField(
+                          controller: _emailController,
+                          label: 'البريد الإلكتروني',
+                          keyboardType: TextInputType.emailAddress,
+                          prefix: const Icon(Icons.email_outlined),
+                          validator: FormValidators.validateEmail,
+                        ),
+                        const SizedBox(height: 16),
+                        PasswordField(
+                          controller: _passwordController,
+                          hintText: 'كلمة المرور',
+                          validator: FormValidators.validatePasswordLogin,
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: _rememberMe,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _rememberMe = value ?? true;
+                                    });
+                                  },
+                                ),
+                                Text(
+                                  'تذكرني',
+                                  style: getSemiBoldStyle(
+                                    fontFamily: FontConstant.cairo,
+                                    fontSize: FontSize.size14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(
+                                  context,
+                                ).pushNamed(PasswordResetLinkView.routeName);
+                              },
+                              child: Text(
+                                'نسيت كلمة المرور؟',
                                 style: getSemiBoldStyle(
                                   fontFamily: FontConstant.cairo,
                                   fontSize: FontSize.size14,
                                 ),
                               ),
-                            ],
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(
-                                context,
-                              ).pushNamed(PasswordResetLinkView.routeName);
-                            },
-                            child: Text(
-                              'نسيت كلمة المرور؟',
-                              style: getSemiBoldStyle(
-                                fontFamily: FontConstant.cairo,
-                                fontSize: FontSize.size14,
-                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      CustomButton(
-                        text: 'دخول',
-                        onPressed:
-                            state is LoginLoading
-                                ? null
-                                : () => _onLogin(context),
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'ليس لديك حساب؟ ',
-                            style: getSemiBoldStyle(
-                              fontFamily: FontConstant.cairo,
-                              fontSize: FontSize.size16,
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(
-                                context,
-                              ).pushReplacementNamed(SignUpView.routeName);
-                            },
-                            child: Text(
-                              'إنشاء حساب',
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        CustomButton(
+                          text: 'دخول',
+                          onPressed:
+                              state is LoginLoading
+                                  ? null
+                                  : () => _onLogin(context),
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'ليس لديك حساب؟ ',
                               style: getSemiBoldStyle(
                                 fontFamily: FontConstant.cairo,
                                 fontSize: FontSize.size16,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(
+                                  context,
+                                ).pushNamed(SignUpView.routeName);
+                              },
+                              child: Text(
+                                'إنشاء حساب',
+                                style: getSemiBoldStyle(
+                                  fontFamily: FontConstant.cairo,
+                                  fontSize: FontSize.size16,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
-      ),
+      )
     );
   }
 

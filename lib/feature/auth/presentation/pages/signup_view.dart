@@ -15,6 +15,7 @@ import 'package:moazez/feature/auth/presentation/cubit/register/register_cubit.d
 import 'package:moazez/feature/auth/presentation/pages/login_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/complete_profile_view.dart';
 
+
 class SignUpView extends StatelessWidget {
   static const String routeName = '/signup';
   const SignUpView({super.key});
@@ -74,11 +75,10 @@ class _SignUpViewState extends State<_SignUpViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: 'إنشاء حساب',
-        automaticallyImplyLeading: false,
-      ),
+      return Scaffold(
+        appBar: CustomAppBar(
+          title: 'إنشاء حساب',
+        ),
       body: SafeArea(
         child: BlocConsumer<RegisterCubit, RegisterState>(
           listener: (context, state) {
