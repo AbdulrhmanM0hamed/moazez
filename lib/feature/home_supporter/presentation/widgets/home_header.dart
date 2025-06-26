@@ -141,7 +141,10 @@ class HomeHeader extends StatelessWidget {
                                 'assets/images/request.svg', // Ensure this asset exists or replace with an appropriate icon
                                 width: 24,
                                 height: 24,
-                                color: Colors.white,
+                                colorFilter: ColorFilter.mode(
+                                  Colors.white,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                             ],
                           ),
@@ -154,10 +157,10 @@ class HomeHeader extends StatelessWidget {
                     builder: (context, teamState) {
                       bool ownsTeam = false;
                       if (teamState is TeamLoaded) {
-                        final loadedState = teamState as TeamLoaded;
+                        final loadedState = teamState;
                         ownsTeam = loadedState.team.isOwner;
                       } else if (teamState is TeamError) {
-                        final errorState = teamState as TeamError;
+                        final errorState = teamState;
                         if (errorState.message.contains("لا تملك فريقاً")) {
                           ownsTeam = false;
                         }

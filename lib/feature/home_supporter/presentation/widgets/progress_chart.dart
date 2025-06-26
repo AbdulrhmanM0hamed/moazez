@@ -6,6 +6,7 @@ import 'package:moazez/feature/home_supporter/domain/entities/member_stats_entit
 import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_state.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/task_details_dialog.dart';
+import 'package:moazez/core/utils/animations/custom_animations.dart';
 
 class _ChartDataPoint {
   final MemberStatsEntity member;
@@ -21,7 +22,7 @@ class ProgressChart extends StatelessWidget {
     return BlocBuilder<MemberStatsCubit, MemberStatsState>(
       builder: (context, state) {
         if (state is MemberStatsLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const SizedBox.shrink();
         }
         if (state is MemberStatsError) {
           return Center(child: Text(state.message));
@@ -69,7 +70,9 @@ class ProgressChart extends StatelessWidget {
           final taskLabels = chartDataPoints.map((dp) => dp.member.name).toList();
           final avatarUrls = chartDataPoints.map((dp) => dp.member.avatarUrl).toList();
 
-          return Directionality(
+          return CustomAnimations.scaleIn(
+            duration: const Duration(milliseconds: 600),
+            child: Directionality(
             textDirection: TextDirection.ltr,
             child: SizedBox(
               height: 250, // Fixed height for the entire chart area
@@ -251,7 +254,7 @@ class ProgressChart extends StatelessWidget {
                 ],
               ),
             ),
-          );
+          ),);
         }
         // Return a widget for other states to avoid null return
         return const SizedBox.shrink();

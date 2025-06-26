@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moazez/core/utils/constant/font_manger.dart';
-import 'package:moazez/core/utils/constant/styles_manger.dart';
+
 import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_state.dart';
+import 'package:moazez/core/utils/animations/custom_animations.dart';
 
 class ParticipantsSection extends StatelessWidget {
   const ParticipantsSection({super.key});
@@ -13,7 +13,7 @@ class ParticipantsSection extends StatelessWidget {
     return BlocBuilder<MemberStatsCubit, MemberStatsState>(
       builder: (context, state) {
         if (state is MemberStatsLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const SizedBox.shrink();
         }
         if (state is MemberStatsError) {
           return Center(child: Text(state.message));
@@ -24,7 +24,9 @@ class ParticipantsSection extends StatelessWidget {
             return const SizedBox.shrink(); // Don't show anything if no members
           }
 
-          return Card(
+          return CustomAnimations.scaleIn(
+            duration: const Duration(milliseconds: 600),
+            child: Card(
             elevation: 2,
             shadowColor: Colors.black.withValues(alpha: 0.5),
             shape: RoundedRectangleBorder(
@@ -67,7 +69,7 @@ class ParticipantsSection extends StatelessWidget {
                 ],
               ),
             ),
-          );
+          ),);
         }
         return const SizedBox.shrink();
       },

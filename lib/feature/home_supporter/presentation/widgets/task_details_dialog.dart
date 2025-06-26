@@ -29,7 +29,7 @@ class TaskDetailsDialog extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24.0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: const [
