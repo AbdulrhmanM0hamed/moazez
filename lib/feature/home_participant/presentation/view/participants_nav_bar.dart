@@ -17,10 +17,10 @@ class ParticipantsNavBar extends StatefulWidget {
   static const String routeName = '/participants-nav-bar';
 
   @override
-  State<ParticipantsNavBar> createState() => _HomeViewState();
+  State<ParticipantsNavBar> createState() => _ParticipantsNavBarState();
 }
 
-class _HomeViewState extends State<ParticipantsNavBar> {
+class _ParticipantsNavBarState extends State<ParticipantsNavBar> {
   int _currentIndex = 0;
 
   late final List<Widget> _pages = [

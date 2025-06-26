@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
-
 import 'package:moazez/feature/home_supporter/presentation/view/create_team_view.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/create_team_prompt.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/home_top_section.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/invite_participants_section.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/participants_section.dart';
-import 'package:moazez/feature/home_supporter/presentation/widgets/subscription_card.dart';
-import 'package:moazez/feature/home_supporter/presentation/cubit/subscription_cubit.dart';
-import 'package:moazez/feature/home_supporter/presentation/cubit/subscription_state.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/title_with_icon.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/progress_chart.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
@@ -54,30 +49,20 @@ class PackagesView extends StatelessWidget {
             create: (context) => sl<MemberStatsCubit>()..fetchMemberTaskStats(),
             child: CustomScrollView(
               slivers: [
-                SliverToBoxAdapter(
-                  child: BlocBuilder<SubscriptionCubit, SubscriptionState>(
-                    builder: (context, subState) {
-                      if (subState is SubscriptionLoading) {
-                        return const Center(child: CustomProgressIndcator());
-                      } else if (subState is SubscriptionLoaded) {
-                        return SubscriptionCard(subscription: subState.subscription);
-                      } else if (subState is SubscriptionError) {
-                        return Center(child: Text(subState.message));
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    },
-                  ),
-                ),
+                // Removed SubscriptionCard as per user request to move it to packages_view.dart
                 SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
                   sliver: SliverToBoxAdapter(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (ownsTeam &&
                             teamState is TeamLoaded &&
-                            (teamState as TeamLoaded).team.membersCount != null &&
+                            (teamState as TeamLoaded).team.membersCount !=
+                                null &&
                             (teamState as TeamLoaded).team.membersCount! >= 1)
                           Column(
                             children: [
@@ -85,7 +70,7 @@ class PackagesView extends StatelessWidget {
                                 title: 'تقدم المشاركين',
                                 icon: Icons.bar_chart_rounded,
                               ),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: 20),
                               const ProgressChart(),
                               const SizedBox(height: 20),
                               const ParticipantsSection(),

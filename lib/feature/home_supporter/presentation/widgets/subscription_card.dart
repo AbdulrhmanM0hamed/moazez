@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
+import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/home_supporter/domain/entities/subscription_entity.dart';
 import 'package:moazez/feature/profile/data/models/profile_model.dart'
     show ActiveSubscription;
@@ -75,21 +76,15 @@ class SubscriptionCard extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors:
-                    isTrial
-                        ? [
-                          const Color.fromARGB(255, 84, 175, 90), // Light Green
-                          const Color.fromARGB(
-                            255,
-                            93,
-                            172,
-                            98,
-                          ), // Medium Green
-                        ]
-                        : [
-                          const Color.fromARGB(255, 56, 74, 235), // Light Blue
-                          const Color.fromARGB(255, 56, 74, 235), // Dark Blue
-                        ],
+                colors: isTrial
+                    ? [
+                        AppColors.primary, // Primary color from app_colors.dart
+                        AppColors.secondary, // Secondary color from app_colors.dart
+                      ]
+                    : [
+                        AppColors.secondary, // Secondary color from app_colors.dart
+                        AppColors.third, // Third color from app_colors.dart
+                      ],
               ),
             ),
             child: Padding(

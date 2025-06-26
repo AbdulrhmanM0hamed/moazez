@@ -20,8 +20,10 @@ class MemberStatsEntity {
       id: json['id'] as int,
       name: json['name'] as String,
       email: json['email'] as String,
-      avatarUrl: json['avatar_url'] as String,
-      stats: StatsEntity.fromJson(json['stats'] as Map<String, dynamic>),
+      avatarUrl: json['avatar_url'] as String? ?? "",
+      stats: json['stats'] != null 
+          ? StatsEntity.fromJson(json['stats'] as Map<String, dynamic>)
+          : const StatsEntity(completionPercentageMargin: "0.0"),
       tasks: (json['tasks'] as List<dynamic>)
           .map((taskJson) => TaskEntity.fromJson(taskJson as Map<String, dynamic>))
           .toList(),

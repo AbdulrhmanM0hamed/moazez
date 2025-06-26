@@ -13,21 +13,21 @@ class PackageCard extends StatelessWidget {
 
   Color get _primaryColor {
     if (package.name.contains('الأساسية'))
-      return const Color(0xFF2196F3); // Blue for Basic
+      return AppColors.primary; // Primary color for Basic
     if (package.name.contains('المتقدمة'))
-      return const Color(0xFFFF9800); // Orange for Advanced
+      return AppColors.secondary; // Secondary color for Advanced
     if (package.name.contains('الاحترافية'))
-      return const Color(0xFF9C27B0); // Purple for Professional
+      return AppColors.third; // Third color for Professional
     return AppColors.primary;
   }
 
   Color get _secondaryColor {
     if (package.name.contains('الأساسية'))
-      return const Color(0xFF1976D2); // Darker Blue
+      return AppColors.primary.withValues(alpha: 0.8); // Slightly darker Primary for Basic
     if (package.name.contains('المتقدمة'))
-      return const Color(0xFFF57C00); // Darker Orange
+      return AppColors.secondary.withValues(alpha: 0.8); // Slightly darker Secondary for Advanced
     if (package.name.contains('الاحترافية'))
-      return const Color(0xFF7C4DFF); // Darker Purple
+      return AppColors.third.withValues(alpha: 0.8); // Slightly darker Third for Professional
     return AppColors.secondary;
   }
 
