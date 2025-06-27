@@ -56,7 +56,7 @@ class TeamInfoCard extends StatelessWidget {
                   final teamState = context.watch<TeamCubit>().state;
                   bool inferredOwner = isOwner;
                   if (teamState is TeamLoaded) {
-                    inferredOwner = (teamState as TeamLoaded).team.id != null;
+                    inferredOwner = (teamState ).team.id != null;
                   }
                   if (inferredOwner) {
                     return IconButton(

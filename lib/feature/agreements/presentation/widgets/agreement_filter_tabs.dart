@@ -50,7 +50,7 @@ class AgreementFilterTabs extends StatelessWidget {
             border:
                 isSelected
                     ? null
-                    : Border.all(color: AppColors.primary, width: .5),
+                    : Border.all(color: AppColors.primary, ),
           ),
           child: Center(
             child: Text(

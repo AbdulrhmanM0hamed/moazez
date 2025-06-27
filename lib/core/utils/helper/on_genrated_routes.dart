@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moazez/feature/agreements/presentation/view/add_task_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/complete_profile_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/login_view.dart';
 import 'package:moazez/feature/auth/presentation/pages/password_reset_link_view.dart';
@@ -25,6 +26,8 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const OnboardingView());
     case SignUpView.routeName:
       return MaterialPageRoute(builder: (_) => const SignUpView());
+    case AddTaskView.routeName:
+      return MaterialPageRoute(builder: (context) => const AddTaskView());
     case LoginView.routeName:
       return MaterialPageRoute(builder: (context) => const LoginView());
     case CompleteProfileView.routeName:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moazez/feature/agreements/presentation/view/add_task_view.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/agreements_view_body.dart';
 
 class AgreementsView extends StatelessWidget {
@@ -10,7 +11,7 @@ class AgreementsView extends StatelessWidget {
       body: const AgreementsViewBody(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Add task functionality to be implemented
+          Navigator.of(context).pushNamed(AddTaskView.routeName);
         },
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 6,
