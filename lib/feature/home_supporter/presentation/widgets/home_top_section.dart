@@ -36,6 +36,7 @@ class HomeTopSection extends StatelessWidget {
           SizedBox(
             height: 50, // Reduce the height of the text field
             child: CustomTextField(
+              
               hint: 'ابحث...',
               prefix: const Icon(Icons.search, size: 35, color: AppColors.textSecondary),
               fillColor: Theme.of(context).scaffoldBackgroundColor,

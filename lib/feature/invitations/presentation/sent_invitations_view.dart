@@ -88,9 +88,7 @@ class InvitationCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 2,
       shadowColor: Colors.black.withOpacity(0.08),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Row(
@@ -107,10 +105,13 @@ class InvitationCard extends StatelessWidget {
                 height: 60,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
-                  color: AppColors.textSecondary.withOpacity(0.1),
+                  color: AppColors.textSecondary.withValues(alpha: 0.1),
                 ),
-                child: const Icon(Icons.person_off_outlined,
-                    color: AppColors.textSecondary, size: 30),
+                child: const Icon(
+                  Icons.person,
+                  color: AppColors.textSecondary,
+                  size: 30,
+                ),
               ),
             ),
             const SizedBox(width: 16),
@@ -171,7 +172,7 @@ class _StatusIndicator extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: statusColor.withOpacity(0.15),
+        color: statusColor.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
