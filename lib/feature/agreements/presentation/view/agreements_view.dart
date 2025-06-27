@@ -4,22 +4,44 @@ import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/feature/agreements/presentation/view/add_task_view.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/agreements_view_body.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_cubit.dart';
+import 'package:moazez/feature/agreements/presentation/cubit/close_task_cubit.dart';
+import 'package:moazez/feature/agreements/presentation/cubit/close_task_state.dart';
 
 class AgreementsView extends StatelessWidget {
   const AgreementsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<MemberStatsCubit>()..fetchMemberTaskStats(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => sl<MemberStatsCubit>()..fetchMemberTaskStats(),
+        ),
+        BlocProvider(
+          create: (context) => sl<CloseTaskCubit>(),
+        ),
+      ],
       child: Builder(builder: (context) {
         return Scaffold(
-          body: RefreshIndicator(
+          body: BlocListener<CloseTaskCubit, CloseTaskState>(
+            listener: (context, state) {
+              if (state is CloseTaskSuccess) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('تم تحديث حالة المهمة بنجاح')),
+                );
+                context.read<MemberStatsCubit>().fetchMemberTaskStats();
+              } else if (state is CloseTaskFailure) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.message)),
+                );
+              }
+            },
+            child: RefreshIndicator(
             onRefresh: () async {
               context.read<MemberStatsCubit>().fetchMemberTaskStats();
             },
             child: const AgreementsViewBody(),
-          ),
+          ),), 
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.of(context).pushNamed(AddTaskView.routeName);

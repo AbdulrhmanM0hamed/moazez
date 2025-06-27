@@ -45,4 +45,23 @@ class AgreementsRemoteDataSourceImpl implements AgreementsRemoteDataSource {
       throw ServerException(message: e.response?.data['message'] ?? 'Failed to create task');
     }
   }
+
+  @override
+  Future<void> closeTask({required String taskId, required String status}) async {
+    final token = await cacheService.getToken();
+    try {
+      await dio.post(
+        ApiEndpoints.closeTask,
+        data: {
+          'task_id': taskId,
+          'status': status,
+        },
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+    } on DioError catch (e) {
+      throw ServerException(message: e.response?.data['message'] ?? 'Failed to close task');
+    }
+  }
 }

@@ -10,9 +10,12 @@ import 'package:moazez/feature/agreements/data/datasources/agreements_remote_dat
 import 'package:moazez/feature/agreements/data/repositories/agreements_repository_impl.dart';
 import 'package:moazez/feature/agreements/domain/repositories/agreements_repository.dart';
 import 'package:moazez/feature/agreements/domain/usecases/get_team_members_usecase.dart';
+import 'package:moazez/feature/agreements/presentation/cubit/create_task_cubit.dart';
 import 'package:moazez/feature/agreements/presentation/cubit/team_members_cubit.dart';
 import 'package:moazez/feature/agreements/domain/usecases/create_task_usecase.dart';
-import 'package:moazez/feature/agreements/presentation/cubit/create_task_cubit.dart';
+
+import 'package:moazez/feature/agreements/domain/usecases/close_task_usecase.dart';
+import 'package:moazez/feature/agreements/presentation/cubit/close_task_cubit.dart';
 import 'package:moazez/feature/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:moazez/feature/auth/domain/usecases/send_password_reset_link_usecase.dart';
 import 'package:moazez/feature/home_supporter/data/datasources/subscription_remote_data_source.dart';
@@ -223,4 +226,8 @@ Future<void> init() async {
   // Create Task
   sl.registerLazySingleton(() => CreateTaskUsecase(sl()));
   sl.registerFactory(() => CreateTaskCubit(createTaskUsecase: sl()));
+
+  // Close Task
+  sl.registerLazySingleton(() => CloseTaskUseCase(sl()));
+  sl.registerFactory(() => CloseTaskCubit(sl()));
 }

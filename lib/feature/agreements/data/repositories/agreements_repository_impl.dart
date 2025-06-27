@@ -32,4 +32,14 @@ class AgreementsRepositoryImpl implements AgreementsRepository {
       return Left(ServerFailure(message: e.message ?? 'An unexpected error occurred'));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> closeTask({required String taskId, required String status}) async {
+    try {
+      await remoteDataSource.closeTask(taskId: taskId, status: status);
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message ?? 'An unexpected error occurred'));
+    }
+  }
 }

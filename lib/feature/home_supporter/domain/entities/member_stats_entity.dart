@@ -145,8 +145,23 @@ class MemberTaskStatsResponseEntity {
       members: (json['members'] as List<dynamic>)
           .map((memberJson) => MemberStatsEntity.fromJson(memberJson as Map<String, dynamic>))
           .toList(),
-      teamSummary: TeamSummaryEntity.fromJson(json['team_summary'] as Map<String, dynamic>),
-      pagination: PaginationEntity.fromJson(json['pagination'] as Map<String, dynamic>),
+      teamSummary: json['team_summary'] is Map<String, dynamic>
+          ? TeamSummaryEntity.fromJson(json['team_summary'] as Map<String, dynamic>)
+          : const TeamSummaryEntity(
+              totalTasks: 0,
+              completedTasks: 0,
+              pendingTasks: 0,
+              inProgressTasks: 0,
+              completionRate: 0.0,
+            ),
+      pagination: json['pagination'] is Map<String, dynamic>
+          ? PaginationEntity.fromJson(json['pagination'] as Map<String, dynamic>)
+          : const PaginationEntity(
+              total: 0,
+              perPage: 0,
+              currentPage: 0,
+              lastPage: 0,
+            ),
     );
   }
 }

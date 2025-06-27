@@ -78,6 +78,23 @@ class _AgreementsViewBodyState extends State<AgreementsViewBody> {
                     )
                     .toList();
 
+                // Sort tasks by creation date (newest first)
+                allTasks.sort((a, b) {
+                  try {
+                    // Handle empty or null dates gracefully
+                    if (a.task.createdAt.isEmpty && b.task.createdAt.isEmpty) return 0;
+                    if (a.task.createdAt.isEmpty) return 1; // Treat empty dates as older
+                    if (b.task.createdAt.isEmpty) return -1; // Treat empty dates as older
+
+                    final dateA = DateTime.parse(a.task.createdAt);
+                    final dateB = DateTime.parse(b.task.createdAt);
+                    return dateB.compareTo(dateA);
+                  } catch (e) {
+                    // Fallback for malformed date strings
+                    return 0;
+                  }
+                });
+
                 final filteredTasks = _getFilteredTasks(allTasks);
 
                 if (filteredTasks.isEmpty) {

@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moazez/feature/agreements/presentation/cubit/close_task_cubit.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/gradient_progress_indicator.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/stages_indicator.dart';
 import 'package:moazez/feature/home_supporter/domain/entities/member_stats_entity.dart';
@@ -21,6 +23,36 @@ class MemberTaskCard extends StatelessWidget {
     return uri.isScheme('HTTP') || uri.isScheme('HTTPS');
   }
 
+
+  void _showConfirmationDialog(BuildContext context, String taskId, String status) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('تأكيد'),
+          content: const Text('هل أنت متأكد أنك تريد تحديث حالة هذه المهمة؟'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('إلغاء'),
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('تأكيد'),
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                context.read<CloseTaskCubit>().closeTask(
+                      taskId: taskId,
+                      status: status,
+                    );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,11 +118,20 @@ class MemberTaskCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.more_vert),
-                  onPressed: () {
-                    // TODO: Implement menu action
+                PopupMenuButton<String>(
+                  onSelected: (value) {
+                    _showConfirmationDialog(context, task.id.toString(), value);
                   },
+                  itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                    const PopupMenuItem<String>(
+                      value: 'completed',
+                      child: Text('مكتمل'),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: 'not_completed',
+                      child: Text('غير مكتمل'),
+                    ),
+                  ],
                 ),
               ],
             ),
