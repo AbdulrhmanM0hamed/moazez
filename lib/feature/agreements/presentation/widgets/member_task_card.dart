@@ -10,6 +10,18 @@ class MemberTaskCard extends StatelessWidget {
 
   const MemberTaskCard({super.key, required this.task, required this.member});
 
+  bool _isValidUrl(String? url) {
+    if (url == null || url.isEmpty) return false;
+    Uri? uri;
+    try {
+      uri = Uri.parse(url);
+    } catch (e) {
+      return false;
+    }
+    return uri.isScheme('HTTP') || uri.isScheme('HTTPS');
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -18,14 +30,25 @@ class MemberTaskCard extends StatelessWidget {
       if (dateStr.isEmpty) return '';
       try {
         final date = DateTime.parse(dateStr);
-        return '${date.day}/${date.month}';
+        return '${date.day}/${date.month}/${date.year}';
       } catch (e) {
         return '';
       }
     }
 
-    final dateRange =
-        '${formatDate(task.createdAt)} - ${formatDate(task.dueDate)}';
+    final createdDateStr = formatDate(task.createdAt);
+    final dueDateStr = formatDate(task.dueDate);
+    String dateRange;
+
+    if (createdDateStr.isNotEmpty && dueDateStr.isNotEmpty) {
+      dateRange = '$createdDateStr - $dueDateStr';
+    } else if (dueDateStr.isNotEmpty) {
+      dateRange = 'تاريخ الاستحقاق: $dueDateStr';
+    } else if (createdDateStr.isNotEmpty) {
+      dateRange = 'تاريخ الإنشاء: $createdDateStr';
+    } else {
+      dateRange = '';
+    }
 
     return Card(
       elevation: 2,
@@ -110,14 +133,12 @@ class MemberTaskCard extends StatelessWidget {
                 const Spacer(),
                 CircleAvatar(
                   radius: 16,
-                  backgroundImage:
-                      (member.avatarUrl.isNotEmpty)
-                          ? CachedNetworkImageProvider(member.avatarUrl)
-                          : null,
-                  child:
-                      (member.avatarUrl.isEmpty)
-                          ? const Icon(Icons.person, size: 16)
-                          : null,
+                  backgroundImage: _isValidUrl(member.avatarUrl)
+                      ? CachedNetworkImageProvider(member.avatarUrl)
+                      : null,
+                  child: !_isValidUrl(member.avatarUrl)
+                      ? const Icon(Icons.person, size: 16)
+                      : null,
                 ),
                 const SizedBox(width: 8),
                 Text(

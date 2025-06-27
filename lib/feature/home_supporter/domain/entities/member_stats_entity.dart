@@ -72,7 +72,7 @@ class TaskEntity {
       title: json['title'] as String,
       status: json['status'] as String,
       progress: json['progress'] as int,
-      dueDate: json['due_date'] as String,
+      dueDate: json['due_date']  ?? '',
       createdAt: json['created_at'] as String,
       stagesCount: json['stages_count'] as int,
       completedStages: json['completed_stages'] as int,

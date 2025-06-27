@@ -18,5 +18,7 @@ class ApiEndpoints {
   static const String teamRewards = 'team/rewards';
   static const String myRewards = 'my-rewards';
   static const String passwordResetLink = 'password/reset-link';
+  static const String teamMembers = 'team/member-stats';
+  static const String createTask = 'team/create-task';
   
 }

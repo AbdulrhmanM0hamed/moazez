@@ -12,6 +12,13 @@ class AppValidators {
     return null;
   }
 
+  static String? validateRequired(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'يرجى إدخال قيمة';
+    }
+    return null;
+  }
+
   static String? validateDescription(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'يرجى إدخال وصف المهمة';

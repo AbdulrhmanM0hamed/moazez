@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:moazez/core/services/service_locator.dart';
+
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/member_task_card.dart';
@@ -12,33 +12,20 @@ import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_st
 import 'package:moazez/feature/agreements/presentation/widgets/agreement_filter_tabs.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/home_top_section.dart';
 
-class AgreementsViewBody extends StatelessWidget {
+class AgreementsViewBody extends StatefulWidget {
   const AgreementsViewBody({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<MemberStatsCubit>()..fetchMemberTaskStats(),
-      child: const _AgreementsContent(),
-    );
-  }
+  State<AgreementsViewBody> createState() => _AgreementsViewBodyState();
 }
 
-class _AgreementsContent extends StatefulWidget {
-  const _AgreementsContent();
-
-  @override
-  State<_AgreementsContent> createState() => _AgreementsContentState();
-}
-
-class _AgreementsContentState extends State<_AgreementsContent> {
+class _AgreementsViewBodyState extends State<AgreementsViewBody> {
   int _selectedFilterIndex = 0;
-  List<_TaskWithMemberInfo> _tasks = [];
 
-  List<_TaskWithMemberInfo> _getFilteredTasks() {
-    if (_selectedFilterIndex == 0) return _tasks; // ALL
+  List<_TaskWithMemberInfo> _getFilteredTasks(List<_TaskWithMemberInfo> allTasks) {
+    if (_selectedFilterIndex == 0) return allTasks; // ALL
 
-    return _tasks.where((taskWithInfo) {
+    return allTasks.where((taskWithInfo) {
       final status = taskWithInfo.task.status;
       switch (_selectedFilterIndex) {
         case 1: // Completed
@@ -69,67 +56,65 @@ class _AgreementsContentState extends State<_AgreementsContent> {
         ),
         const SizedBox(height: 16),
         Expanded(
-          child: BlocConsumer<MemberStatsCubit, MemberStatsState>(
-            listener: (context, state) {
-              if (state is MemberStatsLoaded) {
-                setState(() {
-                  _tasks =
-                      state.response.members
-                          .expand(
-                            (member) => member.tasks.map(
-                              (task) => _TaskWithMemberInfo(
-                                task: task,
-                                member: member,
-                              ),
-                            ),
-                          )
-                          .toList();
-                });
-              }
-            },
+          child: BlocBuilder<MemberStatsCubit, MemberStatsState>(
             builder: (context, state) {
-              if (state is MemberStatsLoading && _tasks.isEmpty) {
+              if (state is MemberStatsLoading) {
                 return const ShimmerTaskList();
               }
 
-              if (state is MemberStatsError && _tasks.isEmpty) {
+              if (state is MemberStatsError) {
                 return Center(child: Text(state.message));
               }
 
-              final filteredTasks = _getFilteredTasks();
-
-              if (filteredTasks.isEmpty) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      'assets/images/tasks_empty.svg',
-                      height: 200,
-                      width: 200,
-                    ),
-                    Text(
-                      'لا توجد مهام ',
-                      style: getMediumStyle(
-                        fontFamily: FontConstant.cairo,
-                        fontSize: 18,
+              if (state is MemberStatsLoaded) {
+                final allTasks = state.response.members
+                    .expand(
+                      (member) => member.tasks.map(
+                        (task) => _TaskWithMemberInfo(
+                          task: task,
+                          member: member,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                    )
+                    .toList();
+
+                final filteredTasks = _getFilteredTasks(allTasks);
+
+                if (filteredTasks.isEmpty) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/images/tasks_empty.svg',
+                        height: 200,
+                        width: 200,
+                      ),
+                      Text(
+                        'لا توجد مهام ',
+                        style: getMediumStyle(
+                          fontFamily: FontConstant.cairo,
+                          fontSize: 18,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  );
+                }
+
+                return ListView.builder(
+                  padding: const EdgeInsets.only(top: 8, bottom: 16),
+                  itemCount: filteredTasks.length,
+                  itemBuilder: (context, index) {
+                    final taskWithInfo = filteredTasks[index];
+                    return MemberTaskCard(
+                      task: taskWithInfo.task,
+                      member: taskWithInfo.member,
+                    );
+                  },
                 );
               }
 
-              return ListView.builder(
-                padding: const EdgeInsets.only(top: 8, bottom: 16),
-                itemCount: filteredTasks.length,
-                itemBuilder: (context, index) {
-                  final taskWithInfo = filteredTasks[index];
-                  return MemberTaskCard(
-                    task: taskWithInfo.task,
-                    member: taskWithInfo.member,
-                  );
-                },
-              );
+              return const ShimmerTaskList();
             },
           ),
         ),

@@ -10,6 +10,18 @@ class AgreementCard extends StatelessWidget {
 
   const AgreementCard({super.key, required this.member, required this.onTap});
 
+  bool _isValidUrl(String? url) {
+    if (url == null || url.isEmpty) return false;
+    Uri? uri;
+    try {
+      uri = Uri.parse(url);
+    } catch (e) {
+      return false;
+    }
+    return uri.isScheme('HTTP') || uri.isScheme('HTTPS');
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -72,10 +84,10 @@ class AgreementCard extends StatelessWidget {
         CircleAvatar(
           radius: 24,
           backgroundColor: theme.scaffoldBackgroundColor,
-          backgroundImage: member.avatarUrl.isNotEmpty
+          backgroundImage: _isValidUrl(member.avatarUrl)
               ? CachedNetworkImageProvider(member.avatarUrl)
               : null,
-          child: member.avatarUrl.isEmpty
+          child: !_isValidUrl(member.avatarUrl)
               ? const Icon(Icons.person, size: 24, color: Colors.grey)
               : null,
         ),

@@ -5,6 +5,14 @@ import 'package:moazez/core/network/network_info.dart';
 import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/services/cache/cache_service_impl.dart';
 import 'package:moazez/core/utils/constant/api_endpoints.dart';
+import 'package:moazez/feature/agreements/data/datasources/agreements_remote_data_source.dart';
+import 'package:moazez/feature/agreements/data/datasources/agreements_remote_data_source_impl.dart';
+import 'package:moazez/feature/agreements/data/repositories/agreements_repository_impl.dart';
+import 'package:moazez/feature/agreements/domain/repositories/agreements_repository.dart';
+import 'package:moazez/feature/agreements/domain/usecases/get_team_members_usecase.dart';
+import 'package:moazez/feature/agreements/presentation/cubit/team_members_cubit.dart';
+import 'package:moazez/feature/agreements/domain/usecases/create_task_usecase.dart';
+import 'package:moazez/feature/agreements/presentation/cubit/create_task_cubit.dart';
 import 'package:moazez/feature/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:moazez/feature/auth/domain/usecases/send_password_reset_link_usecase.dart';
 import 'package:moazez/feature/home_supporter/data/datasources/subscription_remote_data_source.dart';
@@ -65,7 +73,9 @@ Future<void> init() async {
 
   // Blocs & Cubits
   sl.registerFactory(() => LoginCubit(loginUseCase: sl()));
-  sl.registerFactory(() => RegisterCubit(registerUseCase: sl(), teamCubit: sl()));
+  sl.registerFactory(
+    () => RegisterCubit(registerUseCase: sl(), teamCubit: sl()),
+  );
   sl.registerFactory(() => CompleteProfileCubit(sl()));
   sl.registerFactory(() => LogoutCubit(cacheHelper: sl(), logoutUseCase: sl()));
 
@@ -199,4 +209,18 @@ Future<void> init() async {
   sl.registerFactory(
     () => SubscriptionCubit(getCurrentSubscriptionUseCase: sl()),
   );
+
+  sl.registerLazySingleton(() => GetTeamMembersUsecase(sl()));
+  sl.registerLazySingleton<AgreementsRemoteDataSource>(
+    () => AgreementsRemoteDataSourceImpl(dio: sl(), cacheService: sl()),
+  );
+
+  sl.registerLazySingleton<AgreementsRepository>(
+    () => AgreementsRepositoryImpl(remoteDataSource: sl()),
+  );
+  sl.registerFactory(() => TeamMembersCubit(getTeamMembersUsecase: sl()));
+
+  // Create Task
+  sl.registerLazySingleton(() => CreateTaskUsecase(sl()));
+  sl.registerFactory(() => CreateTaskCubit(createTaskUsecase: sl()));
 }
