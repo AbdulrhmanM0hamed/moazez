@@ -6,6 +6,7 @@ import 'package:moazez/feature/agreements/domain/entities/team_member.dart';
 import 'package:moazez/feature/agreements/domain/repositories/agreements_repository.dart';
 import 'package:moazez/feature/agreements/data/models/task_model.dart';
 import 'package:moazez/feature/agreements/domain/entities/task.dart';
+import 'package:moazez/feature/agreements/domain/entities/task_details_entity.dart';
 
 class AgreementsRepositoryImpl implements AgreementsRepository {
   final AgreementsRemoteDataSource remoteDataSource;
@@ -40,6 +41,16 @@ class AgreementsRepositoryImpl implements AgreementsRepository {
       return Right(message);
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message ?? 'حدث خطأ'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, TaskDetailsEntity>> getTaskDetails({required int taskId}) async {
+    try {
+      final remoteTaskDetails = await remoteDataSource.getTaskDetails(taskId: taskId);
+      return Right(remoteTaskDetails);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message ?? 'حدث خطأ في جلب تفاصيل المهمة'));
     }
   }
 }

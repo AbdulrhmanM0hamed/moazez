@@ -5,6 +5,7 @@ import 'package:moazez/feature/agreements/presentation/cubit/close_task_cubit.da
 import 'package:moazez/feature/agreements/presentation/widgets/gradient_progress_indicator.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/stages_indicator.dart';
 import 'package:moazez/core/utils/common/custom_dialog_button.dart';
+import 'package:moazez/feature/agreements/presentation/view/task_details_view.dart';
 import 'package:moazez/feature/home_supporter/domain/entities/member_stats_entity.dart';
 
 class MemberTaskCard extends StatelessWidget {
@@ -100,125 +101,135 @@ class MemberTaskCard extends StatelessWidget {
       dateRange = '';
     }
 
-    return Card(
-      elevation: 2,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header: Title, Date, Menu
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        task.title,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TaskDetailsView(taskId: task.id),
+          ),
+        );
+      },
+      child: Card(
+        elevation: 2,
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header: Title, Date, Menu
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          task.title,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        dateRange,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: Colors.grey.shade600,
+                        const SizedBox(height: 4),
+                        Text(
+                          dateRange,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: Colors.grey.shade600,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                if (task.status != 'completed')
-                  PopupMenuButton<String>(
-                    onSelected: (value) {
-                      _showConfirmationDialog(context, task.id.toString(), value);
-                    },
-                    itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                      const PopupMenuItem<String>(
-                        value: 'completed',
-                        child: Text('مكتمل'),
-                      ),
-                      const PopupMenuItem<String>(
-                        value: 'not_completed',
-                        child: Text('غير مكتمل'),
-                      ),
-                    ],
-                  )
-                else
-                  // Reserve space to keep the layout consistent
-                  const SizedBox(width: 48.0),
-              ],
-            ),
-            const SizedBox(height: 12),
-            // Status Badge
-            Align(
-              alignment: Alignment.centerRight,
-              child: _TaskStatusBadge(status: task.status),
-            ),
-            const SizedBox(height: 16),
-            // Progress
-            _buildInfoRow(
-              context,
-              title: 'التقدم',
-              value: '${task.progress}%',
-              indicator: GradientProgressIndicator(
-                progress: task.progress / 100.0,
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF006E82), Color(0xFF0DD0F4)],
+                  if (task.status != 'completed')
+                    PopupMenuButton<String>(
+                      onSelected: (value) {
+                        _showConfirmationDialog(context, task.id.toString(), value);
+                      },
+                      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                        const PopupMenuItem<String>(
+                          value: 'completed',
+                          child: Text('مكتمل'),
+                        ),
+                        const PopupMenuItem<String>(
+                          value: 'not_completed',
+                          child: Text('غير مكتمل'),
+                        ),
+                      ],
+                    )
+                  else
+                    // Reserve space to keep the layout consistent
+                    const SizedBox(width: 48.0),
+                ],
+              ),
+              const SizedBox(height: 12),
+              // Status Badge
+              Align(
+                alignment: Alignment.centerRight,
+                child: _TaskStatusBadge(status: task.status),
+              ),
+              const SizedBox(height: 16),
+              // Progress
+              _buildInfoRow(
+                context,
+                title: 'التقدم',
+                value: '${task.progress}%',
+                indicator: GradientProgressIndicator(
+                  progress: task.progress / 100.0,
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF006E82), Color(0xFF0DD0F4)],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-            // Stages
-            _buildInfoRow(
-              context,
-              title: 'المراحل',
-              value: '${task.stagesCount} مراحل',
-              indicator: StagesIndicator(
-                totalStages: task.stagesCount,
-                completedStages: task.completedStages,
+              const SizedBox(height: 16),
+              // Stages
+              _buildInfoRow(
+                context,
+                title: 'المراحل',
+                value: '${task.stagesCount} مراحل',
+                indicator: StagesIndicator(
+                  totalStages: task.stagesCount,
+                  completedStages: task.completedStages,
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            const Divider(),
-            const SizedBox(height: 8),
-            // Participant
-            Row(
-              children: [
-                Text(
-                  'المشارك',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey.shade700,
+              const SizedBox(height: 16),
+              const Divider(),
+              const SizedBox(height: 8),
+              // Participant
+              Row(
+                children: [
+                  Text(
+                    'المشارك',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: Colors.grey.shade700,
+                    ),
                   ),
-                ),
-                const Spacer(),
-                CircleAvatar(
-                  radius: 16,
-                  backgroundImage: _isValidUrl(member.avatarUrl)
-                      ? CachedNetworkImageProvider(member.avatarUrl)
-                      : null,
-                  child: !_isValidUrl(member.avatarUrl)
-                      ? const Icon(Icons.person, size: 16)
-                      : null,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  member.name,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
+                  const Spacer(),
+                  CircleAvatar(
+                    radius: 16,
+                    backgroundImage: _isValidUrl(member.avatarUrl)
+                        ? CachedNetworkImageProvider(member.avatarUrl)
+                        : null,
+                    child: !_isValidUrl(member.avatarUrl)
+                        ? const Icon(Icons.person, size: 16)
+                        : null,
                   ),
-                ),
-              ],
-            ),
-          ],
+                  const SizedBox(width: 8),
+                  Text(
+                    member.name,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -21,5 +21,6 @@ class ApiEndpoints {
   static const String teamMembers = 'team/member-stats';
   static const String createTask = 'team/create-task';
   static const String closeTask = 'tasks/close';
+  static const String taskDetails = 'task-details';
   
 }

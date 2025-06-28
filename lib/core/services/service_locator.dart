@@ -15,6 +15,8 @@ import 'package:moazez/feature/agreements/presentation/cubit/team_members_cubit.
 import 'package:moazez/feature/agreements/domain/usecases/create_task_usecase.dart';
 
 import 'package:moazez/feature/agreements/domain/usecases/close_task_usecase.dart';
+import 'package:moazez/feature/agreements/domain/usecases/get_task_details_usecase.dart';
+import 'package:moazez/feature/agreements/presentation/cubit/task_details_cubit/task_details_cubit.dart';
 import 'package:moazez/feature/agreements/presentation/cubit/close_task_cubit.dart';
 import 'package:moazez/feature/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:moazez/feature/auth/domain/usecases/send_password_reset_link_usecase.dart';
@@ -230,4 +232,8 @@ Future<void> init() async {
   // Close Task
   sl.registerLazySingleton(() => CloseTaskUseCase(sl()));
   sl.registerFactory(() => CloseTaskCubit(sl()));
+
+  // Get Task Details
+  sl.registerLazySingleton(() => GetTaskDetailsUseCase(sl()));
+  sl.registerFactory(() => TaskDetailsCubit(sl()));
 }
