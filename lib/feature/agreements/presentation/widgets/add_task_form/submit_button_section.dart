@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
+import 'package:moazez/core/utils/common/custom_button.dart';
 
 class SubmitButtonSection extends StatelessWidget {
   final bool isLoading;
@@ -13,14 +13,9 @@ class SubmitButtonSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return CustomButton(
       onPressed: isLoading ? null : onSubmit,
-      style: ElevatedButton.styleFrom(
-        minimumSize: const Size(double.infinity, 50),
-      ),
-      child: isLoading
-          ? const CustomProgressIndcator(size: 25, color: Colors.white)
-          : const Text('إنشاء المهمة'),
+      text: 'إنشاء المهمة',
     );
   }
 }

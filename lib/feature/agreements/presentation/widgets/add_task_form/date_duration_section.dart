@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:moazez/core/utils/validation/validators.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/custom_task_text_field.dart';
 

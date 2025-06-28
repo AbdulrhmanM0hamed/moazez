@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:moazez/core/utils/constant/font_manger.dart';
+import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 
 class PrioritySelectorSection extends StatelessWidget {
@@ -13,29 +15,47 @@ class PrioritySelectorSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
+    const priorities = {
+      'low': 'منخفضة',
+      'normal': 'عادية',
+      'medium': 'متوسطة',
+      'high': 'عالية',
+      'urgent': 'عاجلة',
+    };
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'الأولوية',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
-        SegmentedButton<String>(
-          segments: const [
-            ButtonSegment(value: 'normal', label: Text('عادية')),
-            ButtonSegment(value: 'Urgent', label: Text('عاجلة')),
-          ],
-          selected: {priority},
-          onSelectionChanged: (newSelection) {
-            onPriorityChanged(newSelection.first);
-          },
-          style: SegmentedButton.styleFrom(
-            selectedBackgroundColor: AppColors.primary.withValues(alpha: 0.2),
-            side: BorderSide(color: Colors.grey.shade300),
-          ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8.0,
+          runSpacing: 8.0,
+          children:
+              priorities.entries.map((entry) {
+                return ChoiceChip(
+                  label: Text(
+                    entry.value,
+                    style: getMediumStyle(fontFamily: FontConstant.cairo),
+                  ),
+                  selected: priority == entry.key,
+                  onSelected: (isSelected) {
+                    if (isSelected) {
+                      onPriorityChanged(entry.key);
+                    }
+                  },
+                  selectedColor: AppColors.primary.withValues(alpha: 0.2),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide(color: Colors.grey.shade300),
+                  ),
+                );
+              }).toList(),
         ),
       ],
     );

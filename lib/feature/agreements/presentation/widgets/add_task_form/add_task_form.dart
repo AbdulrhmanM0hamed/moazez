@@ -13,6 +13,7 @@ import 'package:moazez/feature/agreements/presentation/widgets/add_task_form/rew
 import 'package:moazez/feature/agreements/presentation/widgets/add_task_form/reward_type_selector_section.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/add_task_form/stages_selector_section.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/add_task_form/submit_button_section.dart';
+import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/add_task_form/task_details_section.dart';
 
 class AddTaskForm extends StatefulWidget {
@@ -126,75 +127,86 @@ class _AddTaskFormState extends State<AddTaskForm> {
             Navigator.of(context).pop();
           });
         } else if (state is CreateTaskError) {
+          print(state.message);
           CustomSnackbar.showError(context: context, message: state.message);
         }
       },
       builder: (context, state) {
-        return Form(
-          key: _formKey,
-          child: ListView(
-            padding: const EdgeInsets.all(16.0),
-            children: [
-              TaskDetailsSection(
-                titleController: _titleController,
-                descriptionController: _descriptionController,
+        return Stack(
+          children: [
+            Form(
+              key: _formKey,
+              child: ListView(
+                padding: const EdgeInsets.all(16.0),
+                children: [
+                  TaskDetailsSection(
+                    titleController: _titleController,
+                    descriptionController: _descriptionController,
+                  ),
+                  const SizedBox(height: 16),
+                  MemberSelectionSection(
+                    selectedMembers: _selectedMembers,
+                    onMembersSelected: (selected) {
+                      setState(() {
+                        _selectedMembers = selected;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  DateDurationSection(
+                    startDateController: _startDateController,
+                    durationController: _durationController,
+                    endDateController: _endDateController,
+                    onStartDateSelected: _selectStartDate,
+                  ),
+                  const SizedBox(height: 16),
+                  StagesSelectorSection(
+                    totalStages: _totalStages,
+                    onStagesChanged: (newStages) {
+                      setState(() {
+                        _totalStages = newStages;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  PrioritySelectorSection(
+                    priority: _priority,
+                    onPriorityChanged: (newPriority) {
+                      setState(() {
+                        _priority = newPriority;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  RewardTypeSelectorSection(
+                    rewardType: _rewardType,
+                    onRewardTypeChanged: (newType) {
+                      setState(() {
+                        _rewardType = newType;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  RewardDetailsSection(
+                    rewardType: _rewardType,
+                    rewardAmountController: _rewardAmountController,
+                    rewardDescriptionController: _rewardDescriptionController,
+                  ),
+                  const SizedBox(height: 24),
+                  SubmitButtonSection(
+                    isLoading: state is CreateTaskLoading,
+                    onSubmit: () => _createTask(context),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-              MemberSelectionSection(
-                selectedMembers: _selectedMembers,
-                onMembersSelected: (selected) {
-                  setState(() {
-                    _selectedMembers = selected;
-                  });
-                },
+            ),
+            if (state is CreateTaskLoading)
+              const Positioned.fill(
+                child: Center(
+                  child: CustomProgressIndcator(size: 50),
+                ),
               ),
-              const SizedBox(height: 16),
-              DateDurationSection(
-                startDateController: _startDateController,
-                durationController: _durationController,
-                endDateController: _endDateController,
-                onStartDateSelected: _selectStartDate,
-              ),
-              const SizedBox(height: 16),
-              StagesSelectorSection(
-                totalStages: _totalStages,
-                onStagesChanged: (newStages) {
-                  setState(() {
-                    _totalStages = newStages;
-                  });
-                },
-              ),
-              const SizedBox(height: 24),
-              PrioritySelectorSection(
-                priority: _priority,
-                onPriorityChanged: (newPriority) {
-                  setState(() {
-                    _priority = newPriority;
-                  });
-                },
-              ),
-              const SizedBox(height: 24),
-              RewardTypeSelectorSection(
-                rewardType: _rewardType,
-                onRewardTypeChanged: (newType) {
-                  setState(() {
-                    _rewardType = newType;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-              RewardDetailsSection(
-                rewardType: _rewardType,
-                rewardAmountController: _rewardAmountController,
-                rewardDescriptionController: _rewardDescriptionController,
-              ),
-              const SizedBox(height: 24),
-              SubmitButtonSection(
-                isLoading: state is CreateTaskLoading,
-                onSubmit: () => _createTask(context),
-              ),
-            ],
-          ),
+          ],
         );
       },
     );

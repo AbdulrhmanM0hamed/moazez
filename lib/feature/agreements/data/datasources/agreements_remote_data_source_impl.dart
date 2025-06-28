@@ -40,7 +40,7 @@ class AgreementsRemoteDataSourceImpl implements AgreementsRemoteDataSource {
         data: task.toJson(),
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       throw ServerException(
         message: e.response?.data['message'] ?? 'Failed to create task',
       );
@@ -60,7 +60,7 @@ class AgreementsRemoteDataSourceImpl implements AgreementsRemoteDataSource {
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
       return response.data['message'] as String? ?? 'تم تحديث حالة المهم بنجاح';
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       throw ServerException(
         message: e.response?.data['message'] ?? 'فشل تحديث حالة المهمة',
       );

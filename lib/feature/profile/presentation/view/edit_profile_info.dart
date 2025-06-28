@@ -10,6 +10,8 @@ import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/feature/profile/data/models/edit_profile_params.dart';
 import 'package:moazez/feature/auth/data/models/area_city_static.dart';
+import 'package:moazez/feature/agreements/presentation/widgets/custom_task_text_field.dart';
+import 'package:moazez/core/utils/validators/form_validators.dart';
 
 class EditProfileInfo extends StatefulWidget {
   static const String routeName = '/edit-profile';
@@ -49,7 +51,7 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
         _nameController.text = profile.name ?? '';
         _emailController.text = profile.email ?? '';
         _phoneController.text = profile.phone ?? '';
-        _selectedGender = profile.gender ?? '';
+        _selectedGender = (profile.gender == 'male' || profile.gender == 'female') ? profile.gender : null;
         birthdateController.text = profile.birthdate ?? '';
 
         // Find matching area and city from static data
@@ -247,56 +249,34 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
                           ),
                         ),
                         const SizedBox(height: 24),
-                        TextFormField(
+                        CustomTaskTextField(
                           controller: _nameController,
-                          decoration: const InputDecoration(
-                            labelText: 'الاسم',
-                            prefixIcon: Icon(Icons.person),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'الرجاء إدخال الاسم';
-                            }
-                            return null;
-                          },
+                          labelText: 'الاسم',
+                          prefixIcon: Icons.person,
+                          validator: FormValidators.validateName,
                         ),
                         const SizedBox(height: 16),
-                        TextFormField(
+                        CustomTaskTextField(
                           controller: _emailController,
-                          decoration: const InputDecoration(
-                            labelText: 'البريد الإلكتروني',
-                            prefixIcon: Icon(Icons.email),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'الرجاء إدخال البريد الإلكتروني';
-                            }
-                            if (!value.contains('@')) {
-                              return 'الرجاء إدخال بريد إلكتروني صحيح';
-                            }
-                            return null;
-                          },
+                          labelText: 'البريد الإلكتروني',
+                          prefixIcon: Icons.email,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: FormValidators.validateEmail,
                         ),
                         const SizedBox(height: 16),
-                        TextFormField(
+                        CustomTaskTextField(
                           controller: _phoneController,
-                          decoration: const InputDecoration(
-                            labelText: 'رقم الهاتف',
-                            prefixIcon: Icon(Icons.phone),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'الرجاء إدخال رقم الهاتف';
-                            }
-                            return null;
-                          },
+                          labelText: 'رقم الهاتف',
+                          prefixIcon: Icons.phone,
+                          keyboardType: TextInputType.phone,
+                          validator: FormValidators.validatePhone,
                         ),
                         const SizedBox(height: 16),
                         DropdownButtonFormField<String>(
                           value: _selectedGender,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: 'النوع',
-                            prefixIcon: Icon(Icons.transgender),
+                            prefixIcon: Icon(_selectedGender == 'female' ? Icons.female : Icons.male),
                           ),
                           items: const [
                             DropdownMenuItem(value: 'male', child: Text('ذكر')),

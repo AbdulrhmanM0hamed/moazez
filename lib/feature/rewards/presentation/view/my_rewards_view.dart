@@ -15,14 +15,16 @@ class MyRewardsView extends StatelessWidget {
     return BlocProvider(
       create: (context) => sl<RewardCubit>()..getMyRewards(),
       child: Scaffold(
-        appBar: const CustomAppBar(title: 'مكافآتي'),
+        appBar: const CustomAppBar(title: 'معززاتى'),
         body: BlocBuilder<RewardCubit, RewardState>(
           builder: (context, state) {
             if (state is RewardLoading) {
               return const Center(child: CustomProgressIndcator());
             } else if (state is RewardLoaded) {
               if (state.rewards.isEmpty) {
-                return const Center(child: Text('لا توجد مكافآت حالياً'));
+                return const Center(child: Text('لا توجد معززات حالياً'));
+              } else {
+                
               }
               return ListView.builder(
                 padding: const EdgeInsets.all(16),
@@ -35,7 +37,7 @@ class MyRewardsView extends StatelessWidget {
             } else if (state is RewardError) {
               return Center(child: Text(state.message));
             } else {
-              return const Center(child: Text('لا توجد مكافآت حالياً'));
+              return const Center(child: Text('لا توجد معززات حالياً'));
             }
           },
         ),

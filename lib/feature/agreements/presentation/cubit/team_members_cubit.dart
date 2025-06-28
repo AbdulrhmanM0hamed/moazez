@@ -12,7 +12,7 @@ class TeamMembersCubit extends Cubit<TeamMembersState> {
     emit(TeamMembersLoading());
     final failureOrMembers = await getTeamMembersUsecase(NoParams());
     failureOrMembers.fold(
-      (failure) => emit(const TeamMembersError('Failed to fetch team members')),
+      (failure) => emit(const TeamMembersError('فشل في جلب بيانات الأعضاء')),
       (members) => emit(TeamMembersLoaded(members)),
     );
   }
