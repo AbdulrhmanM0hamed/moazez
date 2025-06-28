@@ -19,6 +19,12 @@ import 'package:moazez/feature/task_details/data/repositories/task_detials_repos
 import 'package:moazez/feature/task_details/domain/repositories/task_details_repository.dart';
 import 'package:moazez/feature/task_details/domain/usecase/task_details_usecase.dart';
 import 'package:moazez/feature/task_details/presentation/cubit/task_details_cubit.dart';
+import 'package:moazez/feature/MyTasks/data/datasources/my_tasks_remote_data_source.dart';
+import 'package:moazez/feature/MyTasks/data/datasources/my_tasks_remote_data_source_impl.dart';
+import 'package:moazez/feature/MyTasks/data/repositories/my_tasks_repository_impl.dart';
+import 'package:moazez/feature/MyTasks/domain/repositories/my_tasks_repository.dart';
+import 'package:moazez/feature/MyTasks/domain/usecases/get_my_tasks_usecase.dart';
+import 'package:moazez/feature/MyTasks/presentation/cubit/my_tasks_cubit.dart';
 import 'package:moazez/feature/agreements/presentation/cubit/close_task_cubit.dart';
 import 'package:moazez/feature/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:moazez/feature/auth/domain/usecases/send_password_reset_link_usecase.dart';
@@ -245,5 +251,15 @@ Future<void> init() async {
     () => TaskDetailsRepositoryImpl(remoteDataSource: sl()),
   );
 
-  sl.registerFactory(() => TaskDetailsCubit(sl()));
+    sl.registerFactory(() => TaskDetailsCubit(sl()));
+
+  // My Tasks
+  sl.registerLazySingleton<MyTasksRemoteDataSource>(
+    () => MyTasksRemoteDataSourceImpl(dio: sl(), cacheService: sl()),
+  );
+  sl.registerLazySingleton<MyTasksRepository>(
+    () => MyTasksRepositoryImpl(remoteDataSource: sl()),
+  );
+  sl.registerLazySingleton(() => GetMyTasksUseCase(sl()));
+  sl.registerFactory(() => MyTasksCubit(getMyTasksUseCase: sl()));
 }
