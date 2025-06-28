@@ -127,7 +127,6 @@ class _AddTaskFormState extends State<AddTaskForm> {
             Navigator.of(context).pop();
           });
         } else if (state is CreateTaskError) {
-          print(state.message);
           CustomSnackbar.showError(context: context, message: state.message);
         }
       },

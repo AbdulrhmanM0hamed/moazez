@@ -60,6 +60,43 @@ class TaskDetailsInfoCard extends StatelessWidget {
               title: 'تاريخ البدء',
               value: _formatDate(taskDetails.startDate),
             ),
+            Builder(builder: (context) {
+              int? durationInDays;
+              if (taskDetails.startDate != null && taskDetails.dueDate != null) {
+                try {
+                  final startDate = DateTime.parse(taskDetails.startDate!);
+                  final dueDate = DateTime.parse(taskDetails.dueDate!);
+                  final difference = dueDate.difference(startDate).inDays;
+                  // Add 1 to make the duration inclusive
+                  durationInDays = difference >= 0 ? difference + 1 : null;
+                } catch (e) {
+                  durationInDays = null;
+                }
+              } else {
+                durationInDays = null;
+              }
+
+              if (durationInDays == null) {
+                return const SizedBox.shrink();
+              }
+
+              String durationText;
+              if (durationInDays == 1) {
+                durationText = 'يوم واحد';
+              } else if (durationInDays == 2) {
+                durationText = 'يومان';
+              } else if (durationInDays >= 3 && durationInDays <= 10) {
+                durationText = '$durationInDays أيام';
+              } else {
+                durationText = '$durationInDays يومًا';
+              }
+
+              return InfoTile(
+                icon: Icons.timelapse_outlined,
+                title: 'المدة',
+                value: durationText,
+              );
+            }),
             InfoTile(
               icon: Icons.event_available_outlined,
               title: 'تاريخ الاستحقاق',

@@ -8,28 +8,26 @@ class CurrentTasksCard extends StatelessWidget {
   final String status;
   final String title;
   final double progress;
-  final VoidCallback? onViewAllTap;
 
   const CurrentTasksCard({
     super.key,
     required this.status,
     required this.title,
     required this.progress,
-    this.onViewAllTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: theme.cardColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black.withValues(alpha: 0.09),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -39,18 +37,21 @@ class CurrentTasksCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                style: getBoldStyle(
-                  fontFamily: FontConstant.cairo,
-                  fontSize: FontSize.size16,
-                  color: theme.textTheme.bodyLarge?.color,
+              Expanded(
+                child: Text(
+                  title,
+                  style: getBoldStyle(
+                    fontFamily: FontConstant.cairo,
+                    fontSize: FontSize.size16,
+                    color: theme.textTheme.bodyLarge?.color,
+                  ),
+                  softWrap: true,
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
-              Spacer(),
-              _buildHeader(context),
+              const SizedBox(width: 16),
+              _buildStatusBadge(context),
             ],
           ),
           const SizedBox(height: 16),
@@ -60,88 +61,56 @@ class CurrentTasksCard extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: _getStatusColor(
-                      context,
-                      status,
-                    ).withValues(alpha: .08),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-
-                  child: Text(
-                    status,
-                    style: getMediumStyle(
-                      fontFamily: FontConstant.cairo,
-                      fontSize: FontSize.size12,
-                      color: _getStatusColor(context, status),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.access_time_filled,
-                      color: const Color.fromARGB(255, 61, 188, 211),
-                    ),
-                    SizedBox(width: 6),
-                    Text("10 ايام"),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-          ],
+  Widget _buildStatusBadge(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: _getStatusColor(context, status).withOpacity(0.08),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Text(
+        status,
+        style: getMediumStyle(
+          fontFamily: FontConstant.cairo,
+          fontSize: FontSize.size12,
+          color: _getStatusColor(context, status),
         ),
-      ],
+      ),
     );
   }
 
   Widget _buildProgressRow(BuildContext context) {
     final theme = Theme.of(context);
+    final double progressValue = progress / 100.0;
+
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               'التقدم',
-              style: getMediumStyle(
+              style: getRegularStyle(
                 fontFamily: FontConstant.cairo,
                 fontSize: FontSize.size14,
-                color: theme.textTheme.bodyMedium?.color,
+                color: theme.textTheme.bodySmall?.color,
               ),
             ),
             Text(
-              '${(progress * 100).toInt()}%',
-              style: getSemiBoldStyle(
+              '${progress.toStringAsFixed(0)}%',
+              style: getBoldStyle(
                 fontFamily: FontConstant.cairo,
                 fontSize: FontSize.size14,
-                color: theme.textTheme.bodyLarge?.color,
+                color: AppColors.primary,
               ),
             ),
           ],
         ),
         const SizedBox(height: 8),
         GradientProgressIndicator(
-          progress: progress,
+          progress: progressValue,
           gradient: const LinearGradient(
-            colors: [Color(0xFF006E82), Color(0xFF0DD0F4)],
+            colors: [Color(0xFF0DD0F4), Color(0xFF006E82)],
           ),
         ),
       ],
@@ -151,13 +120,13 @@ class CurrentTasksCard extends StatelessWidget {
   Color _getStatusColor(BuildContext context, String status) {
     switch (status) {
       case 'قيد التنفيذ':
-        return Colors.orange;
+        return Colors.blue;
       case 'مكتمل':
         return Colors.green;
       case 'قيد الانتظار':
-        return Colors.grey;
+        return Colors.orange;
       default:
-        return Theme.of(context).textTheme.bodySmall?.color ?? Colors.black;
+        return Colors.orange;
     }
   }
 }
@@ -181,17 +150,6 @@ class TitleWithSeeAll extends StatelessWidget {
             ),
           ),
           Spacer(),
-          InkWell(
-            onTap: onTap,
-            child: Text(
-              'عرض الكل',
-              style: getMediumStyle(
-                fontFamily: FontConstant.cairo,
-                fontSize: FontSize.size14,
-                color: AppColors.primary,
-              ),
-            ),
-          ),
         ],
       ),
     );

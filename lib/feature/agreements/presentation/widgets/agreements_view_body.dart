@@ -44,14 +44,17 @@ class _AgreementsViewBodyState extends State<AgreementsViewBody> {
     return Column(
       children: [
         const HomeTopSection(),
-        const SizedBox(height: 24),
-        AgreementFilterTabs(
-          selectedIndex: _selectedFilterIndex,
-          onTabSelected: (index) {
-            setState(() {
-              _selectedFilterIndex = index;
-            });
-          },
+       const SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8 ),
+          child: AgreementFilterTabs(
+            selectedIndex: _selectedFilterIndex,
+            onTabSelected: (index) {
+              setState(() {
+                _selectedFilterIndex = index;
+              });
+            },
+          ),
         ),
         const SizedBox(height: 16),
         Expanded(

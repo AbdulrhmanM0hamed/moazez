@@ -7,6 +7,7 @@ import 'package:moazez/feature/MyTasks/presentation/cubit/my_tasks_state.dart';
 import 'package:moazez/feature/MyTasks/presentation/widgets/my_task_card.dart';
 import 'package:moazez/feature/MyTasks/presentation/widgets/my_task_card_shimmer.dart';
 import 'package:moazez/feature/MyTasks/presentation/widgets/my_tasks_filter_tabs.dart';
+import 'package:moazez/core/widgets/empty_view.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/home_top_section.dart';
 
 class MyTasksView extends StatelessWidget {
@@ -87,8 +88,10 @@ class _MyTasksViewBodyState extends State<_MyTasksViewBody> {
                   }
 
                   if (filteredTasks.isEmpty) {
-                    return const Center(
-                        child: Text('لا توجد مهام تطابق هذا الفلتر'));
+                    return const EmptyView(
+                      imagePath: 'assets/images/tasksEmpty.png',
+                      message: 'لا توجد مهام تطابق هذا الفلتر',
+                    );
                   }
                   return ListView.builder(
                     padding: const EdgeInsets.only(top: 8, bottom: 16),

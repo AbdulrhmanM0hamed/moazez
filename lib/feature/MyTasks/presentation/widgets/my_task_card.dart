@@ -131,7 +131,7 @@ class MyTaskCard extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: theme.primaryColor.withOpacity(0.1),
+                    backgroundColor: theme.primaryColor.withValues(alpha: 0.1),
                     backgroundImage: _isValidUrl(task.creator.avatarUrl)
                         ? CachedNetworkImageProvider(task.creator.avatarUrl!)
                         : null,
@@ -205,7 +205,7 @@ class _TaskStatusBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-        color: info['color'].withOpacity(0.1),
+        color: info['color'].withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(

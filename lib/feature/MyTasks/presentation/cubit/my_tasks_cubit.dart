@@ -10,6 +10,9 @@ class MyTasksCubit extends Cubit<MyTasksState> {
   Future<void> getMyTasks({String? status}) async {
     emit(MyTasksLoading());
     final result = await getMyTasksUseCase(GetMyTasksParams(status: status));
+
+    if (isClosed) return;
+
     result.fold(
       (failure) => emit(MyTasksError(failure.message)),
       (tasks) => emit(MyTasksLoaded(tasks)),
