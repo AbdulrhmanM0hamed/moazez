@@ -1,4 +1,6 @@
-class TaskDetailsEntity {
+import 'package:equatable/equatable.dart';
+
+class TaskDetailsEntity extends Equatable {
   final int id;
   final String title;
   final String description;
@@ -38,6 +40,28 @@ class TaskDetailsEntity {
     this.rewardType,
     required this.rewardDistributed,
   });
+
+  @override
+  List<Object?> get props => [
+        id,
+        title,
+        description,
+        status,
+        progress,
+        priority,
+        startDate,
+        dueDate,
+        completedAt,
+        createdAt,
+        creator,
+        receiver,
+        team,
+        stages,
+        rewardAmount,
+        rewardDescription,
+        rewardType,
+        rewardDistributed,
+      ];
 }
 
 class TaskUserEntity {

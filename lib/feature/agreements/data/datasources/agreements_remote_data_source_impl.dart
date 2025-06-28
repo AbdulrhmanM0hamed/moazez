@@ -4,7 +4,6 @@ import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/utils/constant/api_endpoints.dart';
 import 'package:moazez/feature/agreements/data/datasources/agreements_remote_data_source.dart';
 import 'package:moazez/feature/agreements/data/models/task_model.dart';
-import 'package:moazez/feature/agreements/data/models/task_details_model.dart';
 import 'package:moazez/feature/agreements/data/models/team_member_model.dart';
 
 class AgreementsRemoteDataSourceImpl implements AgreementsRemoteDataSource {
@@ -68,24 +67,5 @@ class AgreementsRemoteDataSourceImpl implements AgreementsRemoteDataSource {
     }
   }
 
-  @override
-  Future<TaskDetailsModel> getTaskDetails({required int taskId}) async {
-    final token = await cacheService.getToken();
-    try {
-      final response = await dio.post(
-        ApiEndpoints.taskDetails,
-        data: {'task_id': taskId},
-        options: Options(headers: {'Authorization': 'Bearer $token'}),
-      );
-      if (response.statusCode == 200 && response.data != null) {
-        return TaskDetailsModel.fromJson(response.data['data']);
-      } else {
-        throw ServerException(message: 'Failed to get task details');
-      }
-    } on DioException catch (e) {
-      throw ServerException(
-        message: e.response?.data['message'] ?? 'Failed to get task details',
-      );
-    }
-  }
+
 }

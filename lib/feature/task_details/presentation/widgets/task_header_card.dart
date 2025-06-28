@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
-import 'package:moazez/feature/agreements/domain/entities/task_details_entity.dart';
-import 'package:moazez/feature/agreements/presentation/widgets/task_details/status_chip_ar.dart';
+import 'package:moazez/feature/task_details/domain/entites/task_details_entity.dart';
+import 'package:moazez/feature/task_details/presentation/widgets/status_chip_ar.dart';
 
 class TaskHeaderCard extends StatelessWidget {
   final TaskDetailsEntity taskDetails;

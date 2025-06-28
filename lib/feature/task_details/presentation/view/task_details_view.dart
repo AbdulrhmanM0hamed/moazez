@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
-import 'package:moazez/feature/agreements/domain/entities/task_details_entity.dart';
-import 'package:moazez/feature/agreements/presentation/cubit/task_details_cubit/task_details_cubit.dart';
-import 'package:moazez/feature/agreements/presentation/cubit/task_details_cubit/task_details_state.dart';
+import 'package:moazez/feature/task_details/domain/entites/task_details_entity.dart';
+import 'package:moazez/feature/task_details/presentation/cubit/task_details_cubit.dart';
+import 'package:moazez/feature/task_details/presentation/cubit/task_details_state.dart';
 import 'package:moazez/core/services/service_locator.dart' as di;
-import 'package:moazez/feature/agreements/presentation/widgets/task_details/task_details_info_card.dart';
-import 'package:moazez/feature/agreements/presentation/widgets/task_details/task_header_card.dart';
-import 'package:moazez/feature/agreements/presentation/widgets/task_details/task_progress_card.dart';
-import 'package:moazez/feature/agreements/presentation/widgets/task_details/task_reward_card.dart';
-import 'package:moazez/feature/agreements/presentation/widgets/task_details/task_stages_card.dart';
+import 'package:moazez/feature/task_details/presentation/widgets/task_details_info_card.dart';
+import 'package:moazez/feature/task_details/presentation/widgets/task_header_card.dart';
+import 'package:moazez/feature/task_details/presentation/widgets/task_progress_card.dart';
+import 'package:moazez/feature/task_details/presentation/widgets/task_reward_card.dart';
+import 'package:moazez/feature/task_details/presentation/widgets/task_stages_card.dart';
 
 class TaskDetailsView extends StatelessWidget {
   final int taskId;

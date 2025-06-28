@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
-import 'package:moazez/feature/agreements/domain/entities/task_details_entity.dart';
-import 'package:moazez/feature/agreements/presentation/widgets/task_details/info_tile.dart';
+import 'package:moazez/feature/task_details/domain/entites/task_details_entity.dart';
+import 'package:moazez/feature/task_details/presentation/widgets/info_tile.dart';
 
 class TaskDetailsInfoCard extends StatelessWidget {
   final TaskDetailsEntity taskDetails;

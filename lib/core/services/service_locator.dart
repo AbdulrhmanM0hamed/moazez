@@ -13,10 +13,12 @@ import 'package:moazez/feature/agreements/domain/usecases/get_team_members_useca
 import 'package:moazez/feature/agreements/presentation/cubit/create_task_cubit.dart';
 import 'package:moazez/feature/agreements/presentation/cubit/team_members_cubit.dart';
 import 'package:moazez/feature/agreements/domain/usecases/create_task_usecase.dart';
-
 import 'package:moazez/feature/agreements/domain/usecases/close_task_usecase.dart';
-import 'package:moazez/feature/agreements/domain/usecases/get_task_details_usecase.dart';
-import 'package:moazez/feature/agreements/presentation/cubit/task_details_cubit/task_details_cubit.dart';
+import 'package:moazez/feature/task_details/data/datasources/task_details_remote_datasoure.dart';
+import 'package:moazez/feature/task_details/data/repositories/task_detials_repository_impl.dart';
+import 'package:moazez/feature/task_details/domain/repositories/task_details_repository.dart';
+import 'package:moazez/feature/task_details/domain/usecase/task_details_usecase.dart';
+import 'package:moazez/feature/task_details/presentation/cubit/task_details_cubit.dart';
 import 'package:moazez/feature/agreements/presentation/cubit/close_task_cubit.dart';
 import 'package:moazez/feature/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:moazez/feature/auth/domain/usecases/send_password_reset_link_usecase.dart';
@@ -234,6 +236,14 @@ Future<void> init() async {
   sl.registerFactory(() => CloseTaskCubit(sl()));
 
   // Get Task Details
-  sl.registerLazySingleton(() => GetTaskDetailsUseCase(sl()));
+  sl.registerLazySingleton(() => TaskDetailsUseCase(sl()));
+  sl.registerLazySingleton<TaskDetailsRemoteDataSource>(
+    () => TaskDetailsRemoteDataSourceImpl(dio: sl(), cacheService: sl()),
+  );
+
+  sl.registerLazySingleton<TaskDetailsRepository>(
+    () => TaskDetailsRepositoryImpl(remoteDataSource: sl()),
+  );
+
   sl.registerFactory(() => TaskDetailsCubit(sl()));
 }

@@ -5,7 +5,7 @@ import 'package:moazez/feature/agreements/presentation/cubit/close_task_cubit.da
 import 'package:moazez/feature/agreements/presentation/widgets/gradient_progress_indicator.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/stages_indicator.dart';
 import 'package:moazez/core/utils/common/custom_dialog_button.dart';
-import 'package:moazez/feature/agreements/presentation/view/task_details_view.dart';
+import 'package:moazez/feature/task_details/presentation/view/task_details_view.dart';
 import 'package:moazez/feature/home_supporter/domain/entities/member_stats_entity.dart';
 
 class MemberTaskCard extends StatelessWidget {

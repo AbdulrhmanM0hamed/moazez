@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:moazez/feature/agreements/domain/entities/task_details_entity.dart';
+import 'package:moazez/feature/task_details/domain/entites/task_details_entity.dart';
 
 abstract class TaskDetailsState extends Equatable {
   const TaskDetailsState();
