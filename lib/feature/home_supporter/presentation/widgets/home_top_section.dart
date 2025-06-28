@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:moazez/core/utils/common/custom_text_field.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
+import 'package:moazez/feature/search/presentation/cubit/search_cubit.dart';
+import 'package:moazez/feature/search/presentation/widgets/search_results_bottom_sheet.dart';
 import 'home_header.dart';
 
 class HomeTopSection extends StatelessWidget {
@@ -9,9 +12,57 @@ class HomeTopSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => sl<SearchCubit>(),
+      child: const _HomeTopSectionContent(),
+    );
+  }
+}
+
+class _HomeTopSectionContent extends StatefulWidget {
+  const _HomeTopSectionContent();
+
+  @override
+  State<_HomeTopSectionContent> createState() => _HomeTopSectionContentState();
+}
+
+class _HomeTopSectionContentState extends State<_HomeTopSectionContent> {
+  final _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _showSearchBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (bottomSheetContext) {
+        return BlocProvider.value(
+          value: context.read<SearchCubit>(),
+          child: const SearchResultsBottomSheet(),
+        );
+      },
+    ).whenComplete(() {
+      context.read<SearchCubit>().resetSearch();
+    });
+  }
+
+  void _triggerSearch() {
+    final query = _searchController.text.trim();
+    if (query.isNotEmpty) {
+      context.read<SearchCubit>().performSearch(query);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       decoration: const BoxDecoration(
         color: AppColors.primary,
         borderRadius: BorderRadius.only(
@@ -32,18 +83,30 @@ class HomeTopSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          // Search field
-          SizedBox(
-            height: 50, // Reduce the height of the text field
-            child: CustomTextField(
-              
-              hint: 'ابحث...',
-              prefix: const Icon(Icons.search, size: 35, color: AppColors.textSecondary),
-              fillColor: Theme.of(context).scaffoldBackgroundColor,
-              keyboardType: TextInputType.text,
-              onSubmitted: (v) {},
-              textAlign: TextAlign.right,
-              textDirection: TextDirection.rtl,
+          GestureDetector(
+            onTap: _showSearchBottomSheet,
+            child: Container(
+              height: 45,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'ابحث عن مهمة...',
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
+                      fontSize: 16,
+                      color: AppColors.textSecondary,
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
+                  const Icon(Icons.search, size: 30, color: AppColors.textSecondary),
+                ],
+              ),
             ),
           ),
         ],

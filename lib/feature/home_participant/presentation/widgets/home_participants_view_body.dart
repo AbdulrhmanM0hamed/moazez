@@ -102,6 +102,7 @@ class HomeParticipantsViewBody extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final task = currentTasks[index];
                           return CurrentTasksCard(
+                            taskId: task.id,
                             status: statusMap[task.status] ?? task.status,
                             title: task.title,
                             progress: task.progress.toDouble(),

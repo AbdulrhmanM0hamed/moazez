@@ -14,6 +14,11 @@ import 'package:moazez/feature/agreements/presentation/cubit/create_task_cubit.d
 import 'package:moazez/feature/agreements/presentation/cubit/team_members_cubit.dart';
 import 'package:moazez/feature/agreements/domain/usecases/create_task_usecase.dart';
 import 'package:moazez/feature/agreements/domain/usecases/close_task_usecase.dart';
+import 'package:moazez/feature/search/data/datasources/search_remote_data_source.dart';
+import 'package:moazez/feature/search/data/repositories/search_repository_impl.dart';
+import 'package:moazez/feature/search/domain/repositories/search_repository.dart';
+import 'package:moazez/feature/search/domain/usecases/search_usecase.dart';
+import 'package:moazez/feature/search/presentation/cubit/search_cubit.dart';
 import 'package:moazez/feature/task_details/data/datasources/task_details_remote_datasoure.dart';
 import 'package:moazez/feature/task_details/data/repositories/task_detials_repository_impl.dart';
 import 'package:moazez/feature/task_details/domain/repositories/task_details_repository.dart';
@@ -143,6 +148,16 @@ Future<void> init() async {
   sl.registerLazySingleton<RewardRepository>(
     () => RewardRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()),
   );
+
+  //############################################################################
+  //                           Features - Search
+  //############################################################################
+  sl.registerFactory(() => SearchCubit(searchUseCase: sl()));
+  sl.registerLazySingleton(() => SearchUseCase(repository: sl()));
+  sl.registerLazySingleton<SearchRepository>(
+      () => SearchRepositoryImpl(remoteDataSource: sl()));
+  sl.registerLazySingleton<SearchRemoteDataSource>(
+      () => SearchRemoteDataSourceImpl(dio: sl()));
   sl.registerLazySingleton<RewardRemoteDataSource>(
     () => RewardRemoteDataSourceImpl(dio: sl()),
   );

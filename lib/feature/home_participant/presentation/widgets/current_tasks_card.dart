@@ -1,62 +1,76 @@
+import 'package:dartz/dartz.dart' as task;
 import 'package:flutter/material.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/gradient_progress_indicator.dart';
+import 'package:moazez/feature/task_details/presentation/view/task_details_view.dart';
 
 class CurrentTasksCard extends StatelessWidget {
   final String status;
   final String title;
   final double progress;
+  final int taskId;
 
   const CurrentTasksCard({
     super.key,
     required this.status,
     required this.title,
     required this.progress,
+    required this.taskId,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.09),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
+    return GestureDetector(
+      onTap: () {
+          Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TaskDetailsView(taskId: taskId),
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Text(
-                  title,
-                  style: getBoldStyle(
-                    fontFamily: FontConstant.cairo,
-                    fontSize: FontSize.size16,
-                    color: theme.textTheme.bodyLarge?.color,
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: theme.cardColor,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.09),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Text(
+                    title,
+                    style: getBoldStyle(
+                      fontFamily: FontConstant.cairo,
+                      fontSize: FontSize.size16,
+                      color: theme.textTheme.bodyLarge?.color,
+                    ),
+                    softWrap: true,
                   ),
-                  softWrap: true,
                 ),
-              ),
-              const SizedBox(width: 16),
-              _buildStatusBadge(context),
-            ],
-          ),
-          const SizedBox(height: 16),
-          _buildProgressRow(context),
-        ],
+                const SizedBox(width: 16),
+                _buildStatusBadge(context),
+              ],
+            ),
+            const SizedBox(height: 16),
+            _buildProgressRow(context),
+          ],
+        ),
       ),
     );
   }
