@@ -10,16 +10,17 @@ class AgreementsRemoteDataSourceImpl implements AgreementsRemoteDataSource {
   final Dio dio;
   final CacheService cacheService;
 
-  AgreementsRemoteDataSourceImpl({required this.dio, required this.cacheService});
+  AgreementsRemoteDataSourceImpl({
+    required this.dio,
+    required this.cacheService,
+  });
 
   @override
   Future<List<TeamMemberModel>> getTeamMembers() async {
     final token = await cacheService.getToken();
     final response = await dio.get(
       ApiEndpoints.teamMembers,
-      options: Options(
-        headers: {'Authorization': 'Bearer $token'},
-      ),
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
     );
 
     if (response.statusCode == 200 && response.data != null) {
@@ -37,31 +38,32 @@ class AgreementsRemoteDataSourceImpl implements AgreementsRemoteDataSource {
       await dio.post(
         ApiEndpoints.createTask, // Assuming this endpoint exists
         data: task.toJson(),
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
     } on DioError catch (e) {
-      throw ServerException(message: e.response?.data['message'] ?? 'Failed to create task');
+      throw ServerException(
+        message: e.response?.data['message'] ?? 'Failed to create task',
+      );
     }
   }
 
   @override
-  Future<void> closeTask({required String taskId, required String status}) async {
+  Future<String> closeTask({
+    required String taskId,
+    required String status,
+  }) async {
     final token = await cacheService.getToken();
     try {
-      await dio.post(
+      final response = await dio.post(
         ApiEndpoints.closeTask,
-        data: {
-          'task_id': taskId,
-          'status': status,
-        },
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
+        data: {'task_id': taskId, 'status': status},
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
+      return response.data['message'] as String? ?? 'تم تحديث حالة المهم بنجاح';
     } on DioError catch (e) {
-      throw ServerException(message: e.response?.data['message'] ?? 'Failed to close task');
+      throw ServerException(
+        message: e.response?.data['message'] ?? 'فشل تحديث حالة المهمة',
+      );
     }
   }
 }

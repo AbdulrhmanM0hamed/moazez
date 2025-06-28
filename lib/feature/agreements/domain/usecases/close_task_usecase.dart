@@ -8,7 +8,7 @@ class CloseTaskUseCase {
 
   CloseTaskUseCase(this.repository);
 
-  Future<Either<Failure, void>> call(CloseTaskParams params) async {
+  Future<Either<Failure, String>> call(CloseTaskParams params) async {
     return await repository.closeTask(
       taskId: params.taskId,
       status: params.status,

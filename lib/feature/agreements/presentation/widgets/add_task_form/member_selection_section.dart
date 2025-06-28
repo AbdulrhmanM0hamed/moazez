@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/feature/agreements/domain/entities/team_member.dart';
 import 'package:moazez/feature/agreements/presentation/cubit/team_members_cubit.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/custom_task_text_field.dart';
-import 'package:moazez/feature/agreements/presentation/widgets/team_member_selection_dialog.dart';
+import 'package:moazez/feature/agreements/presentation/widgets/add_task_form/team_member_selection_dialog.dart';
 
 class MemberSelectionSection extends StatelessWidget {
   final List<TeamMember> selectedMembers;

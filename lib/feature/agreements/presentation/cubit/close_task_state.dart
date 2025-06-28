@@ -11,7 +11,14 @@ class CloseTaskInitial extends CloseTaskState {}
 
 class CloseTaskLoading extends CloseTaskState {}
 
-class CloseTaskSuccess extends CloseTaskState {}
+class CloseTaskSuccess extends CloseTaskState {
+  final String message;
+
+  const CloseTaskSuccess(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
 
 class CloseTaskFailure extends CloseTaskState {
   final String message;

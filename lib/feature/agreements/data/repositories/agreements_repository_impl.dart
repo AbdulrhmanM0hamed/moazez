@@ -34,12 +34,12 @@ class AgreementsRepositoryImpl implements AgreementsRepository {
   }
 
   @override
-  Future<Either<Failure, void>> closeTask({required String taskId, required String status}) async {
+  Future<Either<Failure, String>> closeTask({required String taskId, required String status}) async {
     try {
-      await remoteDataSource.closeTask(taskId: taskId, status: status);
-      return const Right(null);
+      final message = await remoteDataSource.closeTask(taskId: taskId, status: status);
+      return Right(message);
     } on ServerException catch (e) {
-      return Left(ServerFailure(message: e.message ?? 'An unexpected error occurred'));
+      return Left(ServerFailure(message: e.message ?? 'حدث خطأ'));
     }
   }
 }

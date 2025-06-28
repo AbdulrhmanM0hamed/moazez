@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/feature/agreements/presentation/cubit/close_task_cubit.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/gradient_progress_indicator.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/stages_indicator.dart';
+import 'package:moazez/core/utils/common/custom_dialog_button.dart';
 import 'package:moazez/feature/home_supporter/domain/entities/member_stats_entity.dart';
 
 class MemberTaskCard extends StatelessWidget {
@@ -25,28 +26,45 @@ class MemberTaskCard extends StatelessWidget {
 
 
   void _showConfirmationDialog(BuildContext context, String taskId, String status) {
+    final statusText = status == 'completed' ? 'مكتمل' : 'غير مكتمل';
+
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: const Text('تأكيد'),
-          content: const Text('هل أنت متأكد أنك تريد تحديث حالة هذه المهمة؟'),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Text('تأكيد تحديث الحالة', style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.center),
+          content: Text(
+            'هل أنت متأكد من تحديث حالة المهمة إلى "$statusText"؟',
+            textAlign: TextAlign.center,
+          ),
+          actionsAlignment: MainAxisAlignment.center,
+          actionsPadding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
           actions: <Widget>[
-            TextButton(
-              child: const Text('إلغاء'),
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('تأكيد'),
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-                context.read<CloseTaskCubit>().closeTask(
-                      taskId: taskId,
-                      status: status,
-                    );
-              },
+            Row(
+              children: [
+                Expanded(
+                  child: CustomDialogButton(
+                    text: 'إلغاء',
+                    onPressed: () => Navigator.of(dialogContext).pop(),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: CustomDialogButton(
+                    text: 'تأكيد',
+                    backgroundColor: const Color(0xFF28A745), // Success Green
+                    textColor: Colors.white,
+                    onPressed: () {
+                      Navigator.of(dialogContext).pop();
+                      context.read<CloseTaskCubit>().closeTask(
+                            taskId: taskId,
+                            status: status,
+                          );
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         );
@@ -118,22 +136,32 @@ class MemberTaskCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                PopupMenuButton<String>(
-                  onSelected: (value) {
-                    _showConfirmationDialog(context, task.id.toString(), value);
-                  },
-                  itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                    const PopupMenuItem<String>(
-                      value: 'completed',
-                      child: Text('مكتمل'),
-                    ),
-                    const PopupMenuItem<String>(
-                      value: 'not_completed',
-                      child: Text('غير مكتمل'),
-                    ),
-                  ],
-                ),
+                if (task.status != 'completed')
+                  PopupMenuButton<String>(
+                    onSelected: (value) {
+                      _showConfirmationDialog(context, task.id.toString(), value);
+                    },
+                    itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                      const PopupMenuItem<String>(
+                        value: 'completed',
+                        child: Text('مكتمل'),
+                      ),
+                      const PopupMenuItem<String>(
+                        value: 'not_completed',
+                        child: Text('غير مكتمل'),
+                      ),
+                    ],
+                  )
+                else
+                  // Reserve space to keep the layout consistent
+                  const SizedBox(width: 48.0),
               ],
+            ),
+            const SizedBox(height: 12),
+            // Status Badge
+            Align(
+              alignment: Alignment.centerRight,
+              child: _TaskStatusBadge(status: task.status),
             ),
             const SizedBox(height: 16),
             // Progress
@@ -221,6 +249,68 @@ class MemberTaskCard extends StatelessWidget {
         const SizedBox(height: 8),
         indicator,
       ],
+    );
+  }
+}
+
+class _TaskStatusBadge extends StatelessWidget {
+  final String status;
+
+  const _TaskStatusBadge({required this.status});
+
+  @override
+  Widget build(BuildContext context) {
+    String text;
+    Color backgroundColor;
+    Color foregroundColor;
+    IconData icon;
+
+    switch (status) {
+      case 'completed':
+        text = 'مكتمل';
+        backgroundColor = const Color(0xFFE4F8E9); // Light Green
+        foregroundColor = const Color(0xFF28A745); // Dark Green
+        icon = Icons.check_circle;
+        break;
+      case 'in_progress':
+        text = 'قيد التنفيذ';
+        backgroundColor = const Color(0xFFE0F7FA); // Light Blue
+        foregroundColor = const Color(0xFF007BFF); // Dark Blue
+        icon = Icons.play_circle_outline;
+        break;
+      case 'pending':
+        text = 'معلق';
+        backgroundColor = const Color(0xFFFFF3E0); // Light Orange
+        foregroundColor = const Color(0xFFFD7E14); // Dark Orange
+        icon = Icons.pause_circle_outline;
+        break;
+      default:
+        text = status;
+        backgroundColor = Colors.grey.shade200;
+        foregroundColor = Colors.grey.shade800;
+        icon = Icons.help_outline;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: foregroundColor),
+          const SizedBox(width: 6),
+          Text(
+            text,
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: foregroundColor,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

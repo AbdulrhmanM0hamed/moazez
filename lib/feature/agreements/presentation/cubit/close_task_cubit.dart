@@ -12,7 +12,7 @@ class CloseTaskCubit extends Cubit<CloseTaskState> {
     final result = await closeTaskUseCase(CloseTaskParams(taskId: taskId, status: status));
     result.fold(
       (failure) => emit(CloseTaskFailure(failure.message)),
-      (_) => emit(CloseTaskSuccess()),
+      (message) => emit(CloseTaskSuccess(message)),
     );
   }
 }

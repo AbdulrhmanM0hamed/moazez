@@ -4,7 +4,7 @@ import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/feature/agreements/presentation/cubit/create_task_cubit.dart';
 import 'package:moazez/feature/agreements/presentation/cubit/team_members_cubit.dart';
-import 'package:moazez/feature/agreements/presentation/widgets/add_task_form.dart';
+import 'package:moazez/feature/agreements/presentation/widgets/add_task_form/add_task_form.dart';
 
 class AddTaskView extends StatelessWidget {
   const AddTaskView({super.key});

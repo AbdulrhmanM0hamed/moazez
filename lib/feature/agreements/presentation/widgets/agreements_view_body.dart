@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/member_task_card.dart';

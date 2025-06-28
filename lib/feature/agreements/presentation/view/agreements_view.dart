@@ -6,6 +6,7 @@ import 'package:moazez/feature/agreements/presentation/widgets/agreements_view_b
 import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_cubit.dart';
 import 'package:moazez/feature/agreements/presentation/cubit/close_task_cubit.dart';
 import 'package:moazez/feature/agreements/presentation/cubit/close_task_state.dart';
+import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 
 class AgreementsView extends StatelessWidget {
   const AgreementsView({super.key});
@@ -26,13 +27,15 @@ class AgreementsView extends StatelessWidget {
           body: BlocListener<CloseTaskCubit, CloseTaskState>(
             listener: (context, state) {
               if (state is CloseTaskSuccess) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('تم تحديث حالة المهمة بنجاح')),
+                CustomSnackbar.showSuccess(
+                  context: context,
+                  message: state.message,
                 );
                 context.read<MemberStatsCubit>().fetchMemberTaskStats();
               } else if (state is CloseTaskFailure) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.message)),
+                CustomSnackbar.showError(
+                  context: context,
+                  message: state.message,
                 );
               }
             },

@@ -5,5 +5,5 @@ import 'package:moazez/feature/agreements/data/models/task_model.dart';
 abstract class AgreementsRemoteDataSource {
   Future<List<TeamMemberModel>> getTeamMembers();
   Future<void> createTask(TaskModel task);
-  Future<void> closeTask({required String taskId, required String status});
+  Future<String> closeTask({required String taskId, required String status});
 }
