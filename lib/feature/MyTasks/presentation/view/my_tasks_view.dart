@@ -93,13 +93,19 @@ class _MyTasksViewBodyState extends State<_MyTasksViewBody> {
                       message: 'لا توجد مهام تطابق هذا الفلتر',
                     );
                   }
-                  return ListView.builder(
-                    padding: const EdgeInsets.only(top: 8, bottom: 16),
-                    itemCount: filteredTasks.length,
-                    itemBuilder: (context, index) {
-                      final task = filteredTasks[index];
-                      return MyTaskCard(task: task);
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      await context.read<MyTasksCubit>().getMyTasks();
+                      return Future.delayed(const Duration(seconds: 1));
                     },
+                    child: ListView.builder(
+                      padding: const EdgeInsets.only(top: 8, bottom: 16),
+                      itemCount: filteredTasks.length,
+                      itemBuilder: (context, index) {
+                        final task = filteredTasks[index];
+                        return MyTaskCard(task: task);
+                      },
+                    ),
                   );
                 }
                 return const SizedBox.shrink();

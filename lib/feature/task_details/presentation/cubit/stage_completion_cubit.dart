@@ -38,11 +38,16 @@ class StageCompletionCubit extends Cubit<StageCompletionState> {
   Future<void> updateImage(String imagePath) async {
     try {
       _image = imagePath;
-      emit(StageCompletionUpdated());
+      emit(StageCompletionUpdated(image: imagePath));
     } catch (e) {
       print('Error updating image: $e');
       emit(StageCompletionError(message: 'فشل في معالجة الصورة'));
     }
+  }
+
+  void removeImage() {
+    _image = null;
+    emit(StageCompletionUpdated());
   }
 
   String? get image => _image;

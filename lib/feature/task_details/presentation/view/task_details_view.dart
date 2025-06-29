@@ -11,6 +11,7 @@ import 'package:moazez/feature/task_details/presentation/widgets/task_header_car
 import 'package:moazez/feature/task_details/presentation/widgets/task_progress_card.dart';
 import 'package:moazez/feature/task_details/presentation/widgets/task_reward_card.dart';
 import 'package:moazez/feature/task_details/presentation/widgets/task_stages_card.dart';
+import 'package:moazez/feature/task_details/presentation/cubit/stage_completion_cubit.dart';
 
 class TaskDetailsView extends StatelessWidget {
   final int taskId;
@@ -65,7 +66,10 @@ class _TaskDetailsContent extends StatelessWidget {
           const SizedBox(height: 16),
           TaskDetailsInfoCard(taskDetails: taskDetails),
           const SizedBox(height: 16),
-          TaskStagesCard(stages: taskDetails.stages),
+          BlocProvider(
+            create: (context) => di.sl<StageCompletionCubit>(),
+            child: TaskStagesCard(stages: taskDetails.stages),
+          ),
           if (hasAmount || hasDescription)
             Padding(
               padding: const EdgeInsets.only(top: 16.0),

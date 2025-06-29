@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moazez/core/services/service_locator.dart' as di;
+import 'package:moazez/core/services/cache/cache_service.dart';
+import 'package:moazez/core/services/service_locator.dart';
+
 import 'package:moazez/core/utils/constant/font_manger.dart';
-import 'package:moazez/feature/task_details/domain/usecases/complete_stage_usecase.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/task_details/domain/entities/task_details_entity.dart';
@@ -35,85 +36,86 @@ class TaskStagesCard extends StatelessWidget {
             fontFamily: FontConstant.cairo,
           ),
         ),
-        children:
-            stages.map((stage) {
-              final statusColor =
-                  StatusChipAr.statusColor[stage.status.toLowerCase()] ??
-                  Colors.grey;
-              final IconData statusIcon;
-              switch (stage.status.toLowerCase()) {
-                case 'completed':
-                  statusIcon = Icons.check_circle_outline;
-                  break;
-                case 'in_progress':
-                  statusIcon = Icons.hourglass_top_outlined;
-                  break;
-                case 'pending':
-                  statusIcon = Icons.pending_outlined;
-                  break;
-                default:
-                  statusIcon = Icons.help_outline;
-              }
-
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: statusColor.withValues(alpha: 0.1),
-                  child: Icon(statusIcon, color: statusColor, size: 22),
-                ),
-                title: Text(
-                  stage.title,
-                  style: getMediumStyle(
-                    color: AppColors.textPrimary,
-                    fontFamily: FontConstant.cairo,
-                  ),
-                ),
-                subtitle:
-                    stage.description.isNotEmpty
-                        ? Text(
-                          stage.description,
-                          style: getMediumStyle(
-                            color: AppColors.textSecondary,
-                            fontSize: 13,
-                            fontFamily: FontConstant.cairo,
-                          ),
-                        )
-                        : null,
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    StatusChipAr(status: stage.status),
-                    if (stage.status.toLowerCase() == 'in_progress' ||
-                        stage.status.toLowerCase() == 'pending')
-                      IconButton(
-                        icon: Icon(Icons.check_circle, color: Colors.green),
-                        onPressed: () {
-                          showDialog<bool>(
-                            context: context,
-                            builder: (dialogContext) => BlocProvider(
-                              create: (context) => StageCompletionCubit(
-                                completeStageUseCase: di.sl<CompleteStageUseCase>(),
-                              ),
-                              child: StageCompletionDialog(
-                                stageId: stage.id,
-                                stageTitle: stage.title,
-                                onComplete: (success) {
-                                  if (success) {
-                                    // Trigger a refresh of task details
-                                    context
-                                        .read<TaskDetailsCubit>()
-                                        .fetchTaskDetails(stage.taskId);
-                                  }
-                                },
-                              ),
-                            ),
-                          );
-                        },
-                        tooltip: 'إكمال المرحلة',
+        children: stages.map((stage) {
+          final statusColor =
+              StatusChipAr.statusColor[stage.status.toLowerCase()] ??
+              Colors.grey;
+          final IconData statusIcon;
+          switch (stage.status.toLowerCase()) {
+            case 'completed':
+              statusIcon = Icons.check_circle_outline;
+              break;
+            case 'in_progress':
+              statusIcon = Icons.hourglass_top_outlined;
+              break;
+            case 'pending':
+              statusIcon = Icons.pending_outlined;
+              break;
+            default:
+              statusIcon = Icons.help_outline;
+          }
+          return ListTile(
+            leading: CircleAvatar(
+              backgroundColor: statusColor.withValues(alpha: 0.1),
+              child: Icon(statusIcon, color: statusColor, size: 22),
+            ),
+            title: Text(
+              stage.title,
+              style: getMediumStyle(
+                color: AppColors.textPrimary,
+                fontFamily: FontConstant.cairo,
+              ),
+            ),
+            subtitle:
+                stage.description.isNotEmpty
+                    ? Text(
+                      stage.description,
+                      style: getMediumStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 13,
+                        fontFamily: FontConstant.cairo,
                       ),
-                  ],
-                ),
-              );
-            }).toList(),
+                    )
+                    : null,
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                StatusChipAr(status: stage.status),
+                if (stage.status.toLowerCase() == 'in_progress' ||
+                    stage.status.toLowerCase() == 'pending')
+                  FutureBuilder<String?>(
+                    future: sl<CacheService>().getUserRole(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData && snapshot.data?.toLowerCase() != 'supporter') {
+                        return IconButton(
+                          icon: Icon(Icons.check_circle, color: Colors.green),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (dialogContext) {
+                                return BlocProvider.value(
+                                  value: BlocProvider.of<StageCompletionCubit>(context),
+                                  child: StageCompletionDialog(
+                                    parentContext: context,
+                                    stageId: stage.id,
+                                    stageTitle: stage.title,
+                                    onComplete: () {
+                                      context.read<TaskDetailsCubit>().fetchTaskDetails(stage.taskId);
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+              ],
+            ),
+          );
+        }).toList(),
       ),
     );
   }
