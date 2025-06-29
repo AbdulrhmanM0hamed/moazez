@@ -3,43 +3,28 @@ import 'package:moazez/feature/task_details/domain/entities/stage_completion_ent
 class StageCompletionModel extends StageCompletionEntity {
   const StageCompletionModel({
     required int id,
-    required String title,
-    required String description,
-    required String status,
-    required int stageNumber,
     String? proofNotes,
-    String? proofFiles,
+    String? proofImage,
   }) : super(
           id: id,
-          title: title,
-          description: description,
-          status: status,
-          stageNumber: stageNumber,
           proofNotes: proofNotes,
-          proofFiles: proofFiles,
+          proofImage: proofImage,
         );
 
   factory StageCompletionModel.fromJson(Map<String, dynamic> json) {
+    final data = json['data'] ?? {};
     return StageCompletionModel(
-      id: json['id'],
-      title: json['title'],
-      description: json['description'],
-      status: json['status'],
-      stageNumber: json['stage_number'],
-      proofNotes: json['proof_notes'],
-      proofFiles: json['proof_files'],
+      id: data['id'] ?? 0,
+      proofNotes: data['proof_notes'] ?? '',
+      proofImage: data['proof_image'] ?? '',
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'title': title,
-      'description': description,
-      'status': status,
-      'stage_number': stageNumber,
       'proof_notes': proofNotes,
-      'proof_files': proofFiles,
+      'proof_image': proofImage ?? '',
     };
   }
 }

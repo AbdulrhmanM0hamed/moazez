@@ -114,11 +114,8 @@ class _StageCompletionDialogState extends State<StageCompletionDialog> {
                     child: StageCompletionImagePicker(
                       parentContext: widget.parentContext,
                       imagePath: context.read<StageCompletionCubit>().image,
-                      onImageSelected: () async {
-                        final imagePath = await _pickImage();
-                        if (imagePath != null) {
-                          context.read<StageCompletionCubit>().updateImage(imagePath);
-                        }
+                      onImageSelected: (imagePath) {
+                        context.read<StageCompletionCubit>().updateImage(imagePath);
                       },
                       onImageRemoved: () {
                         context.read<StageCompletionCubit>().removeImage();

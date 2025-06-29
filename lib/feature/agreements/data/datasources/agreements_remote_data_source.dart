@@ -1,6 +1,4 @@
-import 'package:moazez/feature/task_details/data/model/task_details_model.dart';
 import 'package:moazez/feature/agreements/data/models/team_member_model.dart';
-
 import 'package:moazez/feature/agreements/data/models/task_model.dart';
 
 abstract class AgreementsRemoteDataSource {

@@ -13,6 +13,18 @@ class StatusChipAr extends StatelessWidget {
     'pending': 'معلقة',
     'not_completed': 'غير مكتملة',
   };
+
+  static const Map<String, String> statusText = {
+    'pending': 'Pending',
+    'in_progress': 'In Progress',
+    'completed': 'Completed',
+  };
+
+  static const Map<String, String> statusTextAr = {
+    'pending': 'في الانتظار',
+    'in_progress': 'قيد التنفيذ',
+    'completed': 'مكتمل',
+  };
   static const Map<String, Color> statusColor = {
     'completed': Colors.green,
     'in_progress': Colors.blue,

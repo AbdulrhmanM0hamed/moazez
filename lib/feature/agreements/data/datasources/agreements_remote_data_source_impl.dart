@@ -35,15 +35,38 @@ class AgreementsRemoteDataSourceImpl implements AgreementsRemoteDataSource {
   Future<void> createTask(TaskModel task) async {
     final token = await cacheService.getToken();
     try {
-      await dio.post(
-        ApiEndpoints.createTask, // Assuming this endpoint exists
+      final response = await dio.post(
+        '${ApiEndpoints.baseUrl}${ApiEndpoints.createTask}',
         data: task.toJson(),
-        options: Options(headers: {'Authorization': 'Bearer $token'}),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+          validateStatus:
+              (status) => status != null && status >= 200 && status < 300,
+        ),
       );
+
+      if (response.statusCode != 201) {
+        throw ServerException(
+          message: 'فشل في إنشاء المهمة. كود الخطأ: ${response.statusCode}',
+        );
+      }
     } on DioException catch (e) {
-      throw ServerException(
-        message: e.response?.data['message'] ?? 'Failed to create task',
-      );
+      if (e.response != null && e.response!.data != null) {
+        throw ServerException(
+          message:
+              e.response!.data['message'] ??
+              'فشل في إنشاء المهمة. تفاصيل الخطأ: ${e.response!.data}',
+        );
+      } else {
+        throw ServerException(
+          message: 'حدث خطأ أثناء الاتصال بالخادم. تفاصيل الخطأ: ${e.message}',
+        );
+      }
+    } catch (e) {
+      throw ServerException(message: 'حدث خطأ غير متوقع: $e');
     }
   }
 
@@ -66,6 +89,4 @@ class AgreementsRemoteDataSourceImpl implements AgreementsRemoteDataSource {
       );
     }
   }
-
-
 }

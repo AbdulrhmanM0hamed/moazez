@@ -4,7 +4,6 @@ import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/utils/constant/api_endpoints.dart';
 import 'package:moazez/feature/task_details/data/model/stage_completion_model.dart';
 import 'package:moazez/feature/task_details/data/model/task_details_model.dart';
-import 'package:moazez/feature/task_details/domain/entities/stage_completion_entity.dart';
 
 abstract class TaskDetailsRemoteDataSource {
   Future<TaskDetailsModel> getTaskDetails({required int taskId});

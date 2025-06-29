@@ -7,7 +7,7 @@ import 'package:moazez/core/widgets/custom_snackbar.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 
 class StageCompletionImagePicker extends StatefulWidget {
-  final VoidCallback? onImageSelected;
+  final Function(String)? onImageSelected;
   final VoidCallback? onImageRemoved;
   final BuildContext parentContext;
   final String? imagePath;
@@ -93,6 +93,7 @@ class _StageCompletionImagePickerState
                                       setState(() {
                                         _imagePath = pickedFile.path;
                                       });
+                                      widget.onImageSelected?.call(pickedFile.path);
                                       CustomSnackbar.show(
                                         context: widget.parentContext,
                                         message: 'تم اختيار الصورة بنجاح من المعرض',
@@ -131,6 +132,7 @@ class _StageCompletionImagePickerState
                                       setState(() {
                                         _imagePath = pickedFile.path;
                                       });
+                                      widget.onImageSelected?.call(pickedFile.path);
                                       CustomSnackbar.show(
                                         context: widget.parentContext,
                                         message: 'تم اختيار الصورة بنجاح من الكاميرا',
