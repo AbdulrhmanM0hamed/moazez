@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
-import 'package:moazez/feature/task_details/domain/entites/task_details_entity.dart';
+import 'package:moazez/feature/task_details/domain/entities/task_details_entity.dart';
 import 'package:moazez/feature/task_details/presentation/widgets/info_tile.dart';
 
 class TaskRewardCard extends StatelessWidget {

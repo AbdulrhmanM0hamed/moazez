@@ -51,12 +51,7 @@ class _HomeTopSectionContentState extends State<_HomeTopSectionContent> {
     });
   }
 
-  void _triggerSearch() {
-    final query = _searchController.text.trim();
-    if (query.isNotEmpty) {
-      context.read<SearchCubit>().performSearch(query);
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@ import 'package:moazez/feature/auth/domain/entities/auth_entity.dart';
 import 'package:moazez/feature/auth/domain/usecases/register_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
+import 'package:moazez/core/services/service_locator.dart';
 
 part 'register_state.dart';
 
@@ -31,7 +32,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       (failure) => emit(RegisterError(message: failure.message)),
       (authEntity) {
         emit(RegisterSuccess(authEntity: authEntity));
-        teamCubit.createTeam("فريقى");
+        sl<TeamCubit>().createTeam("فريقى");
       },
     );
   }

@@ -23,7 +23,12 @@ import 'package:moazez/feature/task_details/data/datasources/task_details_remote
 import 'package:moazez/feature/task_details/data/repositories/task_detials_repository_impl.dart';
 import 'package:moazez/feature/task_details/domain/repositories/task_details_repository.dart';
 import 'package:moazez/feature/task_details/domain/usecase/task_details_usecase.dart';
+import 'package:moazez/feature/task_details/domain/usecases/complete_stage_usecase.dart';
+import 'package:moazez/feature/task_details/domain/repositories/stage_completion_repository.dart';
+import 'package:moazez/feature/task_details/data/repositories/stage_completion_repository_impl.dart';
+import 'package:moazez/feature/task_details/data/repositories/task_detials_repository_impl.dart';
 import 'package:moazez/feature/task_details/presentation/cubit/task_details_cubit.dart';
+import 'package:moazez/feature/task_details/presentation/cubit/stage_completion_cubit.dart';
 import 'package:moazez/feature/MyTasks/data/datasources/my_tasks_remote_data_source.dart';
 import 'package:moazez/feature/MyTasks/data/datasources/my_tasks_remote_data_source_impl.dart';
 import 'package:moazez/feature/MyTasks/data/repositories/my_tasks_repository_impl.dart';
@@ -266,7 +271,14 @@ Future<void> init() async {
     () => TaskDetailsRepositoryImpl(remoteDataSource: sl()),
   );
 
-    sl.registerFactory(() => TaskDetailsCubit(sl()));
+  sl.registerFactory(() => TaskDetailsCubit(sl()));
+
+  // Complete Stage
+  sl.registerLazySingleton<StageCompletionRepository>(
+    () => StageCompletionRepositoryImpl(remoteDataSource: sl()),
+  );
+  sl.registerLazySingleton(() => CompleteStageUseCase(repository :sl()));
+  sl.registerFactory(() => StageCompletionCubit(completeStageUseCase: sl()));
 
   // My Tasks
   sl.registerLazySingleton<MyTasksRemoteDataSource>(

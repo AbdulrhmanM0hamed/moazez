@@ -6,7 +6,7 @@ import 'package:moazez/feature/agreements/domain/entities/team_member.dart';
 import 'package:moazez/feature/agreements/domain/repositories/agreements_repository.dart';
 import 'package:moazez/feature/agreements/data/models/task_model.dart';
 import 'package:moazez/feature/agreements/domain/entities/task.dart';
-import 'package:moazez/feature/task_details/domain/entites/task_details_entity.dart';
+import 'package:moazez/feature/task_details/domain/entities/task_details_entity.dart';
 
 class AgreementsRepositoryImpl implements AgreementsRepository {
   final AgreementsRemoteDataSource remoteDataSource;

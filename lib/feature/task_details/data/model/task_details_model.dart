@@ -1,4 +1,4 @@
-import 'package:moazez/feature/task_details/domain/entites/task_details_entity.dart';
+import 'package:moazez/feature/task_details/domain/entities/task_details_entity.dart';
 
 class TaskDetailsModel extends TaskDetailsEntity {
   TaskDetailsModel({

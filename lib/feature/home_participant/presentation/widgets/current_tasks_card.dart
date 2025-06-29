@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart' as task;
 import 'package:flutter/material.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
@@ -78,7 +77,7 @@ class CurrentTasksCard extends StatelessWidget {
   Widget _buildStatusBadge(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: _getStatusColor(context, status).withOpacity(0.08),
+        color: _getStatusColor(context, status).withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
