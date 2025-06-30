@@ -211,7 +211,7 @@ class PackageCard extends StatelessWidget {
                                     );
                                     
                                     // تسجيل معلومات الباقة في سجل التصحيح
-                                    debugPrint('[PackageCard] Initiating payment for package: ${package.id} (${package.name})');
+                               //     debugPrint('[PackageCard] Initiating payment for package: ${package.id} (${package.name})');
                                     
                                     // بدء عملية الدفع
                                     context

@@ -24,7 +24,7 @@ class PackagesGrid extends StatelessWidget {
     final paidPackages = packages.where((package) => package.isTrial == false).toList();
     // Debug
     // ignore: avoid_print
-    print("🟢 [PackagesGrid] Paid packages count: ${paidPackages.length}");
+   // print("🟢 [PackagesGrid] Paid packages count: ${paidPackages.length}");
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: _calculateCrossAxisCount(context),
@@ -38,7 +38,7 @@ class PackagesGrid extends StatelessWidget {
           onTap: () {
             final paymentCubit = context.read<PaymentCubit>();
             paymentCubit.initiatePayment(paidPackages[index].id);
-            print("🟢 [PackagesGrid] Paid packages id: ${paidPackages[index].id}");
+          //  print("🟢 [PackagesGrid] Paid packages id: ${paidPackages[index].id}");
           },
         );
       },
