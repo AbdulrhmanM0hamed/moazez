@@ -10,6 +10,9 @@ import 'package:moazez/feature/packages/presentation/widgets/subscription_card.d
 import 'package:moazez/feature/packages/presentation/cubit/package_cubit.dart';
 import 'package:moazez/feature/packages/presentation/cubit/package_state.dart';
 import 'package:moazez/feature/packages/presentation/widgets/packages_grid.dart';
+import 'package:moazez/feature/packages/presentation/cubit/payment_cubit.dart';
+import 'package:moazez/feature/packages/presentation/cubit/payment_state.dart';
+import 'package:moazez/feature/packages/presentation/view/payment_webview.dart';
 
 class PackagesView extends StatelessWidget {
   static const String routeName = '/packages';
@@ -18,13 +21,119 @@ class PackagesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<PackageCubit>(
-      create: (context) => sl<PackageCubit>()..getPackages(),
-      child: BlocProvider<SubscriptionCubit>(
-        create: (context) => sl<SubscriptionCubit>()..fetchCurrentSubscription(),
-        child: Scaffold(
-          appBar: CustomAppBar(title: 'الباقات'),
-          body: BlocBuilder<PackageCubit, PackageState>(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<PackageCubit>(
+          create: (context) => sl<PackageCubit>()..getPackages(),
+        ),
+        BlocProvider<SubscriptionCubit>(
+          create:
+              (context) => sl<SubscriptionCubit>()..fetchCurrentSubscription(),
+        ),
+        BlocProvider<PaymentCubit>(create: (context) {
+          final paymentCubit = sl<PaymentCubit>();
+          // تعيين مراجع للكيوبت الأخرى لتحديث الحالة بعد الدفع الناجح
+          Future.delayed(Duration.zero, () {
+            paymentCubit.setSubscriptionCubit(context.read<SubscriptionCubit>());
+            paymentCubit.setPackageCubit(context.read<PackageCubit>());
+          });
+          return paymentCubit;
+        }),
+      ],
+      child: Scaffold(
+        appBar: CustomAppBar(title: 'الباقات'),
+        body: BlocListener<PaymentCubit, PaymentState>(
+          listener: (context, paymentState) {
+            if (paymentState is PaymentSuccess) {
+              // عرض رسالة للمستخدم قبل فتح صفحة الدفع
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('جارٍ تحويلك إلى صفحة الدفع...'),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+              
+              // تأخير قصير قبل فتح صفحة الدفع
+              Future.delayed(const Duration(seconds: 1), () {
+                final paymentCubit = context.read<PaymentCubit>();
+                final scaffoldMessengerState = ScaffoldMessenger.of(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider.value(
+                      value: paymentCubit,
+                      child: PaymentWebView(
+                        paymentUrl: paymentState.paymentUrl,
+                        onPaymentComplete: (bool success) {
+                          // استخدام Future.microtask لتأجيل العمليات حتى يتم إكمال بناء الشاشة الحالية
+                          Future.microtask(() {
+                            // إغلاق شاشة WebView أولاً
+                            if (Navigator.canPop(context)) {
+                              Navigator.of(context).pop();
+                            }
+
+                            // عرض تعليقات باستخدام ScaffoldMessengerState المحفوظ
+                            scaffoldMessengerState.clearSnackBars(); // إزالة أي snackbars سابقة
+                            scaffoldMessengerState.showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  success 
+                                    ? 'تمت عملية الدفع بنجاح! جارٍ تحديث اشتراكك...' 
+                                    : 'فشلت عملية الدفع، يرجى المحاولة مرة أخرى لاحقًا',
+                                ),
+                                backgroundColor: success ? Colors.green : Colors.red,
+                                duration: const Duration(seconds: 3),
+                              ),
+                            );
+
+                            // تحديث الاشتراك الحالي بعد الدفع الناجح
+                            if (success) {
+                              // استخدام الدالة الجديدة لتحديث الاشتراك والباقات
+                              paymentCubit.updateSubscriptionAfterPayment();
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                );
+              });
+            } else if (paymentState is PaymentError) {
+              debugPrint('[PackagesView] Payment error: ${paymentState.message}');
+              
+              // تحقق مما إذا كانت رسالة الخطأ تتعلق بتجاوز عدد المحاولات
+              final bool isTooManyRequests = paymentState.message.contains('لقد قمت بالعديد من المحاولات') || 
+                                            paymentState.message.contains('تجاوز الحد المسموح');
+              
+              // إنشاء رسالة خطأ أكثر وضوحًا للمستخدم
+              final String userMessage = isTooManyRequests
+                  ? 'لقد قمت بالعديد من محاولات الدفع. يرجى الانتظار لمدة 5 دقائق قبل المحاولة مرة أخرى.'
+                  : paymentState.message;
+              
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(userMessage),
+                  backgroundColor: Colors.red,
+                  duration: const Duration(seconds: 6), // زيادة مدة العرض
+                  action: SnackBarAction(
+                    label: 'حسنًا',
+                    textColor: Colors.white,
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    },
+                  ),
+                ),
+              );
+              
+              // إذا كان الخطأ بسبب تجاوز عدد المحاولات، يمكن إضافة تأخير قبل السماح بمحاولة جديدة
+              if (isTooManyRequests) {
+                // يمكن هنا تعطيل زر الدفع مؤقتًا أو إضافة منطق آخر إذا لزم الأمر
+              }
+            } else if (paymentState is PaymentLoading) {
+              // يمكن إضافة مؤشر تحميل هنا إذا لزم الأمر
+            }
+          },
+          child: BlocBuilder<PackageCubit, PackageState>(
             builder: (context, state) {
               return Column(
                 children: [
@@ -34,7 +143,9 @@ class PackagesView extends StatelessWidget {
                       if (subState is SubscriptionLoading) {
                         return const Center(child: CustomProgressIndcator());
                       } else if (subState is SubscriptionLoaded) {
-                        return SubscriptionCard(subscription: subState.subscription);
+                        return SubscriptionCard(
+                          subscription: subState.subscription,
+                        );
                       } else if (subState is SubscriptionError) {
                         print(subState.message);
                         return Center(child: Text(subState.message));

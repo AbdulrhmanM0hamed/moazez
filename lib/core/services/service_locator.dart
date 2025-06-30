@@ -14,6 +14,11 @@ import 'package:moazez/feature/agreements/presentation/cubit/create_task_cubit.d
 import 'package:moazez/feature/agreements/presentation/cubit/team_members_cubit.dart';
 import 'package:moazez/feature/agreements/domain/usecases/create_task_usecase.dart';
 import 'package:moazez/feature/agreements/domain/usecases/close_task_usecase.dart';
+import 'package:moazez/feature/packages/data/datasources/payment_remote_data_source.dart';
+import 'package:moazez/feature/packages/domain/repositories/payment_repository.dart';
+import 'package:moazez/feature/packages/data/repositories/payment_repository_impl.dart';
+import 'package:moazez/feature/packages/domain/usecases/initiate_payment_usecase.dart';
+import 'package:moazez/feature/packages/presentation/cubit/payment_cubit.dart';
 import 'package:moazez/feature/search/data/datasources/search_remote_data_source.dart';
 import 'package:moazez/feature/search/data/repositories/search_repository_impl.dart';
 import 'package:moazez/feature/search/domain/repositories/search_repository.dart';
@@ -232,6 +237,14 @@ Future<void> init() async {
     () => PackageRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()),
   );
   sl.registerLazySingleton(() => GetPackagesUseCase(sl()));
+  sl.registerLazySingleton<PaymentRemoteDataSource>(
+    () => PaymentRemoteDataSourceImpl(dio: sl()),
+  );
+  sl.registerLazySingleton<PaymentRepository>(
+    () => PaymentRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()),
+  );
+  sl.registerLazySingleton(() => InitiatePaymentUseCase(repository: sl()));
+  sl.registerFactory(() => PaymentCubit(initiatePaymentUseCase: sl()));
   sl.registerLazySingleton<SubscriptionRemoteDataSource>(
     () => SubscriptionRemoteDataSourceImpl(dio: sl()),
   );

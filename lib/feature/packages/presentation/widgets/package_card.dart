@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/utils/common/custom_button.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/packages/domain/entities/package_entity.dart';
+import 'package:moazez/feature/packages/presentation/cubit/payment_cubit.dart';
+import 'package:moazez/feature/packages/presentation/cubit/payment_state.dart';
 
 class PackageCard extends StatelessWidget {
   final PackageEntity package;
@@ -13,7 +16,7 @@ class PackageCard extends StatelessWidget {
 
   Color get _primaryColor {
     if (package.name.contains('الأساسية'))
-      return  AppColors.primary; // Primary color for Basic
+      return AppColors.primary; // Primary color for Basic
     if (package.name.contains('المتقدمة'))
       return AppColors.secondary; // Secondary color for Advanced
     if (package.name.contains('الاحترافية'))
@@ -23,15 +26,19 @@ class PackageCard extends StatelessWidget {
 
   Color get _secondaryColor {
     if (package.name.contains('الأساسية'))
-      return AppColors.primary.withValues(alpha: 0.8); // Slightly darker Primary for Basic
+      return AppColors.primary.withValues(
+        alpha: 0.8,
+      ); // Slightly darker Primary for Basic
     if (package.name.contains('المتقدمة'))
-      return AppColors.secondary.withValues(alpha: 0.8); // Slightly darker Secondary for Advanced
+      return AppColors.secondary.withValues(
+        alpha: 0.8,
+      ); // Slightly darker Secondary for Advanced
     if (package.name.contains('الاحترافية'))
-      return AppColors.third.withValues(alpha: 0.8); // Slightly darker Third for Professional
+      return AppColors.third.withValues(
+        alpha: 0.8,
+      ); // Slightly darker Third for Professional
     return AppColors.secondary;
   }
-
-
 
   Icon _getIcon(String type) {
     switch (type) {
@@ -52,7 +59,9 @@ class PackageCard extends StatelessWidget {
   Widget build(BuildContext context) {
     // Debug log
     // ignore: avoid_print
-    print(" [PackageCard] displaying package: ${package.name}, isTrial: ${package.isTrial}");
+    print(
+      " [PackageCard] displaying package: ${package.name}, isTrial: ${package.isTrial}",
+    );
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
       elevation: 8,
@@ -96,7 +105,7 @@ class PackageCard extends StatelessWidget {
             // Price, Tasks, Members section
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-          
+
               child: Column(
                 children: [
                   Row(
@@ -133,14 +142,92 @@ class PackageCard extends StatelessWidget {
             // Button
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-              child: SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: CustomButton(
-                  onPressed: onTap ?? () {},
-                  text: 'اشترك الآن',
-                  backgroundColor: _primaryColor,
-                ),
+              child: BlocBuilder<PaymentCubit, PaymentState>(
+                builder: (context, paymentState) {
+                  final isLoading = paymentState is PaymentLoading;
+                  final isError = paymentState is PaymentError;
+                  
+                  // التحقق من وجود خطأ 429 (Too Many Requests)
+                  // استخدام الدالة الجديدة للتحقق من حالة تقييد المعدل
+                  final paymentCubit = context.read<PaymentCubit>();
+                  final bool isTooManyRequests = paymentCubit.isRateLimited;
+                  
+                  // تحديد نص الزر بناءً على حالة الدفع
+                  String buttonText = 'اشترك الآن';
+                  if (isLoading) {
+                    buttonText = 'جارٍ المعالجة...';
+                  } else if (isTooManyRequests) {
+                    // حساب الوقت المتبقي بالدقائق
+                    final remainingMinutes = (paymentCubit.remainingCooldownSeconds / 60).ceil();
+                    buttonText = 'يرجى الانتظار ($remainingMinutes دقائق)';
+                  }
+                  
+                  return Column(
+                    children: [
+                      // إذا كان هناك خطأ، نعرض رسالة صغيرة فوق الزر
+                      if (isTooManyRequests)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Column(
+                            children: [
+                              Text(
+                                'تم تجاوز الحد المسموح به من المحاولات',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                  fontFamily: FontConstant.cairo,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'يرجى الانتظار لمدة ${(paymentCubit.remainingCooldownSeconds / 60).ceil()} دقائق قبل المحاولة مرة أخرى',
+                                style: TextStyle(
+                                  color: Colors.red[700],
+                                  fontSize: 11,
+                                  fontFamily: FontConstant.cairo,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                      
+                      SizedBox(
+                        width: double.infinity,
+                        height: 52,
+                        child: CustomButton(
+                          onPressed: (isLoading || isTooManyRequests)
+                              ? null
+                              : onTap ??
+                                  () {
+                                    // عرض مؤشر تحميل قبل بدء عملية الدفع
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('جارٍ تجهيز عملية الدفع...'),
+                                        duration: Duration(seconds: 1),
+                                      ),
+                                    );
+                                    
+                                    // تسجيل معلومات الباقة في سجل التصحيح
+                                    debugPrint('[PackageCard] Initiating payment for package: ${package.id} (${package.name})');
+                                    
+                                    // بدء عملية الدفع
+                                    context
+                                        .read<PaymentCubit>()
+                                        .initiatePayment(package.id);
+                                  },
+                          text: buttonText,
+                          backgroundColor: isTooManyRequests 
+                              ? Colors.grey[400] 
+                              : _primaryColor,
+                          isLoading: isLoading,
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ],
