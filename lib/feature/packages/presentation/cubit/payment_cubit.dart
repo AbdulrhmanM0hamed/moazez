@@ -148,27 +148,27 @@ class PaymentCubit extends Cubit<PaymentState> {
       (response) {
         _isProcessing = false;
         _retryCount = 0; // إعادة تعيين العداد عند النجاح
-        emit(PaymentSuccess(paymentUrl: response['payment_url'] as String));
+        emit(PaymentSuccess(paymentUrl: response['payment_url'] as String?));
       },
     );
   }
   
   // تحديث حالة الاشتراك بعد الدفع الناجح
   void updateSubscriptionAfterPayment() {
-    debugPrint('[PaymentCubit] Updating subscription status after successful payment');
+   // debugPrint('[PaymentCubit] Updating subscription status after successful payment');
     
     // تحديث حالة الاشتراك الحالي
     if (_subscriptionCubit != null) {
       _subscriptionCubit!.fetchCurrentSubscription();
     } else {
-      debugPrint('[PaymentCubit] Warning: SubscriptionCubit not set');
+   //   debugPrint('[PaymentCubit] Warning: SubscriptionCubit not set');
     }
     
     // تحديث قائمة الباقات
     if (_packageCubit != null) {
       _packageCubit!.getPackages();
     } else {
-      debugPrint('[PaymentCubit] Warning: PackageCubit not set');
+   //   debugPrint('[PaymentCubit] Warning: PackageCubit not set');
     }
   }
 }

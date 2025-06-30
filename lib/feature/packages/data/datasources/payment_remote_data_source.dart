@@ -45,7 +45,7 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
         debugPrint('[PaymentRemoteDataSource] Response data: ${response.data}');
 
         // التحقق من حالة الاستجابة
-        if (response.statusCode == 200 && response.data != null) {
+        if ((response.statusCode == 200 || response.statusCode == 201) && response.data != null) {
           return response.data;
         } else if (response.statusCode == 429) {
           // Too Many Requests - زيادة التأخير وإعادة المحاولة
@@ -66,9 +66,9 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
             );
           }
         } else {
-          throw ServerException(
-            message: 'فشل في بدء عملية الدفع: حالة الاستجابة ${response.statusCode}',
-          );
+          final errorMessage = response.data?['message'] ??
+              'فشل في بدء عملية الدفع: حالة الاستجابة ${response.statusCode}';
+          throw ServerException(message: errorMessage);
         }
       } on DioException catch (e) {
         debugPrint('[PaymentRemoteDataSource] DioException: ${e.message}, statusCode: ${e.response?.statusCode}');
@@ -98,6 +98,11 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
         final failure = handleDioException(e);
         throw ServerException(message: failure.message);
       } catch (e) {
+        // إذا كان الخطأ هو ServerException بالفعل، أعد إلقاءه للحفاظ على الرسالة الأصلية
+        if (e is ServerException) {
+          rethrow;
+        }
+
         debugPrint('[PaymentRemoteDataSource] Unknown error: ${e.toString()}');
         throw ServerException(
           message: 'خطأ غير متوقع: ${e.toString()}',

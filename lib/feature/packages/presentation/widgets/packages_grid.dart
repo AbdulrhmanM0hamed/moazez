@@ -20,11 +20,11 @@ class PackagesGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Filter out trial packages to show only paid packages
-    final paidPackages = packages.where((package) => package.isTrial == false).toList();
+    // عرض كل الباقات بما في ذلك التجريبية والمدفوعة
+    final displayedPackages = packages;
     // Debug
     // ignore: avoid_print
-   // print("🟢 [PackagesGrid] Paid packages count: ${paidPackages.length}");
+    // print("🟢 [PackagesGrid] Packages count: ${displayedPackages.length}");
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: _calculateCrossAxisCount(context),
@@ -34,15 +34,15 @@ class PackagesGrid extends StatelessWidget {
       ),
       itemBuilder: (context, index) {
         return PackageCard(
-          package: paidPackages[index],
+          package: displayedPackages[index],
           onTap: () {
             final paymentCubit = context.read<PaymentCubit>();
-            paymentCubit.initiatePayment(paidPackages[index].id);
+            paymentCubit.initiatePayment(displayedPackages[index].id);
           //  print("🟢 [PackagesGrid] Paid packages id: ${paidPackages[index].id}");
           },
         );
       },
-      itemCount: paidPackages.length,
+      itemCount: displayedPackages.length,
     );
   }
 

@@ -5,9 +5,9 @@ class PaymentInitial extends PaymentState {}
 class PaymentLoading extends PaymentState {}
 
 class PaymentSuccess extends PaymentState {
-  final String paymentUrl;
+  final String? paymentUrl;
 
-  PaymentSuccess({required this.paymentUrl});
+  PaymentSuccess({this.paymentUrl});
 }
 
 class PaymentError extends PaymentState {
