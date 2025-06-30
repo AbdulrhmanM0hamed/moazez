@@ -12,6 +12,9 @@ import 'package:moazez/feature/packages/presentation/view/packages_view.dart';
 import 'package:moazez/feature/profile/presentation/view/team_view.dart';
 import 'package:moazez/feature/rewards/presentation/view/my_rewards_view.dart';
 import 'package:moazez/feature/rewards/presentation/view/rewards_view.dart';
+import 'package:moazez/feature/profile/presentation/cubit/user_subscriptions_cubit.dart';
+import 'package:moazez/feature/profile/presentation/view/subscriptions_view.dart';
+
 
 class MenuItemsCard extends StatelessWidget {
   const MenuItemsCard({super.key});
@@ -70,6 +73,23 @@ class MenuItemsCard extends StatelessWidget {
                   Icons.card_giftcard_outlined,
                   () {
                     Navigator.pushNamed(context, MyRewardsView.routeName);
+                  },
+                ),
+              if (role == 'Supporter')
+                _buildMenuItem(
+                  context,
+                  'اشتراكاتى',
+                  Icons.subscriptions,
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider(
+                          create: (_) => sl<UserSubscriptionsCubit>()..fetchUserSubscriptions(),
+                          child: const SubscriptionsView(),
+                        ),
+                      ),
+                    );
                   },
                 ),
               if (role == 'Supporter')

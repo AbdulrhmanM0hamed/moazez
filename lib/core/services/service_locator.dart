@@ -31,7 +31,6 @@ import 'package:moazez/feature/task_details/domain/usecase/task_details_usecase.
 import 'package:moazez/feature/task_details/domain/usecases/complete_stage_usecase.dart';
 import 'package:moazez/feature/task_details/domain/repositories/stage_completion_repository.dart';
 import 'package:moazez/feature/task_details/data/repositories/stage_completion_repository_impl.dart';
-import 'package:moazez/feature/task_details/data/repositories/task_detials_repository_impl.dart';
 import 'package:moazez/feature/task_details/presentation/cubit/task_details_cubit.dart';
 import 'package:moazez/feature/task_details/presentation/cubit/stage_completion_cubit.dart';
 import 'package:moazez/feature/MyTasks/data/datasources/my_tasks_remote_data_source.dart';
@@ -90,6 +89,11 @@ import 'package:moazez/feature/rewards/domain/repositories/reward_repository.dar
 import 'package:moazez/feature/rewards/domain/usecases/get_my_rewards_usecase.dart';
 import 'package:moazez/feature/rewards/domain/usecases/get_team_rewards_usecase.dart';
 import 'package:moazez/feature/rewards/presentation/cubit/reward_cubit.dart';
+import 'package:moazez/feature/profile/data/datasources/user_subscriptions_remote_data_source.dart';
+import 'package:moazez/feature/profile/data/repositories/user_subscriptions_repository_impl.dart';
+import 'package:moazez/feature/profile/domain/repositories/user_subscriptions_repository.dart';
+import 'package:moazez/feature/profile/domain/usecases/get_user_subscriptions_usecase.dart';
+import 'package:moazez/feature/profile/presentation/cubit/user_subscriptions_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
@@ -155,6 +159,14 @@ Future<void> init() async {
   );
   sl.registerLazySingleton(() => GetTeamRewardsUseCase(sl()));
   sl.registerLazySingleton(() => GetMyRewardsUseCase(sl()));
+
+  // User Subscriptions
+  sl.registerLazySingleton<UserSubscriptionsRemoteDataSource>(
+      () => UserSubscriptionsRemoteDataSourceImpl(dio: sl()));
+  sl.registerLazySingleton<UserSubscriptionsRepository>(
+      () => UserSubscriptionsRepositoryImpl(remoteDataSource: sl()));
+  sl.registerLazySingleton(() => GetUserSubscriptionsUseCase(sl()));
+  sl.registerFactory(() => UserSubscriptionsCubit(getUserSubscriptionsUseCase: sl()));
   sl.registerLazySingleton<RewardRepository>(
     () => RewardRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()),
   );

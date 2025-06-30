@@ -11,11 +11,13 @@ import 'package:moazez/feature/home_supporter/presentation/view/supporter_nav_ba
 import 'package:moazez/feature/invitations/presentation/received_invitations_view.dart';
 import 'package:moazez/feature/invitations/presentation/sent_invitations_view.dart';
 import 'package:moazez/feature/packages/presentation/view/packages_view.dart';
+import 'package:moazez/feature/profile/presentation/view/subscriptions_view.dart';
 import 'package:moazez/feature/profile/presentation/view/team_view.dart';
 import 'package:moazez/feature/rewards/presentation/view/my_rewards_view.dart';
 import 'package:moazez/feature/rewards/presentation/view/rewards_view.dart';
 import 'package:moazez/feature/splash/presentation/splash_view.dart';
 import 'package:moazez/feature/profile/presentation/view/edit_profile_info.dart';
+
 import 'package:moazez/feature/onboarding/presentation/onboarding_view.dart';
 
 Route<dynamic> onGenratedRoutes(RouteSettings settings) {
@@ -55,11 +57,12 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const PackagesView());
     case PasswordResetLinkView.routeName:
       return MaterialPageRoute(builder: (context) => PasswordResetLinkView());
-
     case SentInvitationsView.routeName:
       return MaterialPageRoute(
         builder: (context) => const SentInvitationsView(),
       );
+    case SubscriptionsView.routeName:
+      return MaterialPageRoute(builder: (context) => const SubscriptionsView());
     case ReceivedInvitationsView.routeName:
       return MaterialPageRoute(
         builder: (context) => const ReceivedInvitationsView(),

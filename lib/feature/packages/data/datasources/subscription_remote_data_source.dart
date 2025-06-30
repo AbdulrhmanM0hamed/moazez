@@ -26,8 +26,8 @@ class SubscriptionRemoteDataSourceImpl implements SubscriptionRemoteDataSource {
         ),
       );
       // Uncomment for debugging
-      print('🔵 Status Code: ${response.statusCode}');
-      print('🔵 Full Response: ${response.data}');
+      // print('🔵 Status Code: ${response.statusCode}');
+      // print('🔵 Full Response: ${response.data}');
       if (response.statusCode == 200 && response.data != null) {
         final data = response.data['data'];
         final hasSubscription = response.data['has_subscription'] ?? false;
