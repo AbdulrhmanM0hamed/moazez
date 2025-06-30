@@ -3,7 +3,6 @@ import 'package:moazez/core/error/failures.dart';
 import 'package:moazez/core/usecases/usecase.dart';
 import 'package:moazez/feature/task_details/domain/entities/stage_completion_entity.dart';
 import 'package:moazez/feature/task_details/domain/repositories/stage_completion_repository.dart';
-import 'package:dio/dio.dart';
 
 class CompleteStageUseCase implements UseCase<StageCompletionEntity, CompleteStageParams> {
   final StageCompletionRepository repository;

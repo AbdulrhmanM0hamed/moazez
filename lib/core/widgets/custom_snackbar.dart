@@ -1,42 +1,42 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
-class CustomSnackbar {
+// class CustomSnackbar {
 
-  static void show({
+//   static void show({
 
-    required BuildContext context,
+//     required BuildContext context,
 
-    required String message,
+//     required String message,
 
-    bool isError = false,
+//     bool isError = false,
 
-  }) {
+//   }) {
 
-    final snackBar = SnackBar(
+//     final snackBar = SnackBar(
 
-      content: Text(message),
+//       content: Text(message),
 
-      backgroundColor: isError ? Colors.red : Colors.green,
+//       backgroundColor: isError ? Colors.red : Colors.green,
 
-      behavior: SnackBarBehavior.floating,
+//       behavior: SnackBarBehavior.floating,
 
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+//       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
 
-      // Adjust the margin to position the SnackBar at the top
-      // We add MediaQuery.of(context).padding.top to account for the status bar
-      margin: EdgeInsets.only(
-        top: MediaQuery.of(context).padding.top + 16.0, // Add padding for status bar and some space
-        left: 16.0,
-        right: 16.0,
-      ),
-      // Setting a negative or large bottom margin can also help push it up,
-      // but 'top' margin is usually sufficient for floating behavior.
-      // bottom: 0.0, // You can explicitly set bottom to 0 if needed, or remove it.
+//       // Adjust the margin to position the SnackBar at the top
+//       // We add MediaQuery.of(context).padding.top to account for the status bar
+//       margin: EdgeInsets.only(
+//         top: MediaQuery.of(context).padding.top + 16.0, // Add padding for status bar and some space
+//         left: 16.0,
+//         right: 16.0,
+//       ),
+//       // Setting a negative or large bottom margin can also help push it up,
+//       // but 'top' margin is usually sufficient for floating behavior.
+//       // bottom: 0.0, // You can explicitly set bottom to 0 if needed, or remove it.
 
-    );
+//     );
 
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+//     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-  }
+//   }
 
-}
+// }

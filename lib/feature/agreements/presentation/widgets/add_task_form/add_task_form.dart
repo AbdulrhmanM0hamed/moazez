@@ -168,14 +168,14 @@ class _AddTaskFormState extends State<AddTaskForm> {
                     },
                   ),
                   const SizedBox(height: 24),
-                  PrioritySelectorSection(
-                    priority: _priority,
-                    onPriorityChanged: (newPriority) {
-                      setState(() {
-                        _priority = newPriority;
-                      });
-                    },
-                  ),
+                  // PrioritySelectorSection(
+                  //   priority: _priority,
+                  //   onPriorityChanged: (newPriority) {
+                  //     setState(() {
+                  //       _priority = newPriority;
+                  //     });
+                  //   },
+                  // ),
                   const SizedBox(height: 24),
                   RewardTypeSelectorSection(
                     rewardType: _rewardType,

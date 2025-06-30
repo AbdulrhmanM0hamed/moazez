@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/feature/task_details/presentation/cubit/stage_completion_cubit.dart';
 import 'package:moazez/feature/task_details/presentation/cubit/stage_completion_state.dart';
 import 'package:moazez/feature/task_details/presentation/widgets/stage_completion/stage_completion_widgets.dart';
-import 'package:moazez/core/widgets/custom_snackbar.dart';
 import 'package:image_picker/image_picker.dart';
 
 class StageCompletionDialog extends StatefulWidget {
@@ -69,17 +69,15 @@ class _StageCompletionDialogState extends State<StageCompletionDialog> {
         if (state is StageCompletionSuccess) {
           widget.onComplete?.call();
           Navigator.of(widget.parentContext).pop(true);
-          CustomSnackbar.show(
+          CustomSnackbar.showSuccess(
             context: widget.parentContext,
             message: 'تم إكمال المرحلة بنجاح',
-            isError: false,
           );
         } else if (state is StageCompletionError) {
           Navigator.of(context).pop(false);
-          CustomSnackbar.show(
+          CustomSnackbar.showError(
             context: widget.parentContext,
             message: state.message,
-            isError: true,
           );
         }
       },
@@ -115,7 +113,9 @@ class _StageCompletionDialogState extends State<StageCompletionDialog> {
                       parentContext: widget.parentContext,
                       imagePath: context.read<StageCompletionCubit>().image,
                       onImageSelected: (imagePath) {
-                        context.read<StageCompletionCubit>().updateImage(imagePath);
+                        context.read<StageCompletionCubit>().updateImage(
+                          imagePath,
+                        );
                       },
                       onImageRemoved: () {
                         context.read<StageCompletionCubit>().removeImage();
@@ -131,7 +131,8 @@ class _StageCompletionDialogState extends State<StageCompletionDialog> {
                           if (!_isValidImageForDialog(cubit.image!)) {
                             CustomSnackbar.show(
                               context: widget.parentContext,
-                              message: 'نوع الصورة غير مدعوم. يرجى اختيار صورة JPG أو PNG',
+                              message:
+                                  'نوع الصورة غير مدعوم. يرجى اختيار صورة JPG أو PNG',
                               isError: true,
                             );
                             return;
@@ -142,7 +143,8 @@ class _StageCompletionDialogState extends State<StageCompletionDialog> {
                         print('Error completing stage: $e');
                         String errorMessage = 'خطأ أثناء إكمال المرحلة: $e';
                         if (e.toString().contains('422')) {
-                          errorMessage = 'نوع الصورة غير مدعوم من الخادم. يرجى اختيار صورة JPG أو PNG';
+                          errorMessage =
+                              'نوع الصورة غير مدعوم من الخادم. يرجى اختيار صورة JPG أو PNG';
                         }
                         CustomSnackbar.show(
                           context: widget.parentContext,

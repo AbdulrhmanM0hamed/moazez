@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:moazez/core/utils/common/custom_button.dart';
 import 'package:moazez/core/utils/common/custom_text_field.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/core/widgets/custom_snackbar.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 
@@ -67,7 +68,11 @@ class _StageCompletionImagePickerState
                 border: Border.all(color: Colors.blue.withOpacity(0.2)),
               ),
               child: IconButton(
-                icon: Icon(Icons.add_a_photo, color: AppColors.primary, size: 40),
+                icon: Icon(
+                  Icons.add_a_photo,
+                  color: AppColors.primary,
+                  size: 40,
+                ),
                 onPressed: () async {
                   showModalBottomSheet(
                     context: context,
@@ -93,24 +98,27 @@ class _StageCompletionImagePickerState
                                       setState(() {
                                         _imagePath = pickedFile.path;
                                       });
-                                      widget.onImageSelected?.call(pickedFile.path);
-                                      CustomSnackbar.show(
+                                      widget.onImageSelected?.call(
+                                        pickedFile.path,
+                                      );
+                                      CustomSnackbar.showSuccess(
                                         context: widget.parentContext,
-                                        message: 'تم اختيار الصورة بنجاح من المعرض',
+                                        message:
+                                            'تم اختيار الصورة بنجاح من المعرض',
                                       );
                                     } else {
                                       CustomSnackbar.show(
                                         context: widget.parentContext,
-                                        message: 'نوع الصورة غير مدعوم. يرجى اختيار صورة JPG أو PNG',
+                                        message:
+                                            'نوع الصورة غير مدعوم. يرجى اختيار صورة JPG أو PNG',
                                         isError: true,
                                       );
                                     }
                                   }
                                 } catch (e) {
-                                  CustomSnackbar.show(
+                                  CustomSnackbar.showError(
                                     context: widget.parentContext,
                                     message: 'فشل اختيار الصورة من المعرض: $e',
-                                    isError: true,
                                   );
                                 }
                               },
@@ -132,23 +140,27 @@ class _StageCompletionImagePickerState
                                       setState(() {
                                         _imagePath = pickedFile.path;
                                       });
-                                      widget.onImageSelected?.call(pickedFile.path);
-                                      CustomSnackbar.show(
+                                      widget.onImageSelected?.call(
+                                        pickedFile.path,
+                                      );
+                                      CustomSnackbar.showSuccess(
                                         context: widget.parentContext,
-                                        message: 'تم اختيار الصورة بنجاح من الكاميرا',
+                                        message:
+                                            'تم اختيار الصورة بنجاح من الكاميرا',
                                       );
                                     } else {
-                                      CustomSnackbar.show(
+                                      CustomSnackbar.showError(
                                         context: widget.parentContext,
-                                        message: 'نوع الصورة غير مدعوم. يرجى اختيار صورة JPG أو PNG',
-                                        isError: true,
+                                        message:
+                                            'نوع الصورة غير مدعوم. يرجى اختيار صورة JPG أو PNG',
                                       );
                                     }
                                   }
                                 } catch (e) {
                                   CustomSnackbar.show(
                                     context: widget.parentContext,
-                                    message: 'فشل اختيار الصورة من الكاميرا: $e',
+                                    message:
+                                        'فشل اختيار الصورة من الكاميرا: $e',
                                     isError: true,
                                   );
                                 }

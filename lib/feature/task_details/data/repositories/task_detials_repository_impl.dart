@@ -4,7 +4,6 @@ import 'package:moazez/core/error/failures.dart';
 import 'package:moazez/feature/task_details/data/datasources/task_details_remote_datasoure.dart';
 import 'package:moazez/feature/task_details/domain/entities/task_details_entity.dart';
 import 'package:moazez/feature/task_details/domain/repositories/task_details_repository.dart';
-import 'package:moazez/feature/task_details/domain/entities/stage_completion_entity.dart';
 
 class TaskDetailsRepositoryImpl implements TaskDetailsRepository {
   final TaskDetailsRemoteDataSource remoteDataSource;

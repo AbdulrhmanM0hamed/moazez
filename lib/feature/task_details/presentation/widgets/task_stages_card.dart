@@ -11,7 +11,7 @@ import 'package:moazez/feature/task_details/presentation/cubit/stage_completion_
 import 'package:moazez/feature/task_details/presentation/cubit/task_details_cubit.dart';
 import 'package:moazez/feature/task_details/presentation/widgets/status_chip_ar.dart';
 import 'package:moazez/feature/task_details/presentation/widgets/stage_completion_dialog.dart';
-import 'package:moazez/feature/task_details/presentation/screens/stage_details_screen.dart';
+import 'package:moazez/feature/task_details/presentation/view/stage_details_screen.dart';
 
 class TaskStagesCard extends StatelessWidget {
   final List<StageEntity> stages;
