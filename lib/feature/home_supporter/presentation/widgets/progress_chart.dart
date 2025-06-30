@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -85,202 +84,285 @@ class ProgressChart extends StatelessWidget {
           });
 
           // 3. Generate labels and avatars from the flat list
-          final taskLabels = chartDataPoints.map((dp) => dp.member.name).toList();
-          final avatarUrls = chartDataPoints.map((dp) => dp.member.avatarUrl).toList();
+          final taskLabels =
+              chartDataPoints.map((dp) => dp.member.name).toList();
+          final avatarUrls =
+              chartDataPoints.map((dp) => dp.member.avatarUrl).toList();
 
           return CustomAnimations.scaleIn(
             duration: const Duration(milliseconds: 600),
             child: Directionality(
-            textDirection: TextDirection.ltr,
-            child: SizedBox(
-              height: 250, // Fixed height for the entire chart area
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 40,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: BarChart(
-                            BarChartData(
-                              minY: 0,
-                              maxY: 100,
-                              alignment: BarChartAlignment.spaceAround,
-                              barGroups: const [], // Remove the grey placeholder bar
-                              gridData: FlGridData(
-                                show: true,
-                                drawVerticalLine: false,
-                                horizontalInterval: 20,
-                                getDrawingHorizontalLine: (value) {
-                                  return const FlLine(
-                                    color: Colors.black12,
-                                    strokeWidth: 1,
-                                  );
-                                },
-                              ),
-                              titlesData: FlTitlesData(
-                                leftTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: true,
-                                    reservedSize: 40,
-                                    getTitlesWidget: (value, meta) {
-                                      if (value % 20 == 0) {
-                                        final text = '${value.toInt()}%';
-                                        if (value == 0) {
-                                          return Transform.translate(
-                                            offset: const Offset(0, 10),
-                                            child: Text(text, style: const TextStyle(fontSize: 10)),
+              textDirection: TextDirection.ltr,
+              child: SizedBox(
+                height: 250, // Fixed height for the entire chart area
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 40,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: BarChart(
+                              BarChartData(
+                                minY: 0,
+                                maxY: 100,
+                                alignment: BarChartAlignment.spaceAround,
+                                barGroups:
+                                    const [], // Remove the grey placeholder bar
+                                gridData: FlGridData(
+                                  show: true,
+                                  drawVerticalLine: false,
+                                  horizontalInterval: 20,
+                                  getDrawingHorizontalLine: (value) {
+                                    return const FlLine(
+                                      color: Colors.black12,
+                                      strokeWidth: 1,
+                                    );
+                                  },
+                                ),
+                                titlesData: FlTitlesData(
+                                  leftTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: true,
+                                      reservedSize: 40,
+                                      getTitlesWidget: (value, meta) {
+                                        if (value % 20 == 0) {
+                                          final text = '${value.toInt()}%';
+                                          if (value == 0) {
+                                            return Transform.translate(
+                                              offset: const Offset(0, 10),
+                                              child: Text(
+                                                text,
+                                                style: const TextStyle(
+                                                  fontSize: 10,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          return Text(
+                                            text,
+                                            style: const TextStyle(
+                                              fontSize: 10,
+                                            ),
                                           );
                                         }
-                                        return Text(text, style: const TextStyle(fontSize: 10));
-                                      }
-                                      return const SizedBox.shrink();
-                                    },
+                                        return const SizedBox.shrink();
+                                      },
+                                    ),
+                                  ),
+                                  rightTitles: const AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false),
+                                  ),
+                                  topTitles: const AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false),
+                                  ),
+                                  bottomTitles: const AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false),
                                   ),
                                 ),
-                                rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                bottomTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                              ),
 
-                              borderData: FlBorderData(
-                                show: true,
-                                border: const Border(
-                                  left: BorderSide(color: Colors.black, width: 1), // Restore Y-axis line
+                                borderData: FlBorderData(
+                                  show: true,
+                                  border: Border(
+                                    left: BorderSide(
+                                      color: Theme.of(context)
+                                          .brightness ==
+                                          Brightness.dark
+                                          ? Colors.grey.shade600
+                                          : Colors.grey.shade600,
+                                      width: 1,
+                                    ), // Restore Y-axis line
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 78), // Spacer to align with bottom labels
-                      ],
+                          const SizedBox(
+                            height: 78,
+                          ), // Spacer to align with bottom labels
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        final chartWidth = max(constraints.maxWidth, chartDataPoints.length * 50.0);
+                    Expanded(
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          final chartWidth = max(
+                            constraints.maxWidth,
+                            chartDataPoints.length * 50.0,
+                          );
 
-                        return SizedBox(
-                          height: constraints.maxHeight,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: SizedBox(
-                              width: chartWidth,
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: BarChart(
-                                      BarChartData(
-                                        minY: 0,
-                                        maxY: 100,
-                                        alignment: BarChartAlignment.spaceAround,
-                                        barGroups: barGroups,
-                                        barTouchData: BarTouchData(
-                                          touchCallback: (FlTouchEvent event, BarTouchResponse? response) {
-                                            if (response == null || response.spot == null) {
-                                              return;
-                                            }
-                                            if (event is FlTapUpEvent) {
-                                              final index = response.spot!.touchedBarGroupIndex;
-                                              if (index >= 0 && index < chartDataPoints.length) {
-                                                final dataPoint = chartDataPoints[index];
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (_) => TaskDetailsDialog(
-                                                    member: dataPoint.member,
-                                                    task: dataPoint.task,
-                                                  ),
-                                                );
+                          return SizedBox(
+                            height: constraints.maxHeight,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: SizedBox(
+                                width: chartWidth,
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: BarChart(
+                                        BarChartData(
+                                          minY: 0,
+                                          maxY: 100,
+                                          alignment:
+                                              BarChartAlignment.spaceAround,
+                                          barGroups: barGroups,
+                                          barTouchData: BarTouchData(
+                                            touchCallback: (
+                                              FlTouchEvent event,
+                                              BarTouchResponse? response,
+                                            ) {
+                                              if (response == null ||
+                                                  response.spot == null) {
+                                                return;
                                               }
-                                            }
-                                          },
-                                        ),
-                                        borderData: FlBorderData(
-                                          show: true,
-                                          border: Border(
-                                            bottom: BorderSide(color: Colors.black, width: 1),
+                                              if (event is FlTapUpEvent) {
+                                                final index =
+                                                    response
+                                                        .spot!
+                                                        .touchedBarGroupIndex;
+                                                if (index >= 0 &&
+                                                    index <
+                                                        chartDataPoints
+                                                            .length) {
+                                                  final dataPoint =
+                                                      chartDataPoints[index];
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (
+                                                          _,
+                                                        ) => TaskDetailsDialog(
+                                                          member:
+                                                              dataPoint.member,
+                                                          task: dataPoint.task,
+                                                        ),
+                                                  );
+                                                }
+                                              }
+                                            },
                                           ),
-                                        ),
-                                        gridData: FlGridData(
-                                          show: true,
-                                          drawVerticalLine: false,
-                                          horizontalInterval: 20,
-                                          getDrawingHorizontalLine: (value) {
-                                            return const FlLine(
-                                              color: Colors.black12,
-                                              strokeWidth: 1,
-                                            );
-                                          },
-                                        ),
-                                        titlesData: const FlTitlesData(
-                                          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                          bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                          borderData: FlBorderData(
+                                            show: true,
+                                            border: Border(
+                                              bottom: BorderSide(
+                                                color: Theme.of(context)
+                                                    .brightness == Brightness.dark
+                                                    ? Colors.grey.shade600
+                                                    : Colors.grey.shade600,
+                                                width: 1,
+                                              ),
+                                            ),
+                                          ),
+                                          gridData: FlGridData(
+                                            show: true,
+                                            drawVerticalLine: false,
+                                            horizontalInterval: 20,
+                                            getDrawingHorizontalLine: (value) {
+                                              return FlLine(
+                                                color: Theme.of(context)
+                                                    .brightness == Brightness.dark
+                                                    ? Colors.grey.shade600
+                                                    : Colors.grey.shade600,
+                                                strokeWidth: 1,
+                                              );
+                                            },
+                                          ),
+                                          titlesData: const FlTitlesData(
+                                            leftTitles: AxisTitles(
+                                              sideTitles: SideTitles(
+                                                showTitles: false,
+                                              ),
+                                            ),
+                                            rightTitles: AxisTitles(
+                                              sideTitles: SideTitles(
+                                                showTitles: false,
+                                              ),
+                                            ),
+                                            topTitles: AxisTitles(
+                                              sideTitles: SideTitles(
+                                                showTitles: false,
+                                              ),
+                                            ),
+                                            bottomTitles: AxisTitles(
+                                              sideTitles: SideTitles(
+                                                showTitles: false,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  SizedBox(
-                                    height: 70,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: List.generate(taskLabels.length, (index) {
-                                        return SizedBox(
-                                          width: 50,
-                                          child: Column(
-                                            children: [
-                                              ClipOval(
-                                                child: Image.network(
-                                                  avatarUrls[index],
-                                                  width: 32,
-                                                  height: 32,
-                                                  fit: BoxFit.cover,
-                                                  errorBuilder: (context, error, stackTrace) {
-                                                    return SvgPicture.asset(
-                                                      'assets/images/defualt_avatar.svg',
+                                    const SizedBox(height: 8),
+                                    SizedBox(
+                                      height: 70,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: List.generate(
+                                          taskLabels.length,
+                                          (index) {
+                                            return SizedBox(
+                                              width: 50,
+                                              child: Column(
+                                                children: [
+                                                  ClipOval(
+                                                    child: Image.network(
+                                                      avatarUrls[index],
                                                       width: 32,
                                                       height: 32,
                                                       fit: BoxFit.cover,
-                                                    );
-                                                  },
-                                                ),
+                                                      errorBuilder: (
+                                                        context,
+                                                        error,
+                                                        stackTrace,
+                                                      ) {
+                                                        return SvgPicture.asset(
+                                                          'assets/images/defualt_avatar.svg',
+                                                          width: 32,
+                                                          height: 32,
+                                                          fit: BoxFit.cover,
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 4),
+                                                  Text(
+                                                    taskLabels[index],
+                                                    style: const TextStyle(
+                                                      fontSize: 10,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ],
                                               ),
-                                              const SizedBox(height: 4),
-                                              Text(
-                                                taskLabels[index],
-                                                style: const TextStyle(fontSize: 10),
-                                                textAlign: TextAlign.center,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      }),
+                                            );
+                                          },
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),);
+          );
         }
         // Return a widget for other states to avoid null return
         return const SizedBox.shrink();
       },
     );
   }
-
-
 }
