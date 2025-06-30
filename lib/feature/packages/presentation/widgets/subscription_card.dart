@@ -45,7 +45,39 @@ class SubscriptionCard extends StatelessWidget {
         ),
       );
     } else {
-      return const SizedBox.shrink(); // Or a placeholder
+      // Handle unexpected subscription data or ServerException case
+      return Card(
+        elevation: 8.0,
+        margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'خطأ في تحميل بيانات الاشتراك',
+                style: getBoldStyle(
+                  fontFamily: FontConstant.cairo,
+                  fontSize: 16.0,
+                  color: AppColors.error,
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              Text(
+                'يرجى المحاولة لاحقًا أو الاتصال بالدعم',
+                style: getRegularStyle(
+                  fontFamily: FontConstant.cairo,
+                  fontSize: 14.0,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
     }
 
     // Map data to the new UI parameters
@@ -132,7 +164,7 @@ class SubscriptionCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "انت الان على الباقة ${planName} ",
+              "${planName} ",
               style: getBoldStyle(
                 fontFamily: FontConstant.cairo,
                 fontSize: 16.0,
@@ -265,7 +297,7 @@ class SubscriptionCard extends StatelessWidget {
       case 'pending':
         return 'معلق';
       default:
-        return 'غير معروف';
+        return 'لا يوجد باقة';
     }
   }
 

@@ -13,7 +13,7 @@ class PackageCard extends StatelessWidget {
 
   Color get _primaryColor {
     if (package.name.contains('الأساسية'))
-      return AppColors.primary; // Primary color for Basic
+      return  AppColors.primary; // Primary color for Basic
     if (package.name.contains('المتقدمة'))
       return AppColors.secondary; // Secondary color for Advanced
     if (package.name.contains('الاحترافية'))
@@ -31,7 +31,7 @@ class PackageCard extends StatelessWidget {
     return AppColors.secondary;
   }
 
-  Color get _backgroundColor => Colors.white;
+
 
   Icon _getIcon(String type) {
     switch (type) {
@@ -96,7 +96,7 @@ class PackageCard extends StatelessWidget {
             // Price, Tasks, Members section
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-              color: _backgroundColor,
+          
               child: Column(
                 children: [
                   Row(

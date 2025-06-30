@@ -12,7 +12,7 @@ class SubscriptionCubit extends Cubit<SubscriptionState> {
     emit(SubscriptionLoading());
     final result = await getCurrentSubscriptionUseCase(NoParams());
     result.fold(
-      (failure) => emit(SubscriptionError(message: failure.message)),
+      (failure) => emit(SubscriptionError(message: failure.message ?? 'خطأ غير معروف أثناء جلب بيانات الاشتراك')),
       (subscription) => emit(SubscriptionLoaded(subscription: subscription)),
     );
   }
