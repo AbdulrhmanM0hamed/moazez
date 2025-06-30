@@ -24,6 +24,7 @@ class ApiEndpoints {
   static const String taskDetails = 'task-details';
   static const String myTasks = 'my-tasks';
   static const String subscriptions = 'subscriptions';
+  static const String payments = 'payments';
   static const String search = 'search';
   static const String completeStage = 'tasks/complete-stage';
 }

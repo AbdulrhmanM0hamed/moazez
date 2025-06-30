@@ -6,15 +6,16 @@ import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
+import 'package:moazez/feature/profile/presentation/cubit/payments_cubit.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/profile/presentation/view/edit_profile_info.dart';
 import 'package:moazez/feature/packages/presentation/view/packages_view.dart';
+import 'package:moazez/feature/profile/presentation/view/payments_view.dart';
 import 'package:moazez/feature/profile/presentation/view/team_view.dart';
 import 'package:moazez/feature/rewards/presentation/view/my_rewards_view.dart';
 import 'package:moazez/feature/rewards/presentation/view/rewards_view.dart';
 import 'package:moazez/feature/profile/presentation/cubit/user_subscriptions_cubit.dart';
 import 'package:moazez/feature/profile/presentation/view/subscriptions_view.dart';
-
 
 class MenuItemsCard extends StatelessWidget {
   const MenuItemsCard({super.key});
@@ -27,10 +28,7 @@ class MenuItemsCard extends StatelessWidget {
       builder: (context, snapshot) {
         String? role = snapshot.data;
         return Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-          
-          ),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
           child: Column(
             children: [
               _buildMenuItem(
@@ -76,22 +74,34 @@ class MenuItemsCard extends StatelessWidget {
                   },
                 ),
               if (role == 'Supporter')
-                _buildMenuItem(
-                  context,
-                  'اشتراكاتى',
-                  Icons.subscriptions,
-                  () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => BlocProvider(
-                          create: (_) => sl<UserSubscriptionsCubit>()..fetchUserSubscriptions(),
-                          child: const SubscriptionsView(),
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                _buildMenuItem(context, 'اشتراكاتى', Icons.subscriptions, () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (_) => BlocProvider(
+                            create:
+                                (_) =>
+                                    sl<UserSubscriptionsCubit>()
+                                      ..fetchUserSubscriptions(),
+                            child: const SubscriptionsView(),
+                          ),
+                    ),
+                  );
+                }),
+              if (role == 'Supporter')
+                _buildMenuItem(context, 'مدفوعاتى', Icons.payments_outlined, () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (_) => BlocProvider(
+                            create: (_) => sl<PaymentsCubit>()..fetchPayments(),
+                            child: const PaymentsView(),
+                          ),
+                    ),
+                  );
+                }),
               if (role == 'Supporter')
                 _buildMenuItem(
                   context,
