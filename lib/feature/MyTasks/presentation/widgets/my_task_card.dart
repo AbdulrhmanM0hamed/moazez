@@ -133,21 +133,23 @@ class MyTaskCard extends StatelessWidget {
               // Creator Info
               Row(
                 children: [
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundColor: theme.primaryColor.withValues(alpha: 0.1),
-                    backgroundImage:
-                        _isValidUrl(task.creator.avatarUrl)
-                            ? CachedNetworkImageProvider(
-                              task.creator.avatarUrl!,
-                            )
-                            : null,
-                    child:
-                        !_isValidUrl(task.creator.avatarUrl)
-                            ? SvgPicture.asset(
-                              'assets/images/defualt_avatar.svg',
-                            )
-                            : null,
+                  SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: ClipOval(
+                      child: CachedNetworkImage(
+                        imageUrl: task.creator.avatarUrl ?? '',
+                        placeholder: (context, url) => SvgPicture.asset(
+                          'assets/images/defualt_avatar.svg',
+                          fit: BoxFit.cover,
+                        ),
+                        errorWidget: (context, url, error) => SvgPicture.asset(
+                          'assets/images/defualt_avatar.svg',
+                          fit: BoxFit.cover,
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(

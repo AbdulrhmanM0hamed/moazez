@@ -27,8 +27,8 @@ class TaskHeaderCard extends StatelessWidget {
                   child: Text(
                     taskDetails.title,
                     style: getBoldStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 20,
+                      color: AppColors.primary,
+                      fontSize: FontSize.size18,
                       fontFamily: FontConstant.cairo,
                     ),
                   ),

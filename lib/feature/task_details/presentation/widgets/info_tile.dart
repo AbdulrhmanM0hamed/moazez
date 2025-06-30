@@ -27,7 +27,7 @@ class InfoTile extends StatelessWidget {
           Text(
             '$title: ',
             style: getBoldStyle(
-              color: AppColors.textPrimary,
+              color: AppColors.primary,
               fontSize: 15,
               fontFamily: FontConstant.cairo,
             ),

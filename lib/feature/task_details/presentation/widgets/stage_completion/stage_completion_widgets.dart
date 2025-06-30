@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:moazez/core/utils/common/custom_button.dart';
+import 'package:moazez/core/utils/common/custom_dialog_button.dart';
 import 'package:moazez/core/utils/common/custom_text_field.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
-import 'package:moazez/core/widgets/custom_snackbar.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 
 class StageCompletionImagePicker extends StatefulWidget {
@@ -63,9 +63,8 @@ class _StageCompletionImagePickerState
               width: double.infinity,
               height: 100,
               decoration: BoxDecoration(
-                color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.blue.withOpacity(0.2)),
+                border: Border.all(color: Colors.blue.withValues(alpha: 0.2)),
               ),
               child: IconButton(
                 icon: Icon(
@@ -228,10 +227,7 @@ class StageCompletionFooter extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
       children: [
-        TextButton(
-          onPressed: onCancel,
-          child: const Text('إلغاء', style: TextStyle(color: Colors.grey)),
-        ),
+        CustomDialogButton(text: 'إلغاء', onPressed: onCancel),
         const SizedBox(width: 10),
         SizedBox(
           width: 120,

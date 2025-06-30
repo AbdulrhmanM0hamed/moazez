@@ -25,7 +25,6 @@ class SupporterOnboardingPage extends StatelessWidget {
             'كن الداعم الذي يصنع الفارق',
             textAlign: TextAlign.center,
             style: getBoldStyle(
-              color: AppColors.black,
               fontSize: FontSize.size22,
               fontFamily: FontConstant.cairo,
             ),

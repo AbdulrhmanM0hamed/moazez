@@ -63,7 +63,7 @@ class TaskStagesCard extends StatelessWidget {
             title: Text(
               stage.title,
               style: getMediumStyle(
-                color: AppColors.textPrimary,
+                color: AppColors.primary,
                 fontFamily: FontConstant.cairo,
               ),
             ),

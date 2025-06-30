@@ -20,7 +20,7 @@ class TaskProgressCard extends StatelessWidget {
             Text(
               'تقدم المهمة',
               style: getBoldStyle(
-                color: AppColors.textPrimary,
+                color: AppColors.primary,
                 fontSize: 18,
                 fontFamily: FontConstant.cairo,
               ),

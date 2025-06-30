@@ -51,7 +51,10 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
         _nameController.text = profile.name ?? '';
         _emailController.text = profile.email ?? '';
         _phoneController.text = profile.phone ?? '';
-        _selectedGender = (profile.gender == 'male' || profile.gender == 'female') ? profile.gender : null;
+        _selectedGender =
+            (profile.gender == 'male' || profile.gender == 'female')
+                ? profile.gender
+                : null;
         birthdateController.text = profile.birthdate ?? '';
 
         // Find matching area and city from static data
@@ -133,18 +136,12 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
       body: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
           if (state is ProfileError) {
-            CustomSnackbar.show(
+            CustomSnackbar.showError(
               context: context,
               message: state.message,
-              isError: true,
             );
           }
-          if (state is ProfileLoaded) {
-            CustomSnackbar.show(
-              context: context,
-              message: 'تم تحديث الملف الشخصي بنجاح',
-            );
-          }
+          // Removed duplicate success message from here as it's already shown in _saveProfile
         },
         builder: (context, state) {
           return Form(
@@ -154,7 +151,7 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16 , vertical: 16),
                     child: Column(
                       children: [
                         Center(
@@ -249,11 +246,17 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
                           ),
                         ),
                         const SizedBox(height: 24),
-                        CustomTaskTextField(
-                          controller: _nameController,
-                          labelText: 'الاسم',
-                          prefixIcon: Icons.person,
-                          validator: FormValidators.validateName,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomTaskTextField(
+                                controller: _nameController,
+                                labelText: 'الاسم',
+                                prefixIcon: Icons.person,
+                                validator: FormValidators.validateName,
+                              ),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 16),
                         CustomTaskTextField(
@@ -264,34 +267,50 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
                           validator: FormValidators.validateEmail,
                         ),
                         const SizedBox(height: 16),
-                        CustomTaskTextField(
-                          controller: _phoneController,
-                          labelText: 'رقم الهاتف',
-                          prefixIcon: Icons.phone,
-                          keyboardType: TextInputType.phone,
-                          validator: FormValidators.validatePhone,
-                        ),
-                        const SizedBox(height: 16),
-                        DropdownButtonFormField<String>(
-                          value: _selectedGender,
-                          decoration: InputDecoration(
-                            labelText: 'النوع',
-                            prefixIcon: Icon(_selectedGender == 'female' ? Icons.female : Icons.male),
-                          ),
-                          items: const [
-                            DropdownMenuItem(value: 'male', child: Text('ذكر')),
-                            DropdownMenuItem(
-                              value: 'female',
-                              child: Text('أنثى'),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomTaskTextField(
+                                controller: _phoneController,
+                                labelText: 'رقم الهاتف',
+                                prefixIcon: Icons.phone,
+                                keyboardType: TextInputType.phone,
+                                validator: FormValidators.validatePhone,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: DropdownButtonFormField<String>(
+                                value: _selectedGender,
+                                decoration: InputDecoration(
+                                  labelText: 'النوع',
+                                  prefixIcon: Icon(
+                                    _selectedGender == 'female'
+                                        ? Icons.female
+                                        : Icons.male,
+                                  ),
+                                ),
+                                items: const [
+                                  DropdownMenuItem(
+                                    value: 'male',
+                                    child: Text('ذكر'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'female',
+                                    child: Text('أنثى'),
+                                  ),
+                                ],
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedGender = value;
+                                  });
+                                },
+                              ),
                             ),
                           ],
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedGender = value;
-                            });
-                          },
                         ),
                         const SizedBox(height: 16),
+
                         TextFormField(
                           controller: birthdateController,
                           decoration: const InputDecoration(
@@ -315,117 +334,135 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
                           },
                         ),
                         const SizedBox(height: 16),
-                        DropdownButtonFormField<Area>(
-                          value: _selectedArea,
-                          decoration: InputDecoration(
-                            labelText: 'المنطقة',
-                            prefixIcon: const Icon(Icons.location_city),
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(
-                                color: AppColors.border,
-                                width: 1,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(
-                                color: AppColors.primary,
-                                width: 1.5,
-                              ),
-                            ),
-                          ),
-                          items:
-                              kAreas
-                                  .map(
-                                    (area) => DropdownMenuItem(
-                                      value: area,
-                                      child: Text(area.name),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: DropdownButtonFormField<Area>(
+                                isExpanded: true,
+                                value: _selectedArea,
+                                decoration: InputDecoration(
+                                  labelText: 'المنطقة',
+                                  prefixIcon: const Icon(Icons.location_city),
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: AppColors.border,
+                                      width: 1,
                                     ),
-                                  )
-                                  .toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedArea = value;
-                              _selectedCityId =
-                                  null; // Reset city when area changes
-                            });
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        DropdownButtonFormField<int>(
-                          value: _selectedCityId,
-                          decoration: InputDecoration(
-                            labelText: 'المدينة',
-                            prefixIcon: const Icon(Icons.location_city),
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(
-                                color: AppColors.border,
-                                width: 1,
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(
+                                      color: AppColors.primary,
+                                      width: 1.5,
+                                    ),
+                                  ),
+                                ),
+                                items:
+                                    kAreas
+                                        .map(
+                                          (area) => DropdownMenuItem(
+                                            value: area,
+                                            child: Text(
+                                              area.name,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedArea = value;
+                                    _selectedCityId =
+                                        null; // Reset city when area changes
+                                  });
+                                },
                               ),
                             ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(
-                                color: AppColors.primary,
-                                width: 1.5,
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: DropdownButtonFormField<int>(
+                                isExpanded: true,
+                                value: _selectedCityId,
+                                decoration: InputDecoration(
+                                  labelText: 'المدينة',
+                                  prefixIcon: const Icon(Icons.location_city),
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: AppColors.border,
+                                      width: 1,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(
+                                      color: AppColors.primary,
+                                      width: 1.5,
+                                    ),
+                                  ),
+                                ),
+                                items:
+                                    _selectedArea != null
+                                        ? _selectedArea!.cities
+                                            .fold<Map<int, City>>({}, (
+                                              map,
+                                              city,
+                                            ) {
+                                              if (!map.containsKey(city.id)) {
+                                                map[city.id] = city;
+                                              }
+                                              return map;
+                                            })
+                                            .values
+                                            .map(
+                                              (city) => DropdownMenuItem(
+                                                value: city.id,
+                                                child: Text(
+                                                  city.name,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            )
+                                            .toList()
+                                        : [],
+                                validator: (value) {
+                                  if (_selectedArea != null && value != null) {
+                                    if (!_selectedArea!.cities.any(
+                                      (city) => city.id == value,
+                                    )) {
+                                      return 'المدينة المحددة غير موجودة في هذه المنطقة';
+                                    }
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedCityId = value;
+                                  });
+                                },
                               ),
                             ),
-                          ),
-                          items:
-                              _selectedArea != null
-                                  ? _selectedArea!.cities
-                                      .fold<Map<int, City>>({}, (map, city) {
-                                        if (!map.containsKey(city.id)) {
-                                          map[city.id] = city;
-                                        }
-                                        return map;
-                                      })
-                                      .values
-                                      .map(
-                                        (city) => DropdownMenuItem(
-                                          value: city.id,
-                                          child: Text(city.name),
-                                        ),
-                                      )
-                                      .toList()
-                                  : [],
-                          // Add a validator to ensure the value exists in items (for debugging)
-                          validator: (value) {
-                            if (_selectedArea != null && value != null) {
-                              if (!_selectedArea!.cities.any(
-                                (city) => city.id == value,
-                              )) {
-                                return 'المدينة المحددة غير موجودة في هذه المنطقة';
-                              }
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedCityId = value;
-                            });
-                          },
+                          ],
                         ),
                         const SizedBox(height: 24),
                         _isLoading
-                            ? Container(
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.all(16),
-                              child: CustomProgressIndcator(
-                                size: 40,
-                                color: AppColors.primary,
-                              ),
-                            )
+                            ? Center(
+                                child: Container(
+                                  padding: const EdgeInsets.all(16),
+                                  child: CustomProgressIndcator(
+                                    size: 40,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              )
                             : CustomButton(
-                              onPressed: _saveProfile,
-                              text: 'حفظ التغييرات',
-                            ),
+                                onPressed: _saveProfile,
+                                text: 'حفظ التغييرات',
+                              ),
                         const SizedBox(height: 24),
                       ],
                     ),

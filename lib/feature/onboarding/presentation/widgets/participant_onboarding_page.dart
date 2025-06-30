@@ -21,7 +21,6 @@ class ParticipantOnboardingPage extends StatelessWidget {
               'جاهز تثبت قدراتك؟\nالمهام في انتظارك',
               textAlign: TextAlign.center,
               style: getBoldStyle(
-                color: AppColors.black,
                 fontSize: FontSize.size16,
                 fontFamily: FontConstant.cairo,
               ),
@@ -36,9 +35,9 @@ class ParticipantOnboardingPage extends StatelessWidget {
             Text(
               'ابدأ رحلتك مع معزز',
               style: getSemiBoldStyle(
-                  color: AppColors.black,
-                  fontSize: FontSize.size18,
-                  fontFamily: FontConstant.cairo),
+                fontSize: FontSize.size18,
+                fontFamily: FontConstant.cairo,
+              ),
             ),
             const SizedBox(height: 16),
             SvgPicture.asset(
@@ -56,15 +55,14 @@ class ParticipantOnboardingPage extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Expanded(child: _TaskCard(
-          label: 'مهام نشطة',
-          value: '0',
-        )),
+        const Expanded(child: _TaskCard(label: 'مهام نشطة', value: '0')),
         const SizedBox(width: 16),
-        Expanded(child: _TaskCard(
-          label: 'مهام مكتملة',
-          valueWidget: Icon(Icons.check, color: AppColors.primary, size: 30),
-        )),
+        Expanded(
+          child: _TaskCard(
+            label: 'مهام مكتملة',
+            valueWidget: Icon(Icons.check, color: AppColors.primary, size: 30),
+          ),
+        ),
       ],
     );
   }
@@ -73,31 +71,45 @@ class ParticipantOnboardingPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('التقدم', 
+        Text(
+          'التقدم',
           style: getMediumStyle(
-            color: AppColors.textPrimary,
+            color: AppColors.primary,
             fontFamily: FontConstant.cairo,
+            fontSize: FontSize.size16,
           ),
         ),
         const SizedBox(height: 8),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: LinearProgressIndicator(
-            value: 0.4,
-            backgroundColor: Colors.grey[300],
-            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-            minHeight: 10,
+        ShaderMask(
+          shaderCallback: (bounds) {
+            return const LinearGradient(
+              colors: [Color(0xFF0DD0F4), Color(0xFF006E82)],
+            ).createShader(Rect.fromLTRB(0, 0, bounds.width, bounds.height));
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: LinearProgressIndicator(
+              value: 0.4,
+              backgroundColor: Colors.grey.withValues(alpha: 0.4),
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                Color.fromARGB(255, 255, 255, 255),
+              ),
+              minHeight: 10,
+            ),
           ),
         ),
         const SizedBox(height: 4),
         Align(
           alignment: Alignment.centerLeft,
-          child: Text('40%',
-              style: getSemiBoldStyle(
-                  color: AppColors.primary,
-                  fontSize: FontSize.size14,
-                  fontFamily: FontConstant.cairo)),
-        )
+          child: Text(
+            '40%',
+            style: getSemiBoldStyle(
+              color: AppColors.primary,
+              fontSize: FontSize.size14,
+              fontFamily: FontConstant.cairo,
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -105,7 +117,6 @@ class ParticipantOnboardingPage extends StatelessWidget {
   Widget _buildRewardsSection() {
     return Column(
       children: [
-      
         const SizedBox(height: 20),
         _RewardCard(
           title: 'المعززات المحققة',
@@ -115,9 +126,14 @@ class ParticipantOnboardingPage extends StatelessWidget {
         const SizedBox(height: 12),
         _RewardCard(
           title: 'معزز إنجاز المهام',
-          trailing: Text('68 ر.س',
-              style: getBoldStyle(
-                  color: AppColors.textSecondary, fontSize: FontSize.size16, fontFamily: FontConstant.cairo)),
+          trailing: Text(
+            '68 ر.س',
+            style: getBoldStyle(
+              color: AppColors.textSecondary,
+              fontSize: FontSize.size16,
+              fontFamily: FontConstant.cairo,
+            ),
+          ),
           icon: Icons.note_alt_outlined,
           iconColor: AppColors.textSecondary,
         ),
@@ -131,18 +147,13 @@ class _TaskCard extends StatelessWidget {
   final String? value;
   final Widget? valueWidget;
 
-  const _TaskCard({
-    required this.label,
-    this.value,
-    this.valueWidget,
-  });
+  const _TaskCard({required this.label, this.value, this.valueWidget});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(15),
         border: Border.all(color: Colors.grey.shade300),
         boxShadow: [
@@ -150,7 +161,7 @@ class _TaskCard extends StatelessWidget {
             color: Colors.grey.withOpacity(0.1),
             blurRadius: 10,
             offset: const Offset(0, 5),
-          )
+          ),
         ],
       ),
       child: Column(
@@ -159,12 +170,19 @@ class _TaskCard extends StatelessWidget {
           valueWidget ??
               Text(
                 value!,
-                style: getBoldStyle(color: AppColors.textSecondary, fontSize: FontSize.size24, fontFamily: FontConstant.cairo),
+                style: getBoldStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: FontSize.size24,
+                  fontFamily: FontConstant.cairo,
+                ),
               ),
           const SizedBox(height: 8),
           Text(
             label,
-            style: getMediumStyle(color: AppColors.textSecondary, fontFamily: FontConstant.cairo),
+            style: getMediumStyle(
+              color: AppColors.textSecondary,
+              fontFamily: FontConstant.cairo,
+            ),
           ),
         ],
       ),
@@ -190,17 +208,22 @@ class _RewardCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-         border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: Colors.grey.shade200),
       ),
       child: Row(
         children: [
           Icon(icon, color: iconColor, size: 28),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(title,
-                style: getSemiBoldStyle(color: AppColors.textSecondary, fontSize: FontSize.size16, fontFamily: FontConstant.cairo)),
+            child: Text(
+              title,
+              style: getSemiBoldStyle(
+                color: AppColors.textSecondary,
+                fontSize: FontSize.size16,
+                fontFamily: FontConstant.cairo,
+              ),
+            ),
           ),
           if (trailing != null) trailing!,
         ],

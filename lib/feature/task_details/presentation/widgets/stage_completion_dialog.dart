@@ -140,7 +140,7 @@ class _StageCompletionDialogState extends State<StageCompletionDialog> {
                         }
                         cubit.completeStage(stageId: widget.stageId);
                       } catch (e) {
-                        print('Error completing stage: $e');
+                   //     print('Error completing stage: $e');
                         String errorMessage = 'خطأ أثناء إكمال المرحلة: $e';
                         if (e.toString().contains('422')) {
                           errorMessage =

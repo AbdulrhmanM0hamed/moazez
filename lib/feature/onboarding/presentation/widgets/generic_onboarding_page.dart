@@ -24,7 +24,7 @@ class GenericOnboardingPage extends StatelessWidget {
             'أنجز مهامك، وحقق أهدافك!',
             textAlign: TextAlign.center,
             style: getBoldStyle(
-              color: AppColors.black,
+        
               fontSize: FontSize.size22,
               fontFamily: FontConstant.cairo,
             ),
