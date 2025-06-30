@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:moazez/core/utils/constant/api_endpoints.dart';
 import 'package:moazez/feature/home_supporter/data/models/team_model.dart';
 import 'package:moazez/core/services/cache/cache_service.dart';
@@ -60,7 +59,7 @@ class TeamRemoteDataSourceImpl implements TeamRemoteDataSource {
           },
         ),
       );
-      debugPrint('Create Team Response: ${response.data}');
+      //debugPrint('Create Team Response: ${response.data}');
       if (response.data['status'] == 'success' || response.data['status'] == true || (response.data['message'] != null && response.data['message'].contains('تم إنشاء الفريق بنجاح'))) {
         if (response.data['data'] != null && response.data['data'] is Map<String, dynamic>) {
           return TeamModel.fromJson(response.data['data']);
@@ -97,7 +96,7 @@ class TeamRemoteDataSourceImpl implements TeamRemoteDataSource {
         ),
       );
       if (response.data['status'] == 'success' || response.data['status'] == true || (response.data['message'] == 'تم تعديل اسم الفريق بنجاح')) {
-        debugPrint('Team Name Updated Successfully: ${response.data['data']}');
+     //   debugPrint('Team Name Updated Successfully: ${response.data['data']}');
         if (response.data['data'] != null && response.data['data'] is Map<String, dynamic>) {
           return TeamModel.fromJson(response.data['data']);
         } else {
@@ -170,12 +169,12 @@ class TeamRemoteDataSourceImpl implements TeamRemoteDataSource {
           },
         ),
       );
-      debugPrint('Get Member Task Stats Response: ${response.data}');
+     // debugPrint('Get Member Task Stats Response: ${response.data}');
       if (response.data['status'] == 'success' || response.data['status'] == true || (response.data['message'] == 'تم جلب إحصائيات مهام أعضاء الفريق بنجاح')) {
-        debugPrint('Member Task Stats Retrieved Successfully: ${response.data['data']}');
+        //debugPrint('Member Task Stats Retrieved Successfully: ${response.data['data']}');
         return MemberTaskStatsResponseEntity.fromJson(response.data['data']);
       } else {
-        debugPrint('Member Task Stats Retrieval Failed: ${response.data['message']}');
+   //     debugPrint('Member Task Stats Retrieval Failed: ${response.data['message']}');
         throw ServerException(
           message: response.data['message'] ?? 'حدث خطأ غير معروف',
         );

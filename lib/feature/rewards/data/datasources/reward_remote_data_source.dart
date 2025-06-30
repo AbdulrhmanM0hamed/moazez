@@ -22,20 +22,20 @@ class RewardRemoteDataSourceImpl implements RewardRemoteDataSource {
     dio.options.headers['Authorization'] = 'Bearer $token';
     try {
       final response = await dio.get(ApiEndpoints.teamRewards);
-      print(response.data);
+    //  print(response.data);
       if (response.statusCode == 200 && response.data != null) {
         final data = response.data['data'] as List;
-        print(data);
+    //    print(data);
         return data.map((json) => RewardModel.fromJson(json)).toList();
       } else {
-        print(response.data);
+      //  print(response.data);
         throw ServerException(message: 'فشل في تحميل البيانات');
       }
     } on DioException catch (e) {
-      print(e);
+     // print(e);
       throw handleDioException(e);
     } catch (e) {
-      print(e);
+     // print(e);
       throw ServerException(message: 'فشل في تحميل البيانات');
     }
   }
@@ -45,20 +45,20 @@ class RewardRemoteDataSourceImpl implements RewardRemoteDataSource {
     dio.options.headers['Authorization'] = 'Bearer $token';
     try {
       final response = await dio.get(ApiEndpoints.myRewards);
-      print(response.data);
+   //   print(response.data);
       if (response.statusCode == 200 && response.data != null) {
         final data = response.data['data'] as List;
-        print(data);
+     //   print(data);
         return data.map((json) => RewardModel.fromJson(json)).toList();
       } else {
-        print(response.data);
+     //   print(response.data);
         throw ServerException(message: 'فشل في تحميل البيانات');
       }
     } on DioException catch (e) {
-      print(e);
+    //  print(e);
       throw handleDioException(e);
     } catch (e) {
-      print(e);
+    //  print(e);
       throw ServerException(message: 'فشل في تحميل البيانات');
     }
   }

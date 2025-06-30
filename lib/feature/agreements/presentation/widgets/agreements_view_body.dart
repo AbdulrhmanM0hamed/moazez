@@ -100,23 +100,35 @@ class _AgreementsViewBodyState extends State<AgreementsViewBody> {
                 final filteredTasks = _getFilteredTasks(allTasks);
 
                 if (filteredTasks.isEmpty) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/images/tasks_empty.svg',
-                        height: 200,
-                        width: 200,
-                      ),
-                      Text(
-                        'لا توجد مهام ',
-                        style: getMediumStyle(
-                          fontFamily: FontConstant.cairo,
-                          fontSize: 18,
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      await context.read<MemberStatsCubit>().fetchMemberTaskStats();
+                      return Future.delayed(const Duration(seconds: 1));
+                    },
+                    child: ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      children: [
+                        const SizedBox(height: 40),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/images/tasks_empty.svg',
+                              height: 200,
+                              width: 200,
+                            ),
+                            Text(
+                              'لا توجد مهام ',
+                              style: getMediumStyle(
+                                fontFamily: FontConstant.cairo,
+                                fontSize: 18,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+                      ],
+                    ),
                   );
                 }
 

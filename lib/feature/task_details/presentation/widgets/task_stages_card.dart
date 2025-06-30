@@ -82,37 +82,47 @@ class TaskStagesCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 StatusChipAr(status: stage.status),
-                if (stage.status.toLowerCase() == 'in_progress' ||
-                    stage.status.toLowerCase() == 'pending')
-                  FutureBuilder<String?>(
-                    future: sl<CacheService>().getUserRole(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData && snapshot.data?.toLowerCase() != 'supporter') {
-                        return IconButton(
-                          icon: Icon(Icons.check_circle, color: Colors.green),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (dialogContext) {
-                                return BlocProvider.value(
-                                  value: BlocProvider.of<StageCompletionCubit>(context),
-                                  child: StageCompletionDialog(
-                                    parentContext: context,
-                                    stageId: stage.id,
-                                    stageTitle: stage.title,
-                                    onComplete: () {
-                                      context.read<TaskDetailsCubit>().fetchTaskDetails(stage.taskId);
-                                    },
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
+                if (stage.status.toLowerCase() != 'completed')
+                   FutureBuilder<String?>(
+                     future: sl<CacheService>().getUserRole(),
+                     builder: (context, snapshot) {
+                       if (snapshot.hasData && snapshot.data?.toLowerCase() != 'supporter') {
+                         return PopupMenuButton<String>(
+                           icon: const Icon(Icons.more_vert),
+                           onSelected: (value) {
+                             if (value == 'complete') {
+                               showDialog(
+                                 context: context,
+                                 builder: (dialogContext) {
+                                   return BlocProvider.value(
+                                     value: BlocProvider.of<StageCompletionCubit>(context),
+                                     child: StageCompletionDialog(
+                                       parentContext: context,
+                                       stageId: stage.id,
+                                       stageTitle: stage.title,
+                                       onComplete: () {
+                                         context.read<TaskDetailsCubit>().fetchTaskDetails(stage.taskId);
+                                       },
+                                     ),
+                                   );
+                                 },
+                               );
+                             }
+                           },
+                           itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                             const PopupMenuItem<String>(
+                               value: 'complete',
+                               child: ListTile(
+                                 leading: Icon(Icons.check_circle_outline, color: Colors.green),
+                                 title: Text('إتمام المرحلة'),
+                               ),
+                             ),
+                           ],
+                         );
+                       }
+                       return const SizedBox.shrink();
+                     },
+                   ),
               ],
             ),
             onTap: () {

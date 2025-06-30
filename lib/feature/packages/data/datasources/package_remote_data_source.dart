@@ -17,27 +17,27 @@ class PackageRemoteDataSourceImpl implements PackageRemoteDataSource {
   Future<List<PackageModel>> getPackages() async {
     try {
       // ignore: avoid_print
-      print("🔵 [PackageRemoteDataSource] Fetching packages from: ${ApiEndpoints.baseUrl + ApiEndpoints.packages}");
+     // print("🔵 [PackageRemoteDataSource] Fetching packages from: ${ApiEndpoints.baseUrl + ApiEndpoints.packages}");
       final response = await dio.get(ApiEndpoints.baseUrl + ApiEndpoints.packages);
       // ignore: avoid_print
-      print("🔵 [PackageRemoteDataSource] Status Code: ${response.statusCode}");
+    //  print("🔵 [PackageRemoteDataSource] Status Code: ${response.statusCode}");
       // ignore: avoid_print
-      print("🔵 [PackageRemoteDataSource] Full Response: ${response.data}");
+   //   print("🔵 [PackageRemoteDataSource] Full Response: ${response.data}");
       if (response.statusCode == 200) {
         final data = response.data['data'] as List<dynamic>;
         // ignore: avoid_print
-        print("🟢 [PackageRemoteDataSource] Packages count: ${data.length}");
+    //    print("🟢 [PackageRemoteDataSource] Packages count: ${data.length}");
         return data.map((json) => PackageModel.fromJson(json)).toList();
       } else {
         throw ServerException(message: 'فشل في تحميل البيانات');
       }
     } on DioException catch (e) {
       // ignore: avoid_print
-      print("🔴 [PackageRemoteDataSource] DioException: ${e.message}");
+   //   print("🔴 [PackageRemoteDataSource] DioException: ${e.message}");
       throw handleDioException(e);
     } catch (e) {
       // ignore: avoid_print
-      print("🔴 [PackageRemoteDataSource] Unknown error: $e");
+  //    print("🔴 [PackageRemoteDataSource] Unknown error: $e");
       throw ServerException(message: 'فشل في تحميل البيانات');
     }
   }

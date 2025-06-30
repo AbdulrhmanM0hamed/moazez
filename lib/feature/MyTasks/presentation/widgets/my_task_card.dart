@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:moazez/feature/MyTasks/domain/entities/my_task_entity.dart';
 import 'package:moazez/feature/MyTasks/presentation/widgets/gradient_progress_indicator.dart';
 import 'package:moazez/feature/MyTasks/presentation/widgets/stages_indicator.dart';
@@ -116,7 +117,10 @@ class MyTaskCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('المراحل', style: Theme.of(context).textTheme.bodyMedium),
+                    Text(
+                      'المراحل',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     const SizedBox(height: 8),
                     StagesIndicator(
                       totalStages: task.stagesCount,
@@ -132,15 +136,18 @@ class MyTaskCard extends StatelessWidget {
                   CircleAvatar(
                     radius: 20,
                     backgroundColor: theme.primaryColor.withValues(alpha: 0.1),
-                    backgroundImage: _isValidUrl(task.creator.avatarUrl)
-                        ? CachedNetworkImageProvider(task.creator.avatarUrl!)
-                        : null,
-                    child: !_isValidUrl(task.creator.avatarUrl)
-                        ? Text(
-                            task.creator.name.isNotEmpty ? task.creator.name[0] : '',
-                            style: TextStyle(color: theme.primaryColor, fontWeight: FontWeight.bold),
-                          )
-                        : null,
+                    backgroundImage:
+                        _isValidUrl(task.creator.avatarUrl)
+                            ? CachedNetworkImageProvider(
+                              task.creator.avatarUrl!,
+                            )
+                            : null,
+                    child:
+                        !_isValidUrl(task.creator.avatarUrl)
+                            ? SvgPicture.asset(
+                              'assets/images/defualt_avatar.svg',
+                            )
+                            : null,
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -149,11 +156,15 @@ class MyTaskCard extends StatelessWidget {
                       children: [
                         Text(
                           'بواسطة',
-                          style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey.shade600),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: Colors.grey.shade600,
+                          ),
                         ),
                         Text(
                           task.creator.name,
-                          style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),
@@ -167,7 +178,12 @@ class MyTaskCard extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(BuildContext context, {required String title, required String value, required Widget indicator}) {
+  Widget _buildInfoRow(
+    BuildContext context, {
+    required String title,
+    required String value,
+    required Widget indicator,
+  }) {
     final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +192,12 @@ class MyTaskCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(title, style: theme.textTheme.bodyMedium),
-            Text(value, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)),
+            Text(
+              value,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 8),

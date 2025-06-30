@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
-import 'package:moazez/feature/packages/domain/entities/package_entity.dart';
 import 'package:moazez/feature/packages/domain/entities/subscription_entity.dart';
 import 'package:moazez/feature/profile/data/models/profile_model.dart'
     show ActiveSubscription;
@@ -18,7 +17,7 @@ class SubscriptionCard extends StatelessWidget {
 
     // Debug log
     // ignore: avoid_print
-    print("🟢 [SubscriptionCard] incoming data: $subscription");
+   // print("🟢 [SubscriptionCard] incoming data: $subscription");
 
     // Unify the data source to SubscriptionEntity
     if (subscription is SubscriptionEntity) {

@@ -88,9 +88,21 @@ class _MyTasksViewBodyState extends State<_MyTasksViewBody> {
                   }
 
                   if (filteredTasks.isEmpty) {
-                    return const EmptyView(
-                      imagePath: 'assets/images/tasksEmpty.png',
-                      message: 'لا توجد مهام تطابق هذا الفلتر',
+                    return RefreshIndicator(
+                      onRefresh: () async {
+                        await context.read<MyTasksCubit>().getMyTasks();
+                        return Future.delayed(const Duration(seconds: 1));
+                      },
+                      child: ListView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        children: const [
+                          SizedBox(height: 40),
+                          EmptyView(
+                            imagePath: 'assets/images/tasksEmpty.png',
+                            message: 'لا توجد مهام تطابق هذا الفلتر',
+                          ),
+                        ],
+                      ),
                     );
                   }
                   return RefreshIndicator(
