@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
-import 'package:moazez/feature/home_supporter/domain/entities/subscription_entity.dart';
+import 'package:moazez/feature/packages/domain/entities/package_entity.dart';
+import 'package:moazez/feature/packages/domain/entities/subscription_entity.dart';
 import 'package:moazez/feature/profile/data/models/profile_model.dart'
     show ActiveSubscription;
 
@@ -14,6 +15,10 @@ class SubscriptionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SubscriptionEntity sub;
+
+    // Debug log
+    // ignore: avoid_print
+    print("🟢 [SubscriptionCard] incoming data: $subscription");
 
     // Unify the data source to SubscriptionEntity
     if (subscription is SubscriptionEntity) {
@@ -27,10 +32,10 @@ class SubscriptionCard extends StatelessWidget {
         endDate: null,
         pricePaid: '0',
         isActive: activeSub.status == 'active',
-        package: PackageEntity(
+        package: PackageEntitySub(
           id: 0,
           name: activeSub.packageName ?? 'Unknown Plan',
-          isTrial: activeSub.packageName?.contains('التجريبية') == true ? 1 : 0,
+          isTrial: activeSub.packageName?.contains('التجريبية') == true,
           maxTasks: 0, // Not available
           maxMilestonesPerTask: 0, // Not available
         ),
@@ -45,7 +50,7 @@ class SubscriptionCard extends StatelessWidget {
     }
 
     // Map data to the new UI parameters
-    final bool isTrial = sub.package.isTrial == 1;
+    final bool isTrial = sub.package.isTrial == true;
     final String planName = sub.package.name;
     final String billingCycle =
         isTrial ? 'فترة تجريبية' : 'شهرياً'; // Placeholder

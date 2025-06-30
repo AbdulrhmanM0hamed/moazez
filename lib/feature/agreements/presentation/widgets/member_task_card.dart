@@ -1,6 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:moazez/core/utils/common/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:moazez/feature/agreements/presentation/cubit/close_task_cubit.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/gradient_progress_indicator.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/stages_indicator.dart';
@@ -212,12 +213,20 @@ class MemberTaskCard extends StatelessWidget {
                   const Spacer(),
                   CircleAvatar(
                     radius: 16,
-                    backgroundImage: _isValidUrl(member.avatarUrl)
-                        ? CachedNetworkImageProvider(member.avatarUrl)
-                        : null,
-                    child: !_isValidUrl(member.avatarUrl)
-                        ? const Icon(Icons.person, size: 16)
-                        : null,
+                    child: _isValidUrl(member.avatarUrl)
+                        ? CustomCachedNetworkImage(
+                            imageUrl: member.avatarUrl,
+                            width: 32,
+                            height: 32,
+                            fit: BoxFit.cover,
+                            borderRadius: BorderRadius.circular(16),
+                          )
+                        : SvgPicture.asset(
+                            'assets/images/defualt_avatar.svg',
+                            width: 32,
+                            height: 32,
+                            fit: BoxFit.cover,
+                          ),
                   ),
                   const SizedBox(width: 8),
                   Text(

@@ -2,9 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:moazez/core/error/exceptions.dart';
 import 'package:moazez/core/error/failures.dart';
 import 'package:moazez/core/network/network_info.dart';
-import 'package:moazez/feature/home_supporter/data/datasources/subscription_remote_data_source.dart';
-import 'package:moazez/feature/home_supporter/domain/entities/subscription_entity.dart';
-import 'package:moazez/feature/home_supporter/domain/repositories/subscription_repository.dart';
+import 'package:moazez/feature/packages/data/datasources/subscription_remote_data_source.dart';
+import 'package:moazez/feature/packages/domain/entities/subscription_entity.dart';
+import 'package:moazez/feature/packages/domain/repositories/subscription_repository.dart';
 
 class SubscriptionRepositoryImpl implements SubscriptionRepository {
   final SubscriptionRemoteDataSource remoteDataSource;

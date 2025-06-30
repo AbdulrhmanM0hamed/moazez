@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:moazez/feature/home_supporter/domain/entities/subscription_entity.dart';
+import 'package:moazez/feature/packages/domain/entities/subscription_entity.dart';
 
 abstract class SubscriptionState extends Equatable {
   const SubscriptionState();

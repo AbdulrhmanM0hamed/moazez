@@ -50,6 +50,9 @@ class PackageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Debug log
+    // ignore: avoid_print
+    print(" [PackageCard] displaying package: ${package.name}, isTrial: ${package.isTrial}");
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
       elevation: 8,

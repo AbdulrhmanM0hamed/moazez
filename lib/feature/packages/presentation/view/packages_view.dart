@@ -4,9 +4,9 @@ import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
-import 'package:moazez/feature/home_supporter/presentation/cubit/subscription_cubit.dart';
-import 'package:moazez/feature/home_supporter/presentation/cubit/subscription_state.dart';
-import 'package:moazez/feature/home_supporter/presentation/widgets/subscription_card.dart';
+import 'package:moazez/feature/packages/presentation/cubit/subscription_cubit.dart';
+import 'package:moazez/feature/packages/presentation/cubit/subscription_state.dart';
+import 'package:moazez/feature/packages/presentation/widgets/subscription_card.dart';
 import 'package:moazez/feature/packages/presentation/cubit/package_cubit.dart';
 import 'package:moazez/feature/packages/presentation/cubit/package_state.dart';
 import 'package:moazez/feature/packages/presentation/widgets/packages_grid.dart';
@@ -36,6 +36,7 @@ class PackagesView extends StatelessWidget {
                       } else if (subState is SubscriptionLoaded) {
                         return SubscriptionCard(subscription: subState.subscription);
                       } else if (subState is SubscriptionError) {
+                        print(subState.message);
                         return Center(child: Text(subState.message));
                       } else {
                         return const SizedBox.shrink();
@@ -53,6 +54,7 @@ class PackagesView extends StatelessWidget {
                             child: PackagesGrid(packages: state.packages),
                           );
                         } else if (state is PackageError) {
+                          print(state.message);
                           return Center(
                             child: Text(
                               state.message,

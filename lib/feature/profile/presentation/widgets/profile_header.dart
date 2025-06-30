@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:moazez/core/utils/common/cached_network_image.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/profile/data/models/profile_model.dart';
@@ -22,10 +24,17 @@ class ProfileHeader extends StatelessWidget {
             backgroundColor: AppColors.border,
             child: Icon(Icons.person, size: 50, color: Colors.white),
           ),
-          errorWidget: const CircleAvatar(
+          errorWidget: CircleAvatar(
             radius: 50,
             backgroundColor: AppColors.border,
-            child: Icon(Icons.person, size: 50, color: Colors.white),
+            child: ClipOval(
+              child: SvgPicture.asset(
+                'assets/images/defualt_avatar.svg',
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         ),
         const SizedBox(height: 16),

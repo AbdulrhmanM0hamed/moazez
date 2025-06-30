@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:moazez/core/utils/common/cached_network_image.dart';
 import 'package:moazez/feature/agreements/domain/entities/team_member.dart';
 import 'package:moazez/feature/agreements/presentation/cubit/team_members_cubit.dart';
 import 'package:moazez/feature/agreements/presentation/cubit/team_members_state.dart';
@@ -61,12 +63,20 @@ class _TeamMemberSelectionDialogState extends State<TeamMemberSelectionDialog> {
                       children: [
                         CircleAvatar(
                           radius: 20,
-                          backgroundImage: _isValidUrl(member.avatarUrl) 
-                              ? NetworkImage(member.avatarUrl!)
-                              : null,
-                          child: !_isValidUrl(member.avatarUrl)
-                              ? const Icon(Icons.person, size: 20)
-                              : null,
+                          child: _isValidUrl(member.avatarUrl) 
+                              ? CustomCachedNetworkImage(
+                                  imageUrl: member.avatarUrl!,
+                                  width: 40,
+                                  height: 40,
+                                  fit: BoxFit.cover,
+                                  borderRadius: BorderRadius.circular(20),
+                                )
+                              : SvgPicture.asset(
+                                  'assets/images/defualt_avatar.svg',
+                                  width: 40,
+                                  height: 40,
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                         SizedBox(width: 10),
                         Text(member.name),

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/packages_view.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
-import 'package:moazez/feature/home_supporter/presentation/cubit/subscription_cubit.dart';
+import 'package:moazez/feature/packages/presentation/cubit/subscription_cubit.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';

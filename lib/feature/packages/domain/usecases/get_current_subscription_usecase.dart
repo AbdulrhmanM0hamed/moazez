@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:moazez/core/error/failures.dart';
 import 'package:moazez/core/usecases/usecase.dart';
-import 'package:moazez/feature/home_supporter/domain/entities/subscription_entity.dart';
-import 'package:moazez/feature/home_supporter/domain/repositories/subscription_repository.dart';
+import 'package:moazez/feature/packages/domain/entities/subscription_entity.dart';
+import 'package:moazez/feature/packages/domain/repositories/subscription_repository.dart';
 
 class GetCurrentSubscriptionUseCase implements UseCase<SubscriptionEntity, NoParams> {
   final SubscriptionRepository repository;

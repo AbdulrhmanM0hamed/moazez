@@ -19,7 +19,11 @@ class PackagesGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Filter out trial packages to show only paid packages
-    final paidPackages = packages.where((package) => package.isTrial == 0).toList();
+    // Filter out trial packages (isTrial == true)
+    final paidPackages = packages.where((package) => package.isTrial == false).toList();
+    // Debug
+    // ignore: avoid_print
+    print("🟢 [PackagesGrid] Paid packages count: ${paidPackages.length}");
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: _calculateCrossAxisCount(context),

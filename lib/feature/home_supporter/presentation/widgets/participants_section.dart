@@ -74,8 +74,8 @@ class ParticipantsSection extends StatelessWidget {
                           member.avatarUrl,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
-                            return Image.asset(
-                              'assets/images/avatar.jpg',
+                            return SvgPicture.asset(
+                              'assets/images/defualt_avatar.svg',
                               fit: BoxFit.cover,
                             );
                           },

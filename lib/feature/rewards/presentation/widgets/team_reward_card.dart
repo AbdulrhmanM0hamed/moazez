@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:moazez/core/utils/common/cached_network_image.dart';
+import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/rewards/domain/entities/reward_entity.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'dart:ui';
@@ -103,24 +105,11 @@ class TeamRewardCard extends StatelessWidget {
                                                 size: 30,
                                               ),
                                             )
-                                            : Text(
-                                              reward.user != null &&
-                                                      reward
-                                                          .user!
-                                                          .name
-                                                          .isNotEmpty
-                                                  ? reward.user!.name
-                                                      .substring(0, 1)
-                                                      .toUpperCase()
-                                                  : '?',
-                                              style: theme.textTheme.titleLarge
-                                                  ?.copyWith(
-                                                    color:
-                                                        theme
-                                                            .colorScheme
-                                                            .onPrimaryContainer,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                            : SvgPicture.asset(
+                                              'assets/images/defualt_avatar.svg',
+                                              width: 56,
+                                              height: 56,
+                                              fit: BoxFit.cover,
                                             ),
                                   ),
                                 ),
@@ -176,7 +165,7 @@ class TeamRewardCard extends StatelessWidget {
                                       color: _getStatusColor(
                                         reward.status,
                                         theme,
-                                      ).withOpacity(0.18),
+                                      ).withValues(alpha: 0.18),
                                       blurRadius: 8,
                                       offset: const Offset(0, 2),
                                     ),
@@ -194,7 +183,7 @@ class TeamRewardCard extends StatelessWidget {
                             ],
                           ),
 
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 0.5),
 
                           // Reward notes with improved typography
                           Text(
@@ -204,7 +193,6 @@ class TeamRewardCard extends StatelessWidget {
                               fontSize: FontSize.size14,
                             ),
                           ),
-                          const SizedBox(height: 8),
 
                           // Amount or Description based on whether amount is non-zero
                           Row(
@@ -300,7 +288,7 @@ class TeamRewardCard extends StatelessWidget {
       case 'processing':
         return Colors.blue;
       default:
-        return theme.colorScheme.primary;
+        return AppColors.success;
     }
   }
 

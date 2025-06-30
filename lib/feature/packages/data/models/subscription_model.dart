@@ -1,4 +1,4 @@
-import 'package:moazez/feature/home_supporter/domain/entities/subscription_entity.dart';
+import 'package:moazez/feature/packages/domain/entities/subscription_entity.dart';
 
 class SubscriptionModel extends SubscriptionEntity {
   const SubscriptionModel({
@@ -12,16 +12,16 @@ class SubscriptionModel extends SubscriptionEntity {
     required double? daysRemaining,
     required bool isActive,
   }) : super(
-          id: id,
-          status: status,
-          startDate: startDate ?? '',
-          endDate: endDate,
-          pricePaid: pricePaid,
-          package: package,
-          usage: usage,
-          daysRemaining: daysRemaining,
-          isActive: isActive,
-        );
+         id: id,
+         status: status,
+         startDate: startDate ?? '',
+         endDate: endDate,
+         pricePaid: pricePaid,
+         package: package,
+         usage: usage,
+         daysRemaining: daysRemaining,
+         isActive: isActive,
+       );
 
   factory SubscriptionModel.fromJson(Map<String, dynamic> json) {
     return SubscriptionModel(
@@ -32,10 +32,12 @@ class SubscriptionModel extends SubscriptionEntity {
       pricePaid: json['price_paid'] ?? '',
       package: PackageModel.fromJson(json['package'] ?? {}),
       usage: UsageModel.fromJson(json['usage'] ?? {}),
-      daysRemaining: json['days_remaining'] is double 
-          ? json['days_remaining'] 
-          : (json['days_remaining'] is String && json['days_remaining'] != 'غير محدد') 
-              ? double.tryParse(json['days_remaining']) 
+      daysRemaining:
+          json['days_remaining'] is double
+              ? json['days_remaining']
+              : (json['days_remaining'] is String &&
+                  json['days_remaining'] != 'غير محدد')
+              ? double.tryParse(json['days_remaining'])
               : null,
       isActive: json['is_active'] ?? false,
     );
@@ -56,26 +58,26 @@ class SubscriptionModel extends SubscriptionEntity {
   }
 }
 
-class PackageModel extends PackageEntity {
-  const PackageModel({
+class PackageModel extends PackageEntitySub {
+  PackageModel({
     required int id,
     required String name,
-    required int isTrial,
+    required bool isTrial,
     required int maxTasks,
     required int maxMilestonesPerTask,
   }) : super(
-          id: id,
-          name: name,
-          isTrial: isTrial,
-          maxTasks: maxTasks,
-          maxMilestonesPerTask: maxMilestonesPerTask,
-        );
+         id: id,
+         name: name,
+         isTrial: isTrial,
+         maxTasks: maxTasks,
+         maxMilestonesPerTask: maxMilestonesPerTask,
+       );
 
   factory PackageModel.fromJson(Map<String, dynamic> json) {
     return PackageModel(
       id: json['id'] ?? 0,
       name: json['name'] ?? '',
-      isTrial: json['is_trial'] ?? 0,
+      isTrial: json['is_trial'] == true || json['is_trial'] == 1,
       maxTasks: json['max_tasks'] ?? 0,
       maxMilestonesPerTask: json['max_milestones_per_task'] ?? 0,
     );
@@ -98,17 +100,18 @@ class UsageModel extends UsageEntity {
     required int remainingTasks,
     required int usagePercentage,
   }) : super(
-          tasksCreated: tasksCreated,
-          remainingTasks: remainingTasks,
-          usagePercentage: usagePercentage,
-        );
+         tasksCreated: tasksCreated,
+         remainingTasks: remainingTasks,
+         usagePercentage: usagePercentage,
+       );
 
   factory UsageModel.fromJson(Map<String, dynamic> json) {
     final int tasksCreated = json['tasks_created'] ?? 0;
     final int maxTasks = json['max_tasks'] ?? 0;
-    final int remainingTasks = json.containsKey('remaining_tasks') 
-        ? json['remaining_tasks'] 
-        : (maxTasks > 0 ? maxTasks - tasksCreated : 0);
+    final int remainingTasks =
+        json.containsKey('remaining_tasks')
+            ? json['remaining_tasks']
+            : (maxTasks > 0 ? maxTasks - tasksCreated : 0);
     return UsageModel(
       tasksCreated: tasksCreated,
       remainingTasks: remainingTasks,

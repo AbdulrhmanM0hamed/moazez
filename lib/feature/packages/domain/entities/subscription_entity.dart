@@ -6,7 +6,7 @@ class SubscriptionEntity extends Equatable {
   final String startDate;
   final String? endDate;
   final String pricePaid;
-  final PackageEntity package;
+  final PackageEntitySub package;
   final UsageEntity usage;
   final double? daysRemaining;
   final bool isActive;
@@ -37,14 +37,14 @@ class SubscriptionEntity extends Equatable {
       ];
 }
 
-class PackageEntity extends Equatable {
+class PackageEntitySub extends Equatable {
   final int id;
   final String name;
-  final int isTrial;
+  final bool isTrial;
   final int maxTasks;
   final int maxMilestonesPerTask;
 
-  const PackageEntity({
+  PackageEntitySub({
     required this.id,
     required this.name,
     required this.isTrial,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:moazez/core/utils/common/cached_network_image.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
@@ -107,24 +108,12 @@ class MyRewardCard extends StatelessWidget {
                                                 size: 30,
                                               ),
                                             )
-                                            : Text(
-                                              reward
-                                                      .distributedBy
-                                                      .name
-                                                      .isNotEmpty
-                                                  ? reward.distributedBy.name
-                                                      .substring(0, 1)
-                                                      .toUpperCase()
-                                                  : '?',
-                                              style: theme.textTheme.titleLarge
-                                                  ?.copyWith(
-                                                    color:
-                                                        theme
-                                                            .colorScheme
-                                                            .onPrimaryContainer,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
+                                            : SvgPicture.asset(
+                                                'assets/images/defualt_avatar.svg',
+                                                width: 56,
+                                                height: 56,
+                                                fit: BoxFit.cover,
+                                              ),
                                   ),
                                 ),
                               ),

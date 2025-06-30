@@ -8,7 +8,7 @@ class PackageModel extends PackageEntity {
     required int maxTasks,
     int? maxTeamMembers,
     int? maxStagesPerTask,
-    required int isTrial,
+    required bool isTrial,
   }) : super(
           id: id,
           name: name,
@@ -27,7 +27,7 @@ class PackageModel extends PackageEntity {
       maxTasks: json['max_tasks'] ?? 0,
       maxTeamMembers: json['max_team_members'],
       maxStagesPerTask: json['max_stages_per_task'],
-      isTrial: json['is_trial'] ?? 0,
+      isTrial: json['is_trial'] == true || json['is_trial'] == 1,
     );
   }
 

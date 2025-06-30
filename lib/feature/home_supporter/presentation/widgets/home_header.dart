@@ -6,6 +6,7 @@ import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
+import 'package:moazez/core/utils/common/cached_network_image.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_state.dart';
 import 'package:moazez/feature/invitations/presentation/cubit/invitation_cubit.dart';
@@ -32,14 +33,15 @@ class HomeHeader extends StatelessWidget {
                       borderRadius: BorderRadius.circular(32),
                       child:
                           user.avatarUrl != null && user.avatarUrl != ''
-                              ? Image.network(
-                                user.avatarUrl!,
+                              ? CustomCachedNetworkImage(
+                                imageUrl: user.avatarUrl!,
                                 width: 56,
                                 height: 56,
                                 fit: BoxFit.cover,
+                                borderRadius: BorderRadius.circular(32),
                               )
-                              : Image.asset(
-                                'assets/images/avatar.jpg',
+                              : SvgPicture.asset(
+                                'assets/images/defualt_avatar.svg',
                                 width: 56,
                                 height: 56,
                                 fit: BoxFit.cover,
@@ -76,8 +78,8 @@ class HomeHeader extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(32),
-                      child: Image.asset(
-                        'assets/images/avatar.jpg',
+                      child: SvgPicture.asset(
+                        'assets/images/defualt_avatar.svg',
                         width: 56,
                         height: 56,
                         fit: BoxFit.cover,

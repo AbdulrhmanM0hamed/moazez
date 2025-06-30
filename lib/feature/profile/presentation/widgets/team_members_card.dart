@@ -145,22 +145,11 @@ class _TeamMembersCardState extends State<TeamMembersCard> {
                         ),
                       ),
                     )
-                    : Container(
+                    : SvgPicture.asset(
+                      'assets/images/defualt_avatar.svg',
                       width: 50,
                       height: 50,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.primary.withValues(alpha: 0.2),
-                      ),
-                      child: Center(
-                        child: Text(
-                          (member.name ?? 'ع').substring(0, 1).toUpperCase(),
-                          style: getSemiBoldStyle(
-                            fontFamily: FontConstant.cairo,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
+                      fit: BoxFit.cover,
                     ),
                 const SizedBox(width: 16),
                 Expanded(

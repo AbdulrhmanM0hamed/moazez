@@ -240,8 +240,8 @@ class ProgressChart extends StatelessWidget {
                                                   height: 32,
                                                   fit: BoxFit.cover,
                                                   errorBuilder: (context, error, stackTrace) {
-                                                    return Image.asset(
-                                                      'assets/images/avatar.jpg',
+                                                    return SvgPicture.asset(
+                                                      'assets/images/defualt_avatar.svg',
                                                       width: 32,
                                                       height: 32,
                                                       fit: BoxFit.cover,

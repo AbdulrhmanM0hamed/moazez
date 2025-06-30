@@ -7,7 +7,7 @@ class PackageEntity extends Equatable {
   final int maxTasks;
   final int? maxTeamMembers;
   final int? maxStagesPerTask;
-  final int isTrial;
+  final bool isTrial;
 
   const PackageEntity({
     required this.id,

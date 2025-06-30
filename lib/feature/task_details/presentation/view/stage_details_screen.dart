@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moazez/core/utils/common/cached_network_image.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/task_details/domain/entities/task_details_entity.dart';
@@ -170,17 +171,15 @@ class StageDetailsScreen extends StatelessWidget {
                                           panEnabled: true,
                                           minScale: 0.5,
                                           maxScale: 4.0,
-                                          child: Image.network(
-                                            stage.proofFiles!,
+                                          child: CustomCachedNetworkImage(
+                                            imageUrl: stage.proofFiles!,
                                             fit: BoxFit.contain,
-                                            errorBuilder: (context, error, stackTrace) {
-                                              return Center(
-                                                child: Text(
-                                                  'فشل تحميل الصورة',
-                                                  style: TextStyle(color: Colors.white, fontSize: 16),
-                                                ),
-                                              );
-                                            },
+                                            errorWidget: Center(
+                                              child: Text(
+                                                'فشل تحميل الصورة',
+                                                style: TextStyle(color: Colors.white, fontSize: 16),
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -199,23 +198,21 @@ class StageDetailsScreen extends StatelessWidget {
                             },
                             child: Hero(
                               tag: 'stage_image_${stage.id}',
-                              child: Image.network(
-                                stage.proofFiles!,
+                              child: CustomCachedNetworkImage(
+                                imageUrl: stage.proofFiles!,
                                 height: 250,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    height: 250,
-                                    color: Colors.grey[200],
-                                    child: Center(
-                                      child: Text(
-                                        'فشل تحميل الصورة',
-                                        style: TextStyle(fontSize: 14, color: Colors.red),
-                                      ),
+                                errorWidget: Container(
+                                  height: 250,
+                                  color: Colors.grey[200],
+                                  child: Center(
+                                    child: Text(
+                                      'فشل تحميل الصورة',
+                                      style: TextStyle(fontSize: 14, color: Colors.red),
                                     ),
-                                  );
-                                },
+                                  ),
+                                ),
                               ),
                             ),
                           ),

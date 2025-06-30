@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:moazez/core/utils/common/custom_dialog_button.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:moazez/core/utils/common/cached_network_image.dart';
 import 'package:moazez/feature/home_supporter/domain/entities/member_stats_entity.dart';
 
 class TaskDetailsDialog extends StatelessWidget {
@@ -76,8 +78,20 @@ class TaskDetailsDialog extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 24,
-          backgroundImage: NetworkImage(member.avatarUrl),
-          onBackgroundImageError: (_, __) {},
+          child: member.avatarUrl.isNotEmpty && Uri.tryParse(member.avatarUrl)?.hasAuthority == true
+              ? CustomCachedNetworkImage(
+                  imageUrl: member.avatarUrl,
+                  width: 48,
+                  height: 48,
+                  fit: BoxFit.cover,
+                  borderRadius: BorderRadius.circular(24),
+                )
+              : SvgPicture.asset(
+                  'assets/images/defualt_avatar.svg',
+                  width: 48,
+                  height: 48,
+                  fit: BoxFit.cover,
+                ),
         ),
         const SizedBox(width: 16),
         Expanded(
