@@ -107,7 +107,7 @@ class _ParticipantsNavBarState extends State<ParticipantsNavBar> {
                         BlendMode.srcIn,
                       ),
                     ),
-                    label: 'المهام',
+                    label: 'الاهداف',
                   ),
                   BottomNavigationBarItem(
                     icon: SvgPicture.asset(

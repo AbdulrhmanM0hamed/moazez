@@ -22,7 +22,7 @@ class SupporterOnboardingPage extends StatelessWidget {
           ),
           const SizedBox(height: 40),
           Text(
-            'كن الداعم الذي يصنع الفارق',
+            'خلّك الداعم، وشجّع التقدّم!',
             textAlign: TextAlign.center,
             style: getBoldStyle(
               fontSize: FontSize.size22,
@@ -31,7 +31,7 @@ class SupporterOnboardingPage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'لأنك القائد الملهم خلف كل إنجاز، حدد المهام، تابع التقدم، وكن السبب في تطوير الآخرين.',
+            'اتفق مع شخص على هدف، تابعه بخطوات واضحة، وإذا التزم؟ أعطيه معزز واصنع عادة جديدة.',
             textAlign: TextAlign.center,
             style: getRegularStyle(
               color: AppColors.textSecondary,

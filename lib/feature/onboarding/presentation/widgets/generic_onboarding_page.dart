@@ -21,7 +21,7 @@ class GenericOnboardingPage extends StatelessWidget {
           ),
           const SizedBox(height: 40),
           Text(
-            'أنجز مهامك، وحقق أهدافك!',
+            '"معزز" منصة تدعم بناء العادات الإيجابية من خلال الاتفاق السلوكي والدعم المتبادل.',
             textAlign: TextAlign.center,
             style: getBoldStyle(
         
@@ -31,7 +31,7 @@ class GenericOnboardingPage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'مع "معزز"، يمكنك تحويل أهدافك إلى مهام قابلة للتنفيذ ومتابعة تقدمك بسهولة، مما يجعلك أقرب إلى تحقيق طموحاتك كل يوم.',
+            'حدد هدفك، اتفق مع شخص تثق فيه، وتابع التزام الطرف الآخر بخطوات واضحة نحو التغيير',
             textAlign: TextAlign.center,
             style: getRegularStyle(
               color: AppColors.textSecondary,

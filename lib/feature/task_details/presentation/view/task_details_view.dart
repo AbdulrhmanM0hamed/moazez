@@ -23,7 +23,7 @@ class TaskDetailsView extends StatelessWidget {
     return BlocProvider(
       create: (context) => di.sl<TaskDetailsCubit>()..fetchTaskDetails(taskId),
       child: Scaffold(
-        appBar: CustomAppBar(title: 'تفاصيل المهمة'),
+        appBar: CustomAppBar(title: 'تفاصيل الهدف'),
         body: BlocBuilder<TaskDetailsCubit, TaskDetailsState>(
           builder: (context, state) {
             if (state is TaskDetailsLoading) {

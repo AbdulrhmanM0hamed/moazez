@@ -17,14 +17,28 @@ class ParticipantOnboardingPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(height: 40),
+            Column(
+          children: [
             Text(
-              'جاهز تثبت قدراتك؟\nالمهام في انتظارك',
+              'جاهز تبدأ؟ أهدافك جاهزة، ومعززك بانتظارك!',
               textAlign: TextAlign.center,
               style: getBoldStyle(
+                fontSize: FontSize.size22,
+                fontFamily: FontConstant.cairo,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'نفّذ هدفك خطوة بخطوة، وخلّك دايمًا أقرب للتعزيز.',
+              textAlign: TextAlign.center,
+              style: getRegularStyle(
+                color: AppColors.textSecondary,
                 fontSize: FontSize.size16,
                 fontFamily: FontConstant.cairo,
               ),
             ),
+          ],
+        ),
             const SizedBox(height: 24),
             _buildTaskCards(),
             const SizedBox(height: 16),

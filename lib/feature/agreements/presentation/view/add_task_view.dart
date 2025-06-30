@@ -19,7 +19,7 @@ class AddTaskView extends StatelessWidget {
         BlocProvider(create: (context) => sl<TeamMembersCubit>()),
       ],
       child: Scaffold(
-        appBar: CustomAppBar(title: 'إضافة مهمة جديدة'),
+        appBar: CustomAppBar(title: 'إضافة هدف جديد'),
         body: const AddTaskForm(),
       ),
     );
