@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/common/cached_network_image.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
@@ -29,7 +30,6 @@ class _ReceivedInvitationsViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBackground,
       appBar: CustomAppBar(title: 'طلبات الانضمام المستلمة'),
       body: BlocConsumer<InvitationCubit, InvitationState>(
         listener: (context, state) {
@@ -70,7 +70,7 @@ class _ReceivedInvitationsViewBody extends StatelessWidget {
                 final invitation = invitations[index];
                 return Card(
                   elevation: 6,
-                  shadowColor: Colors.black.withOpacity(0.1),
+                  shadowColor: Colors.black.withValues(alpha: 0.1),
                   margin: const EdgeInsets.only(bottom: 16.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16.0),
@@ -82,32 +82,35 @@ class _ReceivedInvitationsViewBody extends StatelessWidget {
                         // Avatar
                         ClipRRect(
                           borderRadius: BorderRadius.circular(32),
-                          child: CustomCachedNetworkImage(
-                            imageUrl: invitation.user.avatarUrl,
-                            width: 60,
-                            height: 60,
-                            fit: BoxFit.cover,
-                            errorWidget: Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                color: AppColors.primary.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(32),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  invitation.user.name
-                                      .substring(0, 1)
-                                      .toUpperCase(),
-                                  style: const TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.primary,
+                          child:
+                              invitation.user.avatarUrl != null
+                                  ? CustomCachedNetworkImage(
+                                    imageUrl: invitation.user.avatarUrl,
+                                    width: 60,
+                                    height: 60,
+                                    fit: BoxFit.cover,
+                                    errorWidget: Container(
+                                      width: 60,
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.primary.withValues(
+                                          alpha: 0.1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(32),
+                                      ),
+                                      child: SvgPicture.asset(
+                                        'assets/images/defualt_avatar.svg',
+                                        width: 60,
+                                        height: 60,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  )
+                                  : SvgPicture.asset(
+                                    'assets/images/defualt_avatar.svg',
+                                    width: 60,
+                                    height: 60,
                                   ),
-                                ),
-                              ),
-                            ),
-                          ),
                         ),
                         const SizedBox(width: 16),
 
@@ -121,7 +124,6 @@ class _ReceivedInvitationsViewBody extends StatelessWidget {
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w700,
-                                  color: AppColors.textPrimary,
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -137,69 +139,74 @@ class _ReceivedInvitationsViewBody extends StatelessWidget {
                         ),
 
                         // Actions or Status
-                        invitation.status == 'pending' 
+                        invitation.status == 'pending'
                             ? Row(
-                                children: [
-                                  Tooltip(
-                                    message: 'قبول الطلب',
-                                    child: InkWell(
-                                      onTap: () {
-                                        context
-                                            .read<InvitationCubit>()
-                                            .respondToInvitation(
-                                              invitation.id.toString(),
-                                              'accept',
-                                            );
-                                      },
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          color: Colors.green.withOpacity(0.15),
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        child: const Icon(
-                                          Icons.check,
-                                          color: Colors.green,
-                                        ),
+                              children: [
+                                Tooltip(
+                                  message: 'قبول الطلب',
+                                  child: InkWell(
+                                    onTap: () {
+                                      context
+                                          .read<InvitationCubit>()
+                                          .respondToInvitation(
+                                            invitation.id.toString(),
+                                            'accept',
+                                          );
+                                    },
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.green.withOpacity(0.15),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: const Icon(
+                                        Icons.check,
+                                        color: Colors.green,
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 8),
-                                  Tooltip(
-                                    message: 'رفض الطلب',
-                                    child: InkWell(
-                                      onTap: () {
-                                        context
-                                            .read<InvitationCubit>()
-                                            .respondToInvitation(
-                                              invitation.id.toString(),
-                                              'reject',
-                                            );
-                                      },
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          color: AppColors.error.withOpacity(0.1),
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        child: const Icon(
-                                          Icons.close,
-                                          color: AppColors.error,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : Text(
-                                invitation.status == 'accepted' ? 'تم القبول' : 'تم الرفض',
-                                style: TextStyle(
-                                  color: invitation.status == 'accepted' ? Colors.green : AppColors.error,
-                                  fontWeight: FontWeight.bold,
                                 ),
+                                const SizedBox(width: 8),
+                                Tooltip(
+                                  message: 'رفض الطلب',
+                                  child: InkWell(
+                                    onTap: () {
+                                      context
+                                          .read<InvitationCubit>()
+                                          .respondToInvitation(
+                                            invitation.id.toString(),
+                                            'reject',
+                                          );
+                                    },
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.error.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: const Icon(
+                                        Icons.close,
+                                        color: AppColors.error,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                            : Text(
+                              invitation.status == 'accepted'
+                                  ? 'تم القبول'
+                                  : 'تم الرفض',
+                              style: TextStyle(
+                                color:
+                                    invitation.status == 'accepted'
+                                        ? Colors.green
+                                        : AppColors.error,
+                                fontWeight: FontWeight.bold,
                               ),
+                            ),
                       ],
                     ),
                   ),

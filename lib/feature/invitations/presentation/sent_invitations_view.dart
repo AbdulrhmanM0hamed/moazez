@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:moazez/core/utils/common/cached_network_image.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
@@ -15,7 +16,7 @@ class SentInvitationsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'الدعوات المرسلة', centerTitle: true),
+      appBar: CustomAppBar(title: 'الدعوات المرسلة'),
       body: BlocBuilder<InvitationCubit, InvitationState>(
         builder: (context, state) {
           if (state is InvitationLoading) {
@@ -87,7 +88,7 @@ class InvitationCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 2,
-      shadowColor: Colors.black.withOpacity(0.08),
+
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -107,10 +108,11 @@ class InvitationCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   color: AppColors.textSecondary.withValues(alpha: 0.1),
                 ),
-                child: const Icon(
-                  Icons.person,
-                  color: AppColors.textSecondary,
-                  size: 30,
+                child: SvgPicture.asset(
+                  'assets/images/defualt_avatar.svg',
+                  width: 60,
+                  height: 60,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -122,17 +124,14 @@ class InvitationCard extends StatelessWidget {
                 children: [
                   Text(
                     invitation.user.name,
-                    style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'الفريق: ${invitation.team.name}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       color: AppColors.textSecondary,
                     ),
