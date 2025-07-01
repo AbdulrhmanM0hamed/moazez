@@ -19,6 +19,8 @@ import 'package:moazez/feature/packages/domain/repositories/payment_repository.d
 import 'package:moazez/feature/packages/data/repositories/payment_repository_impl.dart';
 import 'package:moazez/feature/packages/domain/usecases/initiate_payment_usecase.dart';
 import 'package:moazez/feature/packages/presentation/cubit/payment_cubit.dart';
+import 'package:moazez/feature/profile/domain/usecases/get_financial_details_usecase.dart';
+import 'package:moazez/feature/profile/presentation/cubit/financial_details_cubit.dart';
 import 'package:moazez/feature/search/data/datasources/search_remote_data_source.dart';
 import 'package:moazez/feature/search/data/repositories/search_repository_impl.dart';
 import 'package:moazez/feature/search/domain/repositories/search_repository.dart';
@@ -99,6 +101,9 @@ import 'package:moazez/feature/profile/data/repositories/payments_repository_imp
 import 'package:moazez/feature/profile/domain/repositories/payments_repository.dart';
 import 'package:moazez/feature/profile/domain/usecases/get_payments_usecase.dart';
 import 'package:moazez/feature/profile/presentation/cubit/payments_cubit.dart';
+import 'package:moazez/feature/profile/data/datasources/financial_details_remote_data_source.dart';
+import 'package:moazez/feature/profile/data/repositories/financial_details_repository_impl.dart';
+import 'package:moazez/feature/profile/domain/repositories/financial_details_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
@@ -179,6 +184,14 @@ Future<void> init() async {
       () => PaymentsRepositoryImpl(remoteDataSource: sl()));
   sl.registerLazySingleton(() => GetPaymentsUseCase(sl()));
   sl.registerFactory(() => PaymentsCubit(getPaymentsUseCase: sl()));
+
+  // Financial Details
+  sl.registerFactory(() => FinancialDetailsCubit(getFinancialDetailsUseCase: sl()));
+  sl.registerLazySingleton(() => GetFinancialDetailsUseCase(sl()));
+  sl.registerLazySingleton<FinancialDetailsRepository>(
+      () => FinancialDetailsRepositoryImpl(remoteDataSource: sl()));
+  sl.registerLazySingleton<FinancialDetailsRemoteDataSource>(
+      () => FinancialDetailsRemoteDataSourceImpl(dio: sl()));
 
   sl.registerLazySingleton<RewardRepository>(
     () => RewardRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()),

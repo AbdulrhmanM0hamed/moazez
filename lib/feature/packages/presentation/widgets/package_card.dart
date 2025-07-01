@@ -145,7 +145,6 @@ class PackageCard extends StatelessWidget {
               child: BlocBuilder<PaymentCubit, PaymentState>(
                 builder: (context, paymentState) {
                   final isLoading = paymentState is PaymentLoading;
-                  final isError = paymentState is PaymentError;
                   
                   // التحقق من وجود خطأ 429 (Too Many Requests)
                   // استخدام الدالة الجديدة للتحقق من حالة تقييد المعدل

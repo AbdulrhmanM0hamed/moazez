@@ -4,7 +4,6 @@ import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/feature/task_details/presentation/cubit/stage_completion_cubit.dart';
 import 'package:moazez/feature/task_details/presentation/cubit/stage_completion_state.dart';
 import 'package:moazez/feature/task_details/presentation/widgets/stage_completion/stage_completion_widgets.dart';
-import 'package:image_picker/image_picker.dart';
 
 class StageCompletionDialog extends StatefulWidget {
   final int stageId;
@@ -30,37 +29,37 @@ class _StageCompletionDialogState extends State<StageCompletionDialog> {
     return ['jpg', 'jpeg', 'png'].contains(extension);
   }
 
-  Future<String?> _pickImage() async {
-    try {
-      final picker = ImagePicker();
-      final pickedFile = await picker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 80,
-        maxWidth: 1024,
-      );
-      if (pickedFile != null) {
-        final imagePath = pickedFile.path;
-        if (_isValidImageForDialog(imagePath)) {
-          return imagePath;
-        } else {
-          CustomSnackbar.show(
-            context: context,
-            message: 'نوع الصورة غير مدعوم. يرجى اختيار صورة JPG أو PNG',
-            isError: true,
-          );
-          return null;
-        }
-      }
-      return null;
-    } catch (e) {
-      CustomSnackbar.show(
-        context: widget.parentContext,
-        message: 'فشل اختيار الصورة: $e',
-        isError: true,
-      );
-      return null;
-    }
-  }
+  // Future<String?> _pickImage() async {
+  //   try {
+  //     final picker = ImagePicker();
+  //     final pickedFile = await picker.pickImage(
+  //       source: ImageSource.gallery,
+  //       imageQuality: 80,
+  //       maxWidth: 1024,
+  //     );
+  //     if (pickedFile != null) {
+  //       final imagePath = pickedFile.path;
+  //       if (_isValidImageForDialog(imagePath)) {
+  //         return imagePath;
+  //       } else {
+  //         CustomSnackbar.show(
+  //           context: context,
+  //           message: 'نوع الصورة غير مدعوم. يرجى اختيار صورة JPG أو PNG',
+  //           isError: true,
+  //         );
+  //         return null;
+  //       }
+  //     }
+  //     return null;
+  //   } catch (e) {
+  //     CustomSnackbar.show(
+  //       context: widget.parentContext,
+  //       message: 'فشل اختيار الصورة: $e',
+  //       isError: true,
+  //     );
+  //     return null;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

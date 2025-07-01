@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moazez/feature/agreements/presentation/cubit/close_task_cubit.dart';
-import 'package:moazez/feature/agreements/presentation/widgets/gradient_progress_indicator.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/stages_indicator.dart';
 import 'package:moazez/core/utils/common/custom_dialog_button.dart';
 import 'package:moazez/feature/task_details/presentation/view/task_details_view.dart';
@@ -26,22 +25,35 @@ class MemberTaskCard extends StatelessWidget {
     return uri.isScheme('HTTP') || uri.isScheme('HTTPS');
   }
 
-
-  void _showConfirmationDialog(BuildContext context, String taskId, String status) {
+  void _showConfirmationDialog(
+    BuildContext context,
+    String taskId,
+    String status,
+  ) {
     final statusText = status == 'completed' ? 'مكتمل' : 'غير مكتمل';
 
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: Text('تأكيد تحديث الحالة', style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.center),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Text(
+            'تأكيد تحديث الحالة',
+            style: Theme.of(context).textTheme.titleLarge,
+            textAlign: TextAlign.center,
+          ),
           content: Text(
             'هل أنت متأكد من تحديث حالة المهمة إلى "$statusText"؟',
             textAlign: TextAlign.center,
           ),
           actionsAlignment: MainAxisAlignment.center,
-          actionsPadding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+          actionsPadding: const EdgeInsets.only(
+            bottom: 20,
+            left: 20,
+            right: 20,
+          ),
           actions: <Widget>[
             Row(
               children: [
@@ -60,9 +72,9 @@ class MemberTaskCard extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(dialogContext).pop();
                       context.read<CloseTaskCubit>().closeTask(
-                            taskId: taskId,
-                            status: status,
-                          );
+                        taskId: taskId,
+                        status: status,
+                      );
                     },
                   ),
                 ),
@@ -150,18 +162,23 @@ class MemberTaskCard extends StatelessWidget {
                   if (task.status != 'completed')
                     PopupMenuButton<String>(
                       onSelected: (value) {
-                        _showConfirmationDialog(context, task.id.toString(), value);
+                        _showConfirmationDialog(
+                          context,
+                          task.id.toString(),
+                          value,
+                        );
                       },
-                      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                        const PopupMenuItem<String>(
-                          value: 'completed',
-                          child: Text('مكتمل'),
-                        ),
-                        const PopupMenuItem<String>(
-                          value: 'not_completed',
-                          child: Text('غير مكتمل'),
-                        ),
-                      ],
+                      itemBuilder:
+                          (BuildContext context) => <PopupMenuEntry<String>>[
+                            const PopupMenuItem<String>(
+                              value: 'completed',
+                              child: Text('مكتمل'),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'not_completed',
+                              child: Text('غير مكتمل'),
+                            ),
+                          ],
                     )
                   else
                     // Reserve space to keep the layout consistent
@@ -187,7 +204,7 @@ class MemberTaskCard extends StatelessWidget {
               //     ),
               //   ),
               // ),
-           
+
               // Stages
               _buildInfoRow(
                 context,
@@ -213,20 +230,21 @@ class MemberTaskCard extends StatelessWidget {
                   const Spacer(),
                   CircleAvatar(
                     radius: 16,
-                    child: _isValidUrl(member.avatarUrl)
-                        ? CustomCachedNetworkImage(
-                            imageUrl: member.avatarUrl,
-                            width: 32,
-                            height: 32,
-                            fit: BoxFit.cover,
-                            borderRadius: BorderRadius.circular(16),
-                          )
-                        : SvgPicture.asset(
-                            'assets/images/defualt_avatar.svg',
-                            width: 32,
-                            height: 32,
-                            fit: BoxFit.cover,
-                          ),
+                    child:
+                        _isValidUrl(member.avatarUrl)
+                            ? CustomCachedNetworkImage(
+                              imageUrl: member.avatarUrl,
+                              width: 32,
+                              height: 32,
+                              fit: BoxFit.cover,
+                              borderRadius: BorderRadius.circular(16),
+                            )
+                            : SvgPicture.asset(
+                              'assets/images/defualt_avatar.svg',
+                              width: 32,
+                              height: 32,
+                              fit: BoxFit.cover,
+                            ),
                   ),
                   const SizedBox(width: 8),
                   Text(

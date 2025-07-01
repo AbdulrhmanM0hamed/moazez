@@ -6,13 +6,15 @@ import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
+import 'package:moazez/feature/profile/presentation/cubit/financial_details_cubit.dart';
 import 'package:moazez/feature/profile/presentation/cubit/payments_cubit.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/profile/presentation/view/edit_profile_info.dart';
-import 'package:moazez/feature/packages/presentation/view/packages_view.dart';
+import 'package:moazez/feature/profile/presentation/view/financial_details_view.dart';
 import 'package:moazez/feature/profile/presentation/view/payments_view.dart';
 import 'package:moazez/feature/profile/presentation/view/team_view.dart';
 import 'package:moazez/feature/rewards/presentation/view/my_rewards_view.dart';
+import 'package:moazez/feature/packages/presentation/view/packages_view.dart';
 import 'package:moazez/feature/rewards/presentation/view/rewards_view.dart';
 import 'package:moazez/feature/profile/presentation/cubit/user_subscriptions_cubit.dart';
 import 'package:moazez/feature/profile/presentation/view/subscriptions_view.dart';
@@ -127,7 +129,21 @@ class MenuItemsCard extends StatelessWidget {
                 context,
                 'الدعم والمساعدة',
                 Icons.help_outline,
-                () {},
+                () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (_) => BlocProvider(
+                            create:
+                                (_) =>
+                                    sl<FinancialDetailsCubit>()
+                                      ..fetchFinancialDetails(),
+                            child: const FinancialDetailsView(),
+                          ),
+                    ),
+                  );
+                },
               ),
               _buildMenuItem(context, 'تسجيل الخروج', Icons.logout, () {
                 showDialog(
