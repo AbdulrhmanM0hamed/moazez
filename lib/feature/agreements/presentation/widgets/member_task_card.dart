@@ -176,23 +176,23 @@ class MemberTaskCard extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               // Progress
-              _buildInfoRow(
-                context,
-                title: 'التقدم',
-                value: '${task.progress}%',
-                indicator: GradientProgressIndicator(
-                  progress: task.progress / 100.0,
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF006E82), Color(0xFF0DD0F4)],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
+              // _buildInfoRow(
+              //   context,
+              //   title: 'التقدم',
+              //   value: '${task.progress}%',
+              //   indicator: GradientProgressIndicator(
+              //     progress: task.progress / 100.0,
+              //     gradient: const LinearGradient(
+              //       colors: [Color(0xFF006E82), Color(0xFF0DD0F4)],
+              //     ),
+              //   ),
+              // ),
+           
               // Stages
               _buildInfoRow(
                 context,
-                title: 'المراحل',
-                value: '${task.stagesCount} مراحل',
+                title: 'التقدم',
+                value: '${task.progress} %',
                 indicator: StagesIndicator(
                   totalStages: task.stagesCount,
                   completedStages: task.completedStages,
@@ -299,7 +299,7 @@ class _TaskStatusBadge extends StatelessWidget {
         icon = Icons.play_circle_outline;
         break;
       case 'pending':
-        text = 'معلق';
+        text = 'لم تبدأ';
         backgroundColor = const Color(0xFFFFF3E0); // Light Orange
         foregroundColor = const Color(0xFFFD7E14); // Dark Orange
         icon = Icons.pause_circle_outline;

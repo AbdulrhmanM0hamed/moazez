@@ -30,7 +30,7 @@ class TaskStagesCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: ExpansionTile(
         title: Text(
-          'مراحل المهمة (${stages.length})',
+          'مراحل الهدف (${stages.length})',
           style: getBoldStyle(
             color: theme.primaryColor,
             fontSize: 18,
@@ -62,22 +62,13 @@ class TaskStagesCard extends StatelessWidget {
             ),
             title: Text(
               stage.title,
-              style: getMediumStyle(
+              style: getSemiBoldStyle(
                 color: AppColors.primary,
                 fontFamily: FontConstant.cairo,
+                fontSize: FontSize.size14,
               ),
             ),
-            subtitle:
-                stage.description.isNotEmpty
-                    ? Text(
-                      stage.description,
-                      style: getMediumStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: 13,
-                        fontFamily: FontConstant.cairo,
-                      ),
-                    )
-                    : null,
+           
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [

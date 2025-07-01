@@ -212,7 +212,7 @@ class StageDetailsScreen extends StatelessWidget {
                                                 fit: BoxFit.contain,
                                                 errorWidget: Center(
                                                   child: Text(
-                                                    'فشل تحميل الصورة',
+                                                    'لا يوجد صورة',
                                                     style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 16,
@@ -255,7 +255,7 @@ class StageDetailsScreen extends StatelessWidget {
                                   color: Colors.grey[200],
                                   child: Center(
                                     child: Text(
-                                      'فشل تحميل الصورة',
+                                      'لا يوجد صورة',
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Colors.red,
