@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class StagesIndicator extends StatelessWidget {
   final int totalStages;
   final int completedStages;
-
   const StagesIndicator({
     super.key,
     required this.totalStages,

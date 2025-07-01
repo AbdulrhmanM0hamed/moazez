@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moazez/feature/MyTasks/domain/entities/my_task_entity.dart';
-import 'package:moazez/feature/MyTasks/presentation/widgets/gradient_progress_indicator.dart';
 import 'package:moazez/feature/MyTasks/presentation/widgets/stages_indicator.dart';
 import 'package:moazez/feature/task_details/presentation/view/task_details_view.dart';
 
@@ -100,26 +99,25 @@ class MyTaskCard extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               // Progress
-              _buildInfoRow(
-                context,
-                title: 'التقدم',
-                value: '${task.progress}%',
-                indicator: GradientProgressIndicator(
-                  progress: task.progress / 100.0,
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF006E82), Color(0xFF0DD0F4)],
-                  ),
-                ),
-              ),
               if (task.stagesCount > 0) ...[
-                const SizedBox(height: 16),
                 // Stages
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'المراحل',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'التقدم',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        Text(
+                          '${task.progress}%',
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 8),
                     StagesIndicator(
@@ -179,34 +177,6 @@ class MyTaskCard extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildInfoRow(
-    BuildContext context, {
-    required String title,
-    required String value,
-    required Widget indicator,
-  }) {
-    final theme = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(title, style: theme.textTheme.bodyMedium),
-            Text(
-              value,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        indicator,
-      ],
-    );
-  }
 }
 
 class _TaskStatusBadge extends StatelessWidget {
@@ -220,7 +190,7 @@ class _TaskStatusBadge extends StatelessWidget {
       'not_started': {'text': 'لم تبدأ', 'color': Colors.grey},
       'in_progress': {'text': 'قيد التنفيذ', 'color': Colors.blue},
       'completed': {'text': 'مكتملة', 'color': Colors.green},
-      'pending': {'text': 'معلقة', 'color': Colors.orange},
+      'pending': {'text': 'لم تبدأ', 'color': Colors.orange},
     };
 
     final info = statusInfo[status] ?? {'text': status, 'color': Colors.grey};
