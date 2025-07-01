@@ -21,13 +21,13 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
     int maxRetries = 3;
     int currentRetry = 0;
     int delayMs = 2000; // تأخير أولي 2 ثانية
-    
+
     while (currentRetry < maxRetries) {
       try {
         // Debug logs for request
-        debugPrint('[PaymentRemoteDataSource] Initiating payment for packageId: $packageId, attempt: ${currentRetry + 1}');
-        debugPrint('[PaymentRemoteDataSource] Endpoint: ${ApiEndpoints.baseUrl}payment/mobile-init');
-        
+        // debugPrint('[PaymentRemoteDataSource] Initiating payment for packageId: $packageId, attempt: ${currentRetry + 1}');
+        // debugPrint('[PaymentRemoteDataSource] Endpoint: ${ApiEndpoints.baseUrl}payment/mobile-init');
+
         final response = await dio.post(
           '${ApiEndpoints.baseUrl}payment/mobile-init',
           data: {'package_id': packageId},
@@ -39,61 +39,67 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
             validateStatus: (status) => true,
           ),
         );
-        
+
         // Debug logs for response
-        debugPrint('[PaymentRemoteDataSource] Response status: ${response.statusCode}');
-        debugPrint('[PaymentRemoteDataSource] Response data: ${response.data}');
+        // debugPrint('[PaymentRemoteDataSource] Response status: ${response.statusCode}');
+        // debugPrint('[PaymentRemoteDataSource] Response data: ${response.data}');
 
         // التحقق من حالة الاستجابة
-        if ((response.statusCode == 200 || response.statusCode == 201) && response.data != null) {
+        if ((response.statusCode == 200 || response.statusCode == 201) &&
+            response.data != null) {
           return response.data;
         } else if (response.statusCode == 429) {
           // Too Many Requests - زيادة التأخير وإعادة المحاولة
           currentRetry++;
           if (currentRetry < maxRetries) {
-            debugPrint('[PaymentRemoteDataSource] Rate limited (429), retrying in ${delayMs}ms...');
+            //    debugPrint('[PaymentRemoteDataSource] Rate limited (429), retrying in ${delayMs}ms...');
             // إظهار رسالة تشخيصية أكثر تفصيلاً
-            debugPrint('[PaymentRemoteDataSource] Rate limit message: ${response.data?['message'] ?? "No message provided"}');
+            //   debugPrint('[PaymentRemoteDataSource] Rate limit message: ${response.data?['message'] ?? "No message provided"}');
             await Future.delayed(Duration(milliseconds: delayMs));
             delayMs *= 3; // مضاعفة وقت الانتظار بشكل أكبر في كل محاولة
             continue;
           } else {
             // استخراج رسالة الخطأ من الاستجابة إذا كانت متوفرة
-            final errorMessage = response.data?['message'] ?? 'تم تجاوز الحد المسموح به من الطلبات';
-            debugPrint('[PaymentRemoteDataSource] Rate limit exceeded after $maxRetries attempts. Error: $errorMessage');
+            final errorMessage =
+                response.data?['message'] ??
+                'تم تجاوز الحد المسموح به من الطلبات';
+            //     debugPrint('[PaymentRemoteDataSource] Rate limit exceeded after $maxRetries attempts. Error: $errorMessage');
             throw ServerException(
-              message: 'لقد قمت بالعديد من المحاولات. يرجى الانتظار لمدة 5 دقائق قبل المحاولة مرة أخرى.',
+              message:
+                  'لقد قمت بالعديد من المحاولات. يرجى الانتظار لمدة 5 دقائق قبل المحاولة مرة أخرى.',
             );
           }
         } else {
-          final errorMessage = response.data?['message'] ??
+          final errorMessage =
+              response.data?['message'] ??
               'فشل في بدء عملية الدفع: حالة الاستجابة ${response.statusCode}';
           throw ServerException(message: errorMessage);
         }
       } on DioException catch (e) {
-        debugPrint('[PaymentRemoteDataSource] DioException: ${e.message}, statusCode: ${e.response?.statusCode}');
-        
+        //    debugPrint('[PaymentRemoteDataSource] DioException: ${e.message}, statusCode: ${e.response?.statusCode}');
+
         // التحقق من نوع الخطأ
         if (e.response?.statusCode == 429) {
           // Too Many Requests - زيادة التأخير وإعادة المحاولة
           currentRetry++;
           if (currentRetry < maxRetries) {
-            debugPrint('[PaymentRemoteDataSource] Rate limited (429) in DioException, retrying in ${delayMs}ms...');
+            //      debugPrint('[PaymentRemoteDataSource] Rate limited (429) in DioException, retrying in ${delayMs}ms...');
             // إظهار رسالة تشخيصية أكثر تفصيلاً
-            debugPrint('[PaymentRemoteDataSource] Rate limit response data: ${e.response?.data}');
+            //   debugPrint('[PaymentRemoteDataSource] Rate limit response data: ${e.response?.data}');
             await Future.delayed(Duration(milliseconds: delayMs));
             delayMs *= 3; // مضاعفة وقت الانتظار بشكل أكبر في كل محاولة
             continue;
           } else {
             // استخراج رسالة الخطأ من الاستجابة إذا كانت متوفرة
-            final errorMessage = e.response?.data?['message'] ?? 'تم تجاوز الحد المسموح به من الطلبات';
-            debugPrint('[PaymentRemoteDataSource] Rate limit exceeded in DioException after $maxRetries attempts. Error: $errorMessage');
+            //    final errorMessage = e.response?.data?['message'] ?? 'تم تجاوز الحد المسموح به من الطلبات';
+            //    debugPrint('[PaymentRemoteDataSource] Rate limit exceeded in DioException after $maxRetries attempts. Error: $errorMessage');
             throw ServerException(
-              message: 'لقد قمت بالعديد من المحاولات. يرجى الانتظار لمدة 5 دقائق قبل المحاولة مرة أخرى.',
+              message:
+                  'لقد قمت بالعديد من المحاولات. يرجى الانتظار لمدة 5 دقائق قبل المحاولة مرة أخرى.',
             );
           }
         }
-        
+
         // استخدام معالج الأخطاء الموحد
         final failure = handleDioException(e);
         throw ServerException(message: failure.message);
@@ -103,17 +109,16 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
           rethrow;
         }
 
-        debugPrint('[PaymentRemoteDataSource] Unknown error: ${e.toString()}');
-        throw ServerException(
-          message: 'خطأ غير متوقع: ${e.toString()}',
-        );
+        //      debugPrint('[PaymentRemoteDataSource] Unknown error: ${e.toString()}');
+        throw ServerException(message: 'خطأ غير متوقع: ${e.toString()}');
       }
     }
-    
+
     // إذا وصلنا إلى هنا، فهذا يعني أننا استنفدنا جميع المحاولات
-    debugPrint('[PaymentRemoteDataSource] All retry attempts exhausted');
+    // debugPrint('[PaymentRemoteDataSource] All retry attempts exhausted');
     throw ServerException(
-      message: 'فشل في بدء عملية الدفع بعد عدة محاولات. يرجى الانتظار لمدة 5 دقائق قبل المحاولة مرة أخرى.',
+      message:
+          'فشل في بدء عملية الدفع بعد عدة محاولات. يرجى الانتظار لمدة 5 دقائق قبل المحاولة مرة أخرى.',
     );
   }
 }
