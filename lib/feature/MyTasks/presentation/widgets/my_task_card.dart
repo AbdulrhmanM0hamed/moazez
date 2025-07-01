@@ -10,16 +10,16 @@ class MyTaskCard extends StatelessWidget {
 
   const MyTaskCard({super.key, required this.task});
 
-  bool _isValidUrl(String? url) {
-    if (url == null || url.isEmpty) return false;
-    Uri? uri;
-    try {
-      uri = Uri.parse(url);
-    } catch (e) {
-      return false;
-    }
-    return uri.isScheme('HTTP') || uri.isScheme('HTTPS');
-  }
+  // bool _isValidUrl(String? url) {
+  //   if (url == null || url.isEmpty) return false;
+  //   Uri? uri;
+  //   try {
+  //     uri = Uri.parse(url);
+  //   } catch (e) {
+  //     return false;
+  //   }
+  //   return uri.isScheme('HTTP') || uri.isScheme('HTTPS');
+  // }
 
   String _formatDate(String? dateStr) {
     if (dateStr == null || dateStr.isEmpty) return '';

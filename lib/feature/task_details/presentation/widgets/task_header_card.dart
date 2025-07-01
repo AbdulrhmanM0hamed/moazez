@@ -24,7 +24,7 @@ class TaskHeaderCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Text(
+                child: Text(
                     taskDetails.title,
                     style: getBoldStyle(
                       color: AppColors.primary,

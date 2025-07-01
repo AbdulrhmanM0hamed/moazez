@@ -10,7 +10,7 @@ class StatusChipAr extends StatelessWidget {
   static const Map<String, String> arStatus = {
     'completed': 'مكتملة',
     'in_progress': 'قيد التنفيذ',
-    'pending': 'معلقة',
+    'pending': 'لم تبدأ',
     'not_completed': 'غير مكتملة',
   };
 

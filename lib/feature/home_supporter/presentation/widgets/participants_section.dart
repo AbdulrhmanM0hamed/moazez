@@ -61,8 +61,8 @@ class ParticipantsSection extends StatelessWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     padding: EdgeInsets.zero,
                     gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 5,
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 60,
                           crossAxisSpacing: 12.0,
                           mainAxisSpacing: 12.0,
                         ),

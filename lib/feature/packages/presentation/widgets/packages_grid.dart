@@ -15,7 +15,7 @@ class PackagesGrid extends StatelessWidget {
     required this.packages,
     this.crossAxisSpacing = 12,
     this.mainAxisSpacing = 2,
-    this.childAspectRatio = 1.16, // تعديل النسبة لتناسب التصميم الجديد
+    this.childAspectRatio = 1.11, // تعديل النسبة لتناسب التصميم الجديد
   });
 
   @override
