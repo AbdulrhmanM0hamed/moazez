@@ -81,7 +81,7 @@ class TeamRewardCard extends StatelessWidget {
                                       color: theme.colorScheme.primaryContainer,
                                       border: Border.all(
                                         color: theme.colorScheme.primary
-                                            .withOpacity(0.3),
+                                            .withValues(alpha: 0.3),
                                         width: 2,
                                       ),
                                     ),
