@@ -16,7 +16,7 @@ class RewardsView extends StatelessWidget {
     return BlocProvider(
       create: (context) => sl<RewardCubit>()..getTeamRewards(),
       child: Scaffold(
-        appBar: const CustomAppBar(title: 'مكافآت الفريق'),
+        appBar: const CustomAppBar(title: 'معززات الفريق'),
         body: BlocBuilder<RewardCubit, RewardState>(
           builder: (context, state) {
             if (state is RewardLoading) {

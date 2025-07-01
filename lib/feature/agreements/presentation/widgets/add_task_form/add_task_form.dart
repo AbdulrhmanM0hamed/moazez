@@ -8,7 +8,6 @@ import 'package:moazez/feature/agreements/presentation/cubit/create_task_cubit.d
 import 'package:moazez/feature/agreements/presentation/cubit/team_members_cubit.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/add_task_form/date_duration_section.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/add_task_form/member_selection_section.dart';
-import 'package:moazez/feature/agreements/presentation/widgets/add_task_form/priority_selector_section.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/add_task_form/reward_details_section.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/add_task_form/reward_type_selector_section.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/add_task_form/stages_selector_section.dart';

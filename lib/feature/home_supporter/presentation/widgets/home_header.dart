@@ -48,13 +48,15 @@ class HomeHeader extends StatelessWidget {
                               ),
                     ),
                     const SizedBox(width: 12),
+
                     Text(
                       'هلا ${user.name}',
                       style: getBoldStyle(
                         color: AppColors.white,
                         fontFamily: FontConstant.cairo,
-                        fontSize: FontSize.size20,
+                        fontSize: FontSize.size18,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 );

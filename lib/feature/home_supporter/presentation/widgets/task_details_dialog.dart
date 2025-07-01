@@ -100,7 +100,6 @@ class TaskDetailsDialog extends StatelessWidget {
             style: getMediumStyle(
               fontFamily: FontConstant.cairo,
               fontSize: 18,
-              color: Colors.black,
             ),
             overflow: TextOverflow.ellipsis,
           ),

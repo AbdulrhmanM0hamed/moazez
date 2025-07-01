@@ -90,18 +90,24 @@ class MenuItemsCard extends StatelessWidget {
                   );
                 }),
               if (role == 'Supporter')
-                _buildMenuItem(context, 'مدفوعاتى', Icons.payments_outlined, () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder:
-                          (_) => BlocProvider(
-                            create: (_) => sl<PaymentsCubit>()..fetchPayments(),
-                            child: const PaymentsView(),
-                          ),
-                    ),
-                  );
-                }),
+                _buildMenuItem(
+                  context,
+                  'مدفوعاتى',
+                  Icons.payments_outlined,
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (_) => BlocProvider(
+                              create:
+                                  (_) => sl<PaymentsCubit>()..fetchPayments(),
+                              child: const PaymentsView(),
+                            ),
+                      ),
+                    );
+                  },
+                ),
               if (role == 'Supporter')
                 _buildMenuItem(
                   context,
@@ -111,12 +117,12 @@ class MenuItemsCard extends StatelessWidget {
                     Navigator.pushNamed(context, PackagesView.routeName);
                   },
                 ),
-              _buildMenuItem(
-                context,
-                'الإعدادات',
-                Icons.settings_outlined,
-                () {},
-              ),
+              // _buildMenuItem(
+              //   context,
+              //   'الإعدادات',
+              //   Icons.settings_outlined,
+              //   () {},
+              // ),
               _buildMenuItem(
                 context,
                 'الدعم والمساعدة',

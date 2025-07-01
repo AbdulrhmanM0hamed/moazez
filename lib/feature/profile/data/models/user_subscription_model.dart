@@ -16,8 +16,8 @@ class UserSubscriptionModel extends UserSubscriptionEntity {
       id: json['id'] as int,
       packageId: json['package_id'] as int,
       status: json['status'] as String,
-      startDate: json['start_date'] as String,
-      endDate: json['end_date'] as String,
+      startDate: (json['start_date'] ?? '').toString(),
+      endDate: (json['end_date'] ?? '').toString(),
       pricePaid: (json['price_paid'] ?? '').toString(),
       packageInfo: PackageInfo(
         id: json['package']['id'] as int,

@@ -109,11 +109,11 @@ class MyRewardCard extends StatelessWidget {
                                               ),
                                             )
                                             : SvgPicture.asset(
-                                                'assets/images/defualt_avatar.svg',
-                                                width: 56,
-                                                height: 56,
-                                                fit: BoxFit.cover,
-                                              ),
+                                              'assets/images/defualt_avatar.svg',
+                                              width: 56,
+                                              height: 56,
+                                              fit: BoxFit.cover,
+                                            ),
                                   ),
                                 ),
                               ),
@@ -155,12 +155,12 @@ class MyRewardCard extends StatelessWidget {
                                 duration: const Duration(milliseconds: 400),
                                 curve: Curves.easeOutCubic,
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 14,
+                                  horizontal: 12,
                                   vertical: 6,
                                 ),
                                 decoration: BoxDecoration(
                                   color: _getStatusColor(reward.status, theme),
-                                  borderRadius: BorderRadius.circular(14),
+                                  borderRadius: BorderRadius.circular(12),
                                   boxShadow: [
                                     BoxShadow(
                                       color: _getStatusColor(
@@ -173,7 +173,9 @@ class MyRewardCard extends StatelessWidget {
                                   ],
                                 ),
                                 child: Text(
-                                  reward.status,
+                                  reward.status == 'completed'
+                                      ? 'مكتملة'
+                                      : 'تم التسليم',
                                   style: theme.textTheme.labelLarge?.copyWith(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w700,
@@ -185,15 +187,15 @@ class MyRewardCard extends StatelessWidget {
                           ),
 
                           // Reward notes with improved typography
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 10),
                           Text(
-                            reward.notes,
+                            "اسم الهدف : ${reward.task.title}",
                             style: getSemiBoldStyle(
                               fontFamily: FontConstant.cairo,
                               fontSize: FontSize.size14,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 10),
 
                           // Amount or Description based on whether amount is non-zero
                           Row(
@@ -283,7 +285,7 @@ class MyRewardCard extends StatelessWidget {
 
   Color _getStatusColor(String status, ThemeData theme) {
     switch (status.toLowerCase()) {
-      case 'completed':
+      case 'received':
         return Colors.green;
       case 'pending':
         return Colors.orange;
@@ -299,11 +301,11 @@ class MyRewardCard extends StatelessWidget {
   String _formatDate(String dateStr) {
     try {
       if (dateStr.isNotEmpty) {
-        return timeago.format(DateTime.parse(dateStr));
+        return timeago.format(DateTime.parse(dateStr), locale: 'ar');
       }
     } catch (e) {
       // Handle parsing error
     }
-    return 'Unknown date';
+    return 'تاريخ غير معروف';
   }
 }

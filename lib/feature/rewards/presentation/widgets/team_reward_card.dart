@@ -158,12 +158,12 @@ class TeamRewardCard extends StatelessWidget {
                                   vertical: 6,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: _getStatusColor(reward.status, theme),
-                                  borderRadius: BorderRadius.circular(14),
+                                  color: _getStatusColor(reward.status == 'completed' ? 'مكتملة' : 'تم التسليم', theme),
+                                  borderRadius: BorderRadius.circular(12),
                                   boxShadow: [
                                     BoxShadow(
                                       color: _getStatusColor(
-                                        reward.status,
+                                        reward.status == 'completed' ? 'مكتملة' : 'تم التسليم',
                                         theme,
                                       ).withValues(alpha: 0.18),
                                       blurRadius: 8,
@@ -172,7 +172,7 @@ class TeamRewardCard extends StatelessWidget {
                                   ],
                                 ),
                                 child: Text(
-                                  reward.status,
+                                  reward.status == 'completed' ? 'مكتملة' : 'تم التسليم',
                                   style: theme.textTheme.labelLarge?.copyWith(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w700,
@@ -295,11 +295,11 @@ class TeamRewardCard extends StatelessWidget {
   String _formatDate(String dateStr) {
     try {
       if (dateStr.isNotEmpty) {
-        return timeago.format(DateTime.parse(dateStr));
+        return timeago.format(DateTime.parse(dateStr), locale: 'ar');
       }
     } catch (e) {
       // Handle parsing error
     }
-    return 'Unknown date';
+    return 'تاريخ غير معروف';
   }
 }

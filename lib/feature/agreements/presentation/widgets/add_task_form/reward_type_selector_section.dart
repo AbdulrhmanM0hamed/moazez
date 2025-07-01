@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:moazez/core/utils/constant/font_manger.dart';
+import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 
 class RewardTypeSelectorSection extends StatelessWidget {
@@ -19,9 +21,10 @@ class RewardTypeSelectorSection extends StatelessWidget {
       children: [
         Text(
           'نوع المكافأة',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+          style: getBoldStyle(
+            fontFamily: FontConstant.cairo,
+            fontSize: FontSize.size16,
+          ),
         ),
         SegmentedButton<String>(
           style: SegmentedButton.styleFrom(
