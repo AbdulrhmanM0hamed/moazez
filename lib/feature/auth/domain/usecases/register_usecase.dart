@@ -15,7 +15,7 @@ class RegisterUseCase {
     final result = await repository.register(params);
     await result.fold((failure) async {}, (authEntity) async {
       sl<CacheService>().saveToken(authEntity.token);
-      await repository.subscribeToTrialPackage(authEntity.token);
+     // await repository.subscribeToTrialPackage(authEntity.token);
     });
     return result;
   }

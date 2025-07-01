@@ -42,12 +42,12 @@ class TaskDetailsInfoCard extends StatelessWidget {
             const Divider(height: 24),
             InfoTile(
               icon: Icons.person_outline,
-              title: 'المُنشئ',
+              title: 'المنشئ',
               value: taskDetails.creator.name,
             ),
             InfoTile(
               icon: Icons.person_pin_outlined,
-              title: 'المُستلم',
+              title: 'المستلم',
               value: taskDetails.receiver.name,
             ),
             InfoTile(

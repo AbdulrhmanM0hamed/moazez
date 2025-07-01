@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:moazez/core/error/exceptions.dart';
 import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/services/service_locator.dart';
@@ -60,9 +59,9 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
             continue;
           } else {
             // استخراج رسالة الخطأ من الاستجابة إذا كانت متوفرة
-            final errorMessage =
-                response.data?['message'] ??
-                'تم تجاوز الحد المسموح به من الطلبات';
+            // final errorMessage =
+            //     response.data?['message'] ??
+            //     'تم تجاوز الحد المسموح به من الطلبات';
             //     debugPrint('[PaymentRemoteDataSource] Rate limit exceeded after $maxRetries attempts. Error: $errorMessage');
             throw ServerException(
               message:

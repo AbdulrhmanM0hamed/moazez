@@ -43,7 +43,7 @@ class HomeParticipantsViewBody extends StatelessWidget {
     final pendingCount = currentTasks.length;
 
     final statusMap = {
-      'pending': 'معلقة',
+      'pending': 'لم تبدأ',
       'in_progress': 'قيد التنفيذ',
       'completed': 'مكتملة',
       'not_started': 'لم تبدأ',

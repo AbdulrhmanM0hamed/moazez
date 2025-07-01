@@ -122,8 +122,11 @@ class _AddTaskFormState extends State<AddTaskForm> {
         if (state is CreateTaskSuccess) {
           CustomSnackbar.showSuccess(
               context: context, message: 'تم إنشاء المهمة بنجاح!');
-          Future.delayed(Duration(seconds: 2), () {
-            Navigator.of(context).pop();
+          // انتظار انتهاء عرض الـ Snackbar (مدة 3 ثوانٍ) ثم الرجوع للشاشة السابقة لتفادي تعارض الـ Navigator
+          Future.delayed(const Duration(milliseconds: 3000), () {
+            if (context.mounted && Navigator.canPop(context)) {
+              Navigator.of(context).pop();
+            }
           });
         } else if (state is CreateTaskError) {
           CustomSnackbar.showError(context: context, message: state.message);
