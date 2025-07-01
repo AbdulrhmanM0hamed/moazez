@@ -56,7 +56,7 @@ class _TaskDetailsContent extends StatelessWidget {
         taskDetails.rewardDescription!.isNotEmpty;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

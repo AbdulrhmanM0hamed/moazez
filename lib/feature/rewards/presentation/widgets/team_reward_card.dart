@@ -158,12 +158,19 @@ class TeamRewardCard extends StatelessWidget {
                                   vertical: 6,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: _getStatusColor(reward.status == 'completed' ? 'مكتملة' : 'تم التسليم', theme),
+                                  color: _getStatusColor(
+                                    reward.status == 'completed'
+                                        ? 'مكتملة'
+                                        : 'تم التسليم',
+                                    theme,
+                                  ),
                                   borderRadius: BorderRadius.circular(12),
                                   boxShadow: [
                                     BoxShadow(
                                       color: _getStatusColor(
-                                        reward.status == 'completed' ? 'مكتملة' : 'تم التسليم',
+                                        reward.status == 'completed'
+                                            ? 'مكتملة'
+                                            : 'تم التسليم',
                                         theme,
                                       ).withValues(alpha: 0.18),
                                       blurRadius: 8,
@@ -172,7 +179,9 @@ class TeamRewardCard extends StatelessWidget {
                                   ],
                                 ),
                                 child: Text(
-                                  reward.status == 'completed' ? 'مكتملة' : 'تم التسليم',
+                                  reward.status == 'completed'
+                                      ? 'مكتملة'
+                                      : 'تم التسليم',
                                   style: theme.textTheme.labelLarge?.copyWith(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w700,
@@ -183,17 +192,17 @@ class TeamRewardCard extends StatelessWidget {
                             ],
                           ),
 
-                          const SizedBox(height: 0.5),
+                          const SizedBox(height: 10),
 
                           // Reward notes with improved typography
                           Text(
-                            reward.notes,
+                            'اسم الهدف: ${reward.task.title}',
                             style: getSemiBoldStyle(
                               fontFamily: FontConstant.cairo,
                               fontSize: FontSize.size14,
                             ),
                           ),
-
+                          const SizedBox(height: 10),
                           // Amount or Description based on whether amount is non-zero
                           Row(
                             children: [

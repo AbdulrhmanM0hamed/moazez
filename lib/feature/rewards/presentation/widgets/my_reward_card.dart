@@ -71,13 +71,13 @@ class MyRewardCard extends StatelessWidget {
                               // Avatar
                               Hero(
                                 tag: 'reward_avatar_${reward.id}',
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(28),
-                                  child: Container(
+                                child: Container(
                                     width: 56,
                                     height: 56,
+                                    clipBehavior: Clip.antiAlias,
                                     decoration: BoxDecoration(
                                       color: theme.colorScheme.primaryContainer,
+                                      shape: BoxShape.circle,
                                       border: Border.all(
                                         color: theme.colorScheme.primary
                                             .withValues(alpha: 0.3),
@@ -114,7 +114,6 @@ class MyRewardCard extends StatelessWidget {
                                               height: 56,
                                               fit: BoxFit.cover,
                                             ),
-                                  ),
                                 ),
                               ),
                               const SizedBox(width: 18),
