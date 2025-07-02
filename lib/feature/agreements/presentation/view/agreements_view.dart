@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/feature/agreements/presentation/view/add_task_view.dart';
@@ -23,9 +24,15 @@ class AgreementsView extends StatelessWidget {
         ),
       ],
       child: Builder(builder: (context) {
-        return Scaffold(
-          body: BlocListener<CloseTaskCubit, CloseTaskState>(
-            listener: (context, state) {
+        return WillPopScope(
+          onWillPop: () async {
+            // إغلاق التطبيق عند الضغط على زر الرجوع من الصفحة الرئيسية
+            await SystemNavigator.pop();
+            return false;
+          },
+          child: Scaffold(
+            body: BlocListener<CloseTaskCubit, CloseTaskState>(
+              listener: (context, state) {
               if (state is CloseTaskSuccess) {
                 CustomSnackbar.showSuccess(
                   context: context,
@@ -56,7 +63,7 @@ class AgreementsView extends StatelessWidget {
             tooltip: 'إضافة مهمة',
             child: const Icon(Icons.add_task, color: Colors.white, size: 28),
           ),
-        );
+        ));
       }),
     );
   }

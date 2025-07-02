@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/feature/MyTasks/domain/entities/my_task_entity.dart';
@@ -41,8 +42,14 @@ class _MyTasksViewBodyState extends State<_MyTasksViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return WillPopScope(
+      onWillPop: () async {
+        // إغلاق التطبيق عند الضغط على زر الرجوع من الصفحة الرئيسية
+        await SystemNavigator.pop();
+        return false;
+      },
+      child: Scaffold(
+        body: Column(
         children: [
           HomeTopSection(),
           Padding(
@@ -126,6 +133,6 @@ class _MyTasksViewBodyState extends State<_MyTasksViewBody> {
           ),
         ],
       ),
-    );
+    ));
   }
 }

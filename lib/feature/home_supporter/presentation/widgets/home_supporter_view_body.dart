@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/packages_view.dart';
@@ -24,15 +25,21 @@ class _HomeViewBodyState extends State<HomeSupporterViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      key: _refreshIndicatorKey,
-      onRefresh: () async {
-        context.read<ProfileCubit>().fetchProfile();
-        context.read<TeamCubit>().fetchTeamInfo();
-        await Future.delayed(const Duration(milliseconds: 1500));
+    return WillPopScope(
+      onWillPop: () async {
+        // إغلاق التطبيق عند الضغط على زر الرجوع من الصفحة الرئيسية
+        await SystemNavigator.pop();
+        return false;
       },
-      child: BlocBuilder<ProfileCubit, ProfileState>(
-        builder: (context, profileState) {
+      child: RefreshIndicator(
+        key: _refreshIndicatorKey,
+        onRefresh: () async {
+          context.read<ProfileCubit>().fetchProfile();
+          context.read<TeamCubit>().fetchTeamInfo();
+          await Future.delayed(const Duration(milliseconds: 1500));
+        },
+        child: BlocBuilder<ProfileCubit, ProfileState>(
+          builder: (context, profileState) {
           if (profileState is ProfileLoading) {
             
             return const Center(child: CustomProgressIndcator());
@@ -42,8 +49,8 @@ class _HomeViewBodyState extends State<HomeSupporterViewBody> {
               child: Text(
                 profileState.message,
                 style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            );
+      ),
+    );
           }
           if (profileState is ProfileLoaded) {
             return BlocBuilder<TeamCubit, TeamState>(
@@ -127,7 +134,7 @@ class _HomeViewBodyState extends State<HomeSupporterViewBody> {
           }
         },
       ),
-    );
+    ));
   }
 }
 

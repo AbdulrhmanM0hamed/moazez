@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
@@ -36,14 +37,20 @@ class _AccountViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LogoutListener(
-      child: Scaffold(
-        appBar: CustomAppBar(
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          title: 'حسابي',
-          centerTitle: true,
-        ),
-        body: BlocBuilder<ProfileCubit, ProfileState>(
+      child: WillPopScope(
+        onWillPop: () async {
+          // إغلاق التطبيق عند الضغط على زر الرجوع من الصفحة الرئيسية
+          await SystemNavigator.pop();
+          return false;
+        },
+        child: Scaffold(
+          appBar: CustomAppBar(
+            automaticallyImplyLeading: false,
+            elevation: 0,
+            title: 'حسابي',
+            centerTitle: true,
+          ),
+          body: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
             if (state is ProfileLoading) {
               return const ProfileShimmer();
@@ -75,7 +82,7 @@ class _AccountViewBody extends StatelessWidget {
           },
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildProfileContent(BuildContext context, UserProfile user) {

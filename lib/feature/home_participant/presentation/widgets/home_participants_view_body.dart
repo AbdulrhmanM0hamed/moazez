@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
@@ -18,21 +19,28 @@ class HomeParticipantsViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<MyTasksCubit>()..getMyTasks(),
-      child: BlocBuilder<MyTasksCubit, MyTasksState>(
-        builder: (context, state) {
-          if (state is MyTasksLoading) {
-            return Center(child: CustomProgressIndcator());
-          }
-          if (state is MyTasksError) {
-            return Center(child: Text(state.message));
-          }
-          if (state is MyTasksLoaded) {
-            return _buildContent(context, state.tasks);
-          }
-          return const SizedBox.shrink();
-        },
+    return WillPopScope(
+      onWillPop: () async {
+        // إغلاق التطبيق عند الضغط على زر الرجوع من الصفحة الرئيسية
+        await SystemNavigator.pop();
+        return false;
+      },
+      child: BlocProvider(
+        create: (context) => sl<MyTasksCubit>()..getMyTasks(),
+        child: BlocBuilder<MyTasksCubit, MyTasksState>(
+          builder: (context, state) {
+            if (state is MyTasksLoading) {
+              return Center(child: CustomProgressIndcator());
+            }
+            if (state is MyTasksError) {
+              return Center(child: Text(state.message));
+            }
+            if (state is MyTasksLoaded) {
+              return _buildContent(context, state.tasks);
+            }
+            return const SizedBox.shrink();
+          },
+        ),
       ),
     );
   }
