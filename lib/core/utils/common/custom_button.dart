@@ -14,6 +14,9 @@ class CustomButton extends StatelessWidget {
   final double? height;
   final Widget? prefix;
   final Widget? suffix;
+  final IconData? icon;
+  final Color? borderColor;
+  final double? elevation;
 
   const CustomButton({
     super.key,
@@ -27,6 +30,9 @@ class CustomButton extends StatelessWidget {
     this.height,
     this.prefix,
     this.suffix,
+    this.icon,
+    this.borderColor,
+    this.elevation,
   });
 
   @override
@@ -41,10 +47,12 @@ class CustomButton extends StatelessWidget {
           colors: [backgroundColor!.withOpacity(0.9), backgroundColor!],
         ),
         borderRadius: BorderRadius.circular(16),
+        border: borderColor != null ? Border.all(color: borderColor!) : null,
       ),
       child: MaterialButton(
         onPressed: isLoading ? null : onPressed,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: elevation ?? 2,
         child: _buildButtonChild(),
       ),
     );
@@ -66,6 +74,10 @@ class CustomButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (prefix != null) prefix!,
+        if (icon != null) ...[  
+          Icon(icon, color: textColor, size: 20),
+          const SizedBox(width: 8),
+        ],
         Text(
           text,
           style: getBoldStyle(

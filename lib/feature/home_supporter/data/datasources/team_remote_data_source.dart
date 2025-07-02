@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:moazez/core/utils/constant/api_endpoints.dart';
 import 'package:moazez/feature/home_supporter/data/models/team_model.dart';
 import 'package:moazez/core/services/cache/cache_service.dart';
@@ -40,6 +41,12 @@ class TeamRemoteDataSourceImpl implements TeamRemoteDataSource {
         );
       }
     } on DioException catch (e) {
+      debugPrint(e.response?.data.toString());
+      debugPrint(e.response?.statusCode.toString());
+      debugPrint(e.response?.headers.toString());
+      debugPrint(e.response?.requestOptions.toString());
+      debugPrint(e.type.toString());
+      debugPrint(e.message.toString());
       throw handleDioException(e);
     }
   }
@@ -185,6 +192,12 @@ class TeamRemoteDataSourceImpl implements TeamRemoteDataSource {
           message: 'ليس لديك الصلاحية للوصول إلى إحصائيات مهام أعضاء الفريق. (خطأ: 403)',
         );
       }
+      debugPrint(e.response?.data.toString());
+      debugPrint(e.response?.statusCode.toString());
+      debugPrint(e.response?.headers.toString());
+      debugPrint(e.response?.requestOptions.toString());
+      debugPrint(e.type.toString());
+      debugPrint(e.message.toString());
       throw handleDioException(e);
     }
   }

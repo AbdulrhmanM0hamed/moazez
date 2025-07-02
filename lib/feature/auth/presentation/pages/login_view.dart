@@ -18,7 +18,6 @@ import 'package:moazez/feature/auth/presentation/pages/signup_view.dart';
 import 'package:moazez/feature/home_participant/presentation/view/participants_nav_bar.dart';
 import 'package:flutter/services.dart';
 
-
 class LoginView extends StatefulWidget {
   static const String routeName = '/login';
   const LoginView({Key? key}) : super(key: key);
@@ -224,6 +223,39 @@ class _LoginViewState extends State<LoginView> {
                             ),
                           ],
                         ),
+                        const SizedBox(height: 24),
+                        Row(
+                          children: [
+                            Expanded(child: Divider(thickness: 1)),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              child: Text(
+                                'أو',
+                                style: getMediumStyle(
+                                  fontFamily: FontConstant.cairo,
+                                  fontSize: FontSize.size14,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            Expanded(child: Divider(thickness: 1)),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        CustomButton(
+                          text: 'دخول كزائر',
+                          onPressed: () {
+                            Navigator.of(
+                              context,
+                            ).pushReplacementNamed('/guest-nav-bar');
+                          },
+
+                          icon: Icons.person_outline,
+
+                          elevation: 0,
+                        ),
                       ],
                     ),
                   ),
@@ -232,7 +264,7 @@ class _LoginViewState extends State<LoginView> {
             },
           ),
         ),
-      )
+      ),
     );
   }
 
