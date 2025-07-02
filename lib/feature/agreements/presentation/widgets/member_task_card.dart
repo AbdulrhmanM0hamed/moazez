@@ -159,7 +159,7 @@ class MemberTaskCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (task.status != 'completed')
+               //   if (task.status != 'completed')
                     PopupMenuButton<String>(
                       onSelected: (value) {
                         _showConfirmationDialog(
@@ -180,9 +180,9 @@ class MemberTaskCard extends StatelessWidget {
                             ),
                           ],
                     )
-                  else
+               //   else
                     // Reserve space to keep the layout consistent
-                    const SizedBox(width: 48.0),
+                   // const SizedBox(width: 48.0),
                 ],
               ),
               const SizedBox(height: 12),

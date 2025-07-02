@@ -120,7 +120,7 @@ class _ReceivedInvitationsViewBody extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                invitation.user.name,
+                                invitation.senderName,
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w700,

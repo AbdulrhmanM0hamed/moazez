@@ -98,7 +98,7 @@ class UsageModel extends UsageEntity {
   const UsageModel({
     required int tasksCreated,
     required int remainingTasks,
-    required int usagePercentage,
+    required double usagePercentage,
   }) : super(
          tasksCreated: tasksCreated,
          remainingTasks: remainingTasks,
@@ -115,7 +115,7 @@ class UsageModel extends UsageEntity {
     return UsageModel(
       tasksCreated: tasksCreated,
       remainingTasks: remainingTasks,
-      usagePercentage: json['usage_percentage'] ?? 0,
+      usagePercentage: (json['usage_percentage'] as num?)?.toDouble() ?? 0.0,
     );
   }
 

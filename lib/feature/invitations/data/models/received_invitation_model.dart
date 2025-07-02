@@ -11,6 +11,7 @@ class ReceivedInvitationModel extends ReceivedInvitationEntity {
     required String type,
     required UserModel user,
     required TeamModel team,
+    required String senderName,
   }) : super(
           id: id,
           userId: userId,
@@ -21,6 +22,7 @@ class ReceivedInvitationModel extends ReceivedInvitationEntity {
           type: type,
           user: user,
           team: team,
+          senderName: senderName,
         );
 
   factory ReceivedInvitationModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class ReceivedInvitationModel extends ReceivedInvitationEntity {
       type: json['type'] ?? '',
       user: UserModel.fromJson(json['user'] ?? {}),
       team: TeamModel.fromJson(json['team'] ?? {}),
+      senderName: json['sender_name'] ?? '',
     );
   }
 
@@ -48,6 +51,7 @@ class ReceivedInvitationModel extends ReceivedInvitationEntity {
       'type': type,
       'user': (user as UserModel).toJson(),
       'team': (team as TeamModel).toJson(),
+      'sender_name': senderName,
     };
   }
 }

@@ -59,7 +59,7 @@ class PackageEntitySub extends Equatable {
 class UsageEntity extends Equatable {
   final int tasksCreated;
   final int remainingTasks;
-  final int usagePercentage;
+  final double usagePercentage;
 
   const UsageEntity({
     required this.tasksCreated,

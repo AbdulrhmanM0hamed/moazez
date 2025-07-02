@@ -53,7 +53,6 @@ class TaskDetailsDialog extends StatelessWidget {
             style: getBoldStyle(
               fontFamily: FontConstant.cairo,
               fontSize: FontSize.size16,
-              color: Colors.black87,
             ),
           ),
           const SizedBox(height: 16.0),
@@ -78,29 +77,28 @@ class TaskDetailsDialog extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 24,
-          child: member.avatarUrl.isNotEmpty && Uri.tryParse(member.avatarUrl)?.hasAuthority == true
-              ? CustomCachedNetworkImage(
-                  imageUrl: member.avatarUrl,
-                  width: 48,
-                  height: 48,
-                  fit: BoxFit.cover,
-                  borderRadius: BorderRadius.circular(24),
-                )
-              : SvgPicture.asset(
-                  'assets/images/defualt_avatar.svg',
-                  width: 48,
-                  height: 48,
-                  fit: BoxFit.cover,
-                ),
+          child:
+              member.avatarUrl.isNotEmpty &&
+                      Uri.tryParse(member.avatarUrl)?.hasAuthority == true
+                  ? CustomCachedNetworkImage(
+                    imageUrl: member.avatarUrl,
+                    width: 48,
+                    height: 48,
+                    fit: BoxFit.cover,
+                    borderRadius: BorderRadius.circular(24),
+                  )
+                  : SvgPicture.asset(
+                    'assets/images/defualt_avatar.svg',
+                    width: 48,
+                    height: 48,
+                    fit: BoxFit.cover,
+                  ),
         ),
         const SizedBox(width: 16),
         Expanded(
           child: Text(
             member.name,
-            style: getMediumStyle(
-              fontFamily: FontConstant.cairo,
-              fontSize: 18,
-            ),
+            style: getMediumStyle(fontFamily: FontConstant.cairo, fontSize: 18),
             overflow: TextOverflow.ellipsis,
           ),
         ),

@@ -60,17 +60,18 @@ class SubscriptionRemoteDataSourceImpl implements SubscriptionRemoteDataSource {
         }
       } else {
         throw ServerException(
-          message: 'فشل في جلب الاشتراك الحالي: حالة الاستجابة ${response.statusCode}',
+          message:
+              'فشل في جلب الاشتراك الحالي: حالة الاستجابة ${response.statusCode}',
         );
       }
     } on DioException catch (e) {
       throw ServerException(
-        message: e.message ?? 'خطأ في الاتصال بالخادم: ${e.response?.statusCode ?? "غير معروف"}',
+        message:
+            e.message ??
+            'خطأ في الاتصال بالخادم: ${e.response?.statusCode ?? "غير معروف"}',
       );
     } catch (e) {
-      throw ServerException(
-        message: 'خطأ غير متوقع: ${e.toString()}',
-      );
+      throw ServerException(message: 'خطأ غير متوقع: ${e.toString()}');
     }
   }
 }

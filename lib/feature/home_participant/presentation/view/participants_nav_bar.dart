@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
@@ -38,7 +39,13 @@ class _ParticipantsNavBarState extends State<ParticipantsNavBar> {
         //    BlocProvider(create: (_) => sl<PackagesCubit>()..fetchPackages()),
         BlocProvider(create: (_) => sl<TeamCubit>()..fetchTeamInfo()),
       ],
-      child: Scaffold(
+        child: WillPopScope(
+        onWillPop: () async {
+          // إغلاق التطبيق عند الضغط على زر الرجوع من الصفحة الرئيسية
+          await SystemNavigator.pop();
+          return false;
+        },
+        child: Scaffold(
         body: IndexedStack(index: _currentIndex, children: _pages),
         bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(
@@ -132,6 +139,7 @@ class _ParticipantsNavBarState extends State<ParticipantsNavBar> {
               ),
             ),
           ),
+        ),
         ),
       ),
     );

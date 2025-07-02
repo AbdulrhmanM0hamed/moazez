@@ -49,8 +49,9 @@ class HomeHeader extends StatelessWidget {
                     ),
                     const SizedBox(width: 12),
 
+                    // استخدم الاسم الأول فقط لتجنب طول النص الزائد
                     Text(
-                      'هلا ${user.name}',
+                      'هلا ${user.name?.split(' ').first ?? ''}',
                       style: getBoldStyle(
                         color: AppColors.white,
                         fontFamily: FontConstant.cairo,
