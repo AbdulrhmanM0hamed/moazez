@@ -83,9 +83,9 @@ class _ReceivedInvitationsViewBody extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(32),
                           child:
-                              invitation.user.avatarUrl != null
+                              invitation.senderAvatarUrl != null
                                   ? CustomCachedNetworkImage(
-                                    imageUrl: invitation.user.avatarUrl,
+                                    imageUrl: invitation.senderAvatarUrl,
                                     width: 60,
                                     height: 60,
                                     fit: BoxFit.cover,

@@ -12,6 +12,8 @@ import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_cu
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
 import 'package:moazez/feature/packages/presentation/cubit/payment_cubit.dart';
+import 'package:moazez/feature/packages/presentation/cubit/subscription_cubit.dart';
+import 'package:moazez/feature/packages/presentation/cubit/package_cubit.dart';
 
 class GuestNavBar extends StatefulWidget {
   const GuestNavBar({super.key});
@@ -39,6 +41,8 @@ class _GuestNavBarState extends State<GuestNavBar> {
         BlocProvider(create: (_) => sl<TeamCubit>()),
         BlocProvider(create: (_) => sl<MemberStatsCubit>()),
         BlocProvider(create: (_) => sl<PaymentCubit>()),
+        BlocProvider(create: (_) => sl<SubscriptionCubit>()),
+        BlocProvider(create: (_) => sl<PackageCubit>()..getPackages()),
       ],
       child: WillPopScope(
         onWillPop: () async {

@@ -35,14 +35,14 @@ class InvitationRemoteDataSourceImpl implements InvitationRemoteDataSource {
           },
         ),
       );
-      print(
-        'Send Invitation API Response: ${response.statusCode} - ${response.data}',
-      );
+      //   print(
+      //     'Send Invitation API Response: ${response.statusCode} - ${response.data}',
+      //   );
       if ((response.statusCode == 200 || response.statusCode == 201) &&
           response.data != null) {
         final data = response.data['data'] ?? response.data['join_request'];
         if (data != null) {
-          print('Invitation Data to Parse: $data');
+       //   print('Invitation Data to Parse: $data');
           return InvitationModel.fromJson(data);
         } else {
           throw ServerException(
@@ -53,7 +53,7 @@ class InvitationRemoteDataSourceImpl implements InvitationRemoteDataSource {
         throw ServerException(message: 'فشل في إرسال الدعوة');
       }
     } on DioException catch (e) {
-      print(e);
+      //   print(e);
       if (e.response?.statusCode == 422 && e.response?.data != null) {
         final errorData = e.response?.data;
         String errorMessage = 'فشل في إرسال الدعوة: المستخدم غير موجود';
@@ -117,9 +117,9 @@ class InvitationRemoteDataSourceImpl implements InvitationRemoteDataSource {
       );
       if (response.statusCode == 200 && response.data != null) {
         final data = response.data['data'];
-        print('Received Invitations Data: ${response.data}');
+        //   print('Received Invitations Data: ${response.data}');
         if (data != null && data is List) {
-          print('Received Invitations Data: ${data}');
+          //     print('Received Invitations Data: ${data}');
           return data
               .map((json) => ReceivedInvitationModel.fromJson(json))
               .toList();
@@ -153,12 +153,17 @@ class InvitationRemoteDataSourceImpl implements InvitationRemoteDataSource {
           },
         ),
       );
-      print('Respond to Invitation API Response: ${response.statusCode} - ${response.data}');
+      //   print(
+      //     'Respond to Invitation API Response: ${response.statusCode} - ${response.data}',
+      //   );
       if ((response.statusCode == 200 || response.statusCode == 201) &&
           response.data != null) {
         return true;
       } else {
-        throw ServerException(message: 'فشل في الرد على الدعوة: ${response.data?.toString() ?? "لا توجد تفاصيل"}');
+        throw ServerException(
+          message:
+              'فشل في الرد على الدعوة: ${response.data?.toString() ?? "لا توجد تفاصيل"}',
+        );
       }
     } on DioException catch (e) {
       throw handleDioException(e);

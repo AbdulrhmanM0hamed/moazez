@@ -174,10 +174,10 @@ class MemberTaskCard extends StatelessWidget {
                               value: 'completed',
                               child: Text('مكتمل'),
                             ),
-                            const PopupMenuItem<String>(
-                              value: 'not_completed',
-                              child: Text('غير مكتمل'),
-                            ),
+                            // const PopupMenuItem<String>(
+                            //   value: 'not_completed',
+                            //   child: Text('غير مكتمل'),
+                            // ),
                           ],
                     )
                //   else

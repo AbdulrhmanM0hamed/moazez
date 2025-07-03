@@ -11,6 +11,7 @@ class ReceivedInvitationEntity extends Equatable {
   final UserEntity user;
   final TeamEntity team;
   final String senderName;
+  final String senderAvatarUrl;
 
   const ReceivedInvitationEntity({
     required this.id,
@@ -23,6 +24,7 @@ class ReceivedInvitationEntity extends Equatable {
     required this.user,
     required this.team,
     required this.senderName,
+    required this.senderAvatarUrl,
   });
 
   @override
@@ -37,6 +39,7 @@ class ReceivedInvitationEntity extends Equatable {
         user,
         team,
         senderName,
+        senderAvatarUrl,
       ];
 }
 

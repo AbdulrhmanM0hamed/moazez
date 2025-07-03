@@ -51,7 +51,8 @@ class PackagesView extends StatelessWidget {
           listener: (context, paymentState) {
             if (paymentState is PaymentSuccess) {
               // إذا لم يكن هناك رابط دفع، فهذا يعني أن الباقة تم تفعيلها مباشرة (على الأرجح باقة تجريبية)
-              if (paymentState.paymentUrl == null || paymentState.paymentUrl!.isEmpty) {
+              if (paymentState.paymentUrl == null ||
+                  paymentState.paymentUrl!.isEmpty) {
                 // حدث تفعيل مباشر للباقة بدون بوابة دفع
                 context.read<PaymentCubit>().updateSubscriptionAfterPayment();
                 CustomSnackbar.showSuccess(
@@ -78,7 +79,9 @@ class PackagesView extends StatelessWidget {
                         (context) => BlocProvider.value(
                           value: paymentCubit,
                           child: PaymentWebView(
-                            paymentUrl: paymentState.paymentUrl ?? '', // Handle trial success without paymentUrl
+                            paymentUrl:
+                                paymentState.paymentUrl ??
+                                '', // Handle trial success without paymentUrl
                             onPaymentComplete: (bool success) {
                               // استخدام Future.microtask لتأجيل العمليات حتى يتم إكمال بناء الشاشة الحالية
                               Future.microtask(() {
