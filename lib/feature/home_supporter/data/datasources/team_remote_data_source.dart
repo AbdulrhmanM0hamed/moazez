@@ -136,7 +136,10 @@ class TeamRemoteDataSourceImpl implements TeamRemoteDataSource {
           },
         ),
       );
-      if (response.data['status'] == 'success' || response.data['status'] == true || (response.data['message']?.contains('تم حذف العضو بنجاح') == true) || (response.data['message']?.contains('تم إزالة العضو من فريقك بنجاح') == true)) {
+      if (response.data['status'] == 'success' || response.data['status'] == true || 
+          (response.data['message']?.contains('تم حذف العضو بنجاح') == true) || 
+          (response.data['message']?.contains('تم إزالة العضو من فريقك بنجاح') == true) ||
+          (response.data['message']?.contains('تم إزالتك من أعضاء الفريق') == true)) {
         if (response.data['data'] != null && response.data['data'] is Map<String, dynamic>) {
           return TeamModel.fromJson(response.data['data']);
         } else {
