@@ -27,7 +27,7 @@ class MyRewardsView extends StatelessWidget {
                 
               }
               return ListView.builder(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.only(top: 16 , bottom: 40 , left: 16 , right: 16, ),
                 itemCount: state.rewards.length,
                 itemBuilder: (context, index) {
                   final reward = state.rewards[index];

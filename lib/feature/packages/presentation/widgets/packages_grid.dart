@@ -27,8 +27,6 @@ class PackagesGrid extends StatelessWidget {
     // print("🟢 [PackagesGrid] Packages count: ${displayedPackages.length}");
     return GridView.builder(
       padding: EdgeInsets.zero,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: _calculateCrossAxisCount(context),
         childAspectRatio: childAspectRatio,

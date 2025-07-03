@@ -12,7 +12,7 @@ class CancellationDialog extends StatelessWidget {
 
   @override
     Widget build(BuildContext context) {
-    log('CancellationDialog: Displaying.');
+   // log('CancellationDialog: Displaying.');
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -45,7 +45,7 @@ class CancellationDialog extends StatelessWidget {
           width: 100,
           child: TextButton(
             onPressed: () {
-              log('CancellationDialog: Cancel button (No) pressed.');
+         //     log('CancellationDialog: Cancel button (No) pressed.');
               if (Navigator.canPop(context)) {
                 Navigator.of(context).pop(false);
               }
@@ -68,7 +68,7 @@ class CancellationDialog extends StatelessWidget {
           width: 100,
           child: TextButton(
             onPressed: () {
-              log('CancellationDialog: Confirm (Yes) button pressed.');
+           //   log('CancellationDialog: Confirm (Yes) button pressed.');
               Navigator.of(context).pop(true);
               onConfirm(false);
             },

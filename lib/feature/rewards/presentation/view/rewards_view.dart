@@ -21,13 +21,17 @@ class RewardsView extends StatelessWidget {
           builder: (context, state) {
             if (state is RewardLoading) {
               return const Center(child: CustomProgressIndcator());
-              
             } else if (state is RewardLoaded) {
               if (state.rewards.isEmpty) {
                 return const Center(child: Text('لا يوجد مكافآت تابعة لفريقك'));
               }
               return ListView.builder(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.only(
+                  top: 16,
+                  bottom: 40,
+                  left: 16,
+                  right: 16,
+                ),
                 itemCount: state.rewards.length,
                 itemBuilder: (context, index) {
                   return TeamRewardCard(reward: state.rewards[index]);
