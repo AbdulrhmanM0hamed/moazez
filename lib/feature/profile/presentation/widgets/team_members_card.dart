@@ -44,6 +44,9 @@ class _TeamMembersCardState extends State<TeamMembersCard> {
       },
       child: Container(
         padding: const EdgeInsets.all(20.0),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).padding.bottom + 16.0,
+        ),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(20.0),

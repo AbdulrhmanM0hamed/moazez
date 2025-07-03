@@ -163,29 +163,40 @@ class PackagesView extends StatelessWidget {
                     },
                   ),
                   Expanded(
-                    child: BlocBuilder<PackageCubit, PackageState>(
-                      builder: (context, state) {
-                        if (state is PackageLoading) {
-                          return const Center(child: CustomProgressIndcator());
-                        } else if (state is PackageLoaded) {
-                          return Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: PackagesGrid(packages: state.packages),
-                          );
-                        } else if (state is PackageError) {
-                          print(state.message);
-                          return Center(
-                            child: Text(
-                              state.message,
-                              style: const TextStyle(color: AppColors.error),
-                            ),
-                          );
-                        } else {
-                          return const Center(child: Text('ابدأ بجلب الباقات'));
-                        }
-                      },
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(16.0),
+                      child: BlocBuilder<PackageCubit, PackageState>(
+                        builder: (context, state) {
+                          if (state is PackageLoading) {
+                            return const Center(child: CustomProgressIndcator());
+                          } else if (state is PackageLoaded) {
+                            return Column(
+                              children: [
+                                PackagesGrid(
+                                  packages: state.packages,
+                                  childAspectRatio: 1.1,
+                                ),
+                                const SizedBox(height: 20),
+                              ],
+                            );
+                          } else if (state is PackageError) {
+                        //    print(state.message);
+                            return Center(
+                              child: Text(
+                                state.message,
+                                style: const TextStyle(color: AppColors.error),
+                              ),
+                            );
+                          } else {
+                            return const Center(child: Text('ابدأ بجلب الباقات'));
+                          }
+                        },
+                      ),
+                      
                     ),
+                    
                   ),
+                   const SizedBox(height: 30),
                 ],
               );
             },

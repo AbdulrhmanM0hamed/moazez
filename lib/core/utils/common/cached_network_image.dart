@@ -25,51 +25,65 @@ class CustomCachedNetworkImage extends StatelessWidget {
     this.backgroundColor,
   });
 
+  bool _isValidImageUrl(String url) {
+    if (url.isEmpty) return false;
+    try {
+      final uri = Uri.parse(url);
+      if (uri.scheme == 'file') return false; // Reject file:// URLs
+      return uri.hasAuthority && (uri.scheme == 'http' || uri.scheme == 'https');
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Widget get _defaultErrorWidget => Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: borderRadius ?? BorderRadius.circular(12),
+        ),
+        child: const Center(
+          child: Icon(
+            Icons.error_outline,
+            color: AppColors.error,
+          ),
+        ),
+      );
+
+  Widget get _defaultLoadingWidget => Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: borderRadius ?? BorderRadius.circular(12),
+        ),
+        child: const Center(
+          child: LoadingWidget(
+            size: 24,
+            color: AppColors.primary,
+          ),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
+    if (!_isValidImageUrl(imageUrl)) {
+      return errorWidget ?? _defaultErrorWidget;
+    }
+
     return ClipRRect(
       borderRadius: borderRadius ?? BorderRadius.circular(12),
       child: Container(
         width: width,
         height: height,
         color: backgroundColor,
-        child: imageUrl.isEmpty || !Uri.parse(imageUrl).hasAuthority
-            ? (errorWidget ??
-                Container(
-                  color: Colors.grey[200],
-                  child: const Center(
-                    child: Icon(
-                      Icons.error_outline,
-                      color: AppColors.error,
-                    ),
-                  ),
-                ))
-            : CachedNetworkImage(
-                imageUrl: imageUrl,
-                fit: fit ?? BoxFit.cover,
-                placeholder: (context, url) =>
-                    placeholder ??
-                    Container(
-                      color: Colors.grey[200],
-                      child: const Center(
-                        child: LoadingWidget(
-                          size: 24,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                    ),
-                errorWidget: (context, url, error) =>
-                    errorWidget ??
-                    Container(
-                      color: Colors.grey[200],
-                      child: const Center(
-                        child: Icon(
-                          Icons.error_outline,
-                          color: AppColors.error,
-                        ),
-                      ),
-                    ),
-              ),
+        child: CachedNetworkImage(
+          imageUrl: imageUrl,
+          fit: fit ?? BoxFit.cover,
+          placeholder: (context, url) => placeholder ?? _defaultLoadingWidget,
+          errorWidget: (context, url, error) => errorWidget ?? _defaultErrorWidget,
+        ),
       ),
     );
   }

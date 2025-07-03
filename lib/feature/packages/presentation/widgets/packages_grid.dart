@@ -15,17 +15,16 @@ class PackagesGrid extends StatelessWidget {
     required this.packages,
     this.crossAxisSpacing = 12,
     this.mainAxisSpacing = 2,
-    this.childAspectRatio = 1.099, // تعديل النسبة لتناسب التصميم الجديد
+    this.childAspectRatio = 1.0,
   });
 
   @override
   Widget build(BuildContext context) {
-    // عرض كل الباقات بما في ذلك التجريبية والمدفوعة
     final displayedPackages = packages;
-    // Debug
-    // ignore: avoid_print
-    // print("🟢 [PackagesGrid] Packages count: ${displayedPackages.length}");
+
     return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(), // منع السكرول الداخلي
       padding: EdgeInsets.zero,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: _calculateCrossAxisCount(context),
@@ -39,7 +38,6 @@ class PackagesGrid extends StatelessWidget {
           onTap: () {
             final paymentCubit = context.read<PaymentCubit>();
             paymentCubit.initiatePayment(displayedPackages[index].id);
-            //  print("🟢 [PackagesGrid] Paid packages id: ${paidPackages[index].id}");
           },
         );
       },
@@ -54,7 +52,7 @@ class PackagesGrid extends StatelessWidget {
     } else if (width > 700) {
       return 2;
     } else {
-      return 1; // عرض كامل الشاشة على الهواتف الصغيرة
+      return 1;
     }
   }
 }
