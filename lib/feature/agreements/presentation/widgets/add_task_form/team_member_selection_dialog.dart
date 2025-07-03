@@ -50,6 +50,27 @@ class _TeamMemberSelectionDialogState extends State<TeamMemberSelectionDialog> {
           if (state is TeamMembersLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is TeamMembersLoaded) {
+            if (state.members.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'لا يوجد أعضاء في الفريق حالياً',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<TeamMembersCubit>().fetchTeamMembers();
+                      },
+                      child: const Text('تحديث القائمة'),
+                    ),
+                  ],
+                ),
+              );
+            }
             return SizedBox(
               width: double.maxFinite,
               child: ListView.builder(
@@ -57,26 +78,29 @@ class _TeamMemberSelectionDialogState extends State<TeamMemberSelectionDialog> {
                 itemCount: state.members.length,
                 itemBuilder: (context, index) {
                   final member = state.members[index];
-                  final isSelected = _tempSelectedMembers.any((m) => m.id == member.id);
+                  final isSelected = _tempSelectedMembers.any(
+                    (m) => m.id == member.id,
+                  );
                   return CheckboxListTile(
                     title: Row(
                       children: [
                         CircleAvatar(
                           radius: 20,
-                          child: _isValidUrl(member.avatarUrl) 
-                              ? CustomCachedNetworkImage(
-                                  imageUrl: member.avatarUrl!,
-                                  width: 40,
-                                  height: 40,
-                                  fit: BoxFit.cover,
-                                  borderRadius: BorderRadius.circular(20),
-                                )
-                              : SvgPicture.asset(
-                                  'assets/images/defualt_avatar.svg',
-                                  width: 40,
-                                  height: 40,
-                                  fit: BoxFit.cover,
-                                ),
+                          child:
+                              _isValidUrl(member.avatarUrl)
+                                  ? CustomCachedNetworkImage(
+                                    imageUrl: member.avatarUrl!,
+                                    width: 40,
+                                    height: 40,
+                                    fit: BoxFit.cover,
+                                    borderRadius: BorderRadius.circular(20),
+                                  )
+                                  : SvgPicture.asset(
+                                    'assets/images/defualt_avatar.svg',
+                                    width: 40,
+                                    height: 40,
+                                    fit: BoxFit.cover,
+                                  ),
                         ),
                         SizedBox(width: 10),
                         Text(member.name),
@@ -88,7 +112,9 @@ class _TeamMemberSelectionDialogState extends State<TeamMemberSelectionDialog> {
                         if (value == true) {
                           _tempSelectedMembers.add(member);
                         } else {
-                          _tempSelectedMembers.removeWhere((m) => m.id == member.id);
+                          _tempSelectedMembers.removeWhere(
+                            (m) => m.id == member.id,
+                          );
                         }
                       });
                     },
@@ -97,7 +123,25 @@ class _TeamMemberSelectionDialogState extends State<TeamMemberSelectionDialog> {
               ),
             );
           } else if (state is TeamMembersError) {
-            return Center(child: Text(state.message));
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    state.message.contains('403')
+                        ? 'لا يوجد أعضاء في الفريق حالياً'
+                        : state.message,
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<TeamMembersCubit>().fetchTeamMembers();
+                    },
+                    child: const Text('تحديث القائمة'),
+                  ),
+                ],
+              ),
+            );
           } else {
             return const Center(child: Text('الرجاء المحاولة مرة أخرى'));
           }

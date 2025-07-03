@@ -19,16 +19,28 @@ class AgreementsRemoteDataSourceImpl implements AgreementsRemoteDataSource {
   Future<List<TeamMemberModel>> getTeamMembers() async {
     final token = await cacheService.getToken();
     final response = await dio.get(
-      ApiEndpoints.teamMembers,
-      options: Options(headers: {'Authorization': 'Bearer $token'}),
+      ApiEndpoints.myTeam,
+      options: Options(
+        headers: {'Authorization': 'Bearer $token'},
+        validateStatus: (status) {
+          return status! < 500;
+        },
+      ),
     );
 
-    if (response.statusCode == 200 && response.data != null) {
-      final List<dynamic> membersJson = response.data['data']['members'];
-      return membersJson.map((json) => TeamMemberModel.fromJson(json)).toList();
-    } else {
-      throw ServerException(message: 'Failed to get team members');
+    if (response.statusCode == 403) {
+      return [];
     }
+
+    if (response.statusCode == 200 && response.data != null) {
+      final data = response.data['data'];
+      if (data != null && data['members'] != null) {
+        return (data['members'] as List)
+            .map((member) => TeamMemberModel.fromJson(member))
+            .toList();
+      }
+    }
+    return [];
   }
 
   @override
