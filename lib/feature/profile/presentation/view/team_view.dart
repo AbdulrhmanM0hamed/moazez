@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
+import 'package:moazez/core/utils/common/unauthenticated_widget.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
+import 'package:moazez/feature/agreements/data/models/team_member_model.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_state.dart';
 import 'package:moazez/feature/home_supporter/domain/entities/team_entity.dart';
-import 'package:moazez/feature/home_supporter/presentation/view/create_team_view.dart';
-import 'package:moazez/feature/home_supporter/presentation/widgets/create_team_prompt.dart';
 import 'package:moazez/feature/profile/presentation/widgets/team_info_card.dart';
 import 'package:moazez/feature/profile/presentation/widgets/team_members_card.dart';
 
@@ -44,7 +44,6 @@ class _TeamViewBodyState extends State<_TeamViewBody> {
       body: BlocConsumer<TeamCubit, TeamState>(
         listener: (context, state) {
           if (state is TeamError) {
-            // Only show error if not in the middle of an update process
             if (!_isUpdating) {
               CustomSnackbar.show(
                 context: context,
@@ -64,7 +63,6 @@ class _TeamViewBodyState extends State<_TeamViewBody> {
               _isUpdating = false;
             });
 
-            // Only show success message if an update was just performed.
             if (wasUpdating) {
               CustomSnackbar.show(
                 context: context,
@@ -75,6 +73,11 @@ class _TeamViewBodyState extends State<_TeamViewBody> {
           }
         },
         builder: (context, state) {
+          if (state is TeamError) {
+            if (state.message.contains('Unauthenticated.')) {
+              return const UnauthenticatedWidget();
+            }
+          }
           if (state is TeamLoading || _isUpdating) {
             return const Center(child: CustomProgressIndcator());
           } else if (state is TeamLoaded) {
@@ -85,25 +88,16 @@ class _TeamViewBodyState extends State<_TeamViewBody> {
                 state.team.name ?? 'فريق غير مسمى',
                 state.team.membersCount ?? 0,
                 state.team.isOwner,
+                state.members ?? [],
               );
             } else {
-              return Center(
+              return const Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
+                  padding: EdgeInsets.symmetric(
                     horizontal: 20.0,
                     vertical: 180.0,
                   ),
-                  child: CreateTeamPrompt(
-                    onPressed: () async {
-                      final result = await Navigator.pushNamed(
-                        context,
-                        CreateTeamView.routeName,
-                      );
-                      if (result == true) {
-                        context.read<TeamCubit>().fetchTeamInfo();
-                      }
-                    },
-                  ),
+                  child: SizedBox.shrink(),
                 ),
               );
             }
@@ -114,46 +108,27 @@ class _TeamViewBodyState extends State<_TeamViewBody> {
                 _currentTeam!.name ?? 'فريق غير مسمى',
                 _currentTeam!.membersCount ?? 0,
                 _currentTeam!.isOwner,
+                [], // Empty list since we don't have members in this state
               );
             } else {
-              return Center(
+              return const Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
+                  padding: EdgeInsets.symmetric(
                     horizontal: 20.0,
                     vertical: 180.0,
                   ),
-                  child: CreateTeamPrompt(
-                    onPressed: () async {
-                      final result = await Navigator.pushNamed(
-                        context,
-                        CreateTeamView.routeName,
-                      );
-                      if (result == true) {
-                        context.read<TeamCubit>().fetchTeamInfo();
-                      }
-                    },
-                  ),
+                  child: SizedBox.shrink(),
                 ),
               );
             }
           }
-          return Center(
+          return const Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 20.0,
                 vertical: 180.0,
               ),
-              child: CreateTeamPrompt(
-                onPressed: () async {
-                  final result = await Navigator.pushNamed(
-                    context,
-                    CreateTeamView.routeName,
-                  );
-                  if (result == true) {
-                    context.read<TeamCubit>().fetchTeamInfo();
-                  }
-                },
-              ),
+              child: SizedBox.shrink(),
             ),
           );
         },
@@ -166,6 +141,7 @@ class _TeamViewBodyState extends State<_TeamViewBody> {
     String teamName,
     int membersCount,
     bool isOwner,
+    List<TeamMemberModel> members,
   ) {
     final TextEditingController teamNameController = TextEditingController(
       text: teamName,
@@ -187,7 +163,7 @@ class _TeamViewBodyState extends State<_TeamViewBody> {
             },
           ),
           const SizedBox(height: 24),
-          TeamMembersCard(team: _currentTeam),
+          TeamMembersCard(team: _currentTeam, members: members),
         ],
       ),
     );

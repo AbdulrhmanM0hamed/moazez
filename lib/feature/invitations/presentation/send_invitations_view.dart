@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/common/custom_button.dart';
 import 'package:moazez/core/utils/common/custom_text_field.dart';
+import 'package:moazez/core/utils/common/unauthenticated_widget.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/validators/form_validators.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
@@ -42,9 +43,9 @@ class _SendInvitationsViewState extends State<SendInvitationsView> {
                 message: 'تم إرسال الدعوة بنجاح',
               );
             } else if (state is InvitationError) {
-              String errorMessage = state.message;
-
-              CustomSnackbar.showError(context: context, message: errorMessage);
+              if (state.message.contains('Unauthenticated.')) {
+                 Center(child: const UnauthenticatedWidget());
+              }
             }
           },
           child: Padding(

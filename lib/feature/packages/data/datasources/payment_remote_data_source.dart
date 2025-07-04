@@ -28,7 +28,7 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
         // debugPrint('[PaymentRemoteDataSource] Endpoint: ${ApiEndpoints.baseUrl}payment/mobile-init');
 
         final response = await dio.post(
-          '${ApiEndpoints.baseUrl}payment/mobile-init',
+          '${ApiEndpoints.baseUrl}${ApiEndpoints.paymentMobileInit}',
           data: {'package_id': packageId},
           options: Options(
             headers: {

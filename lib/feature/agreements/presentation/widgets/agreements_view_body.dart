@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:moazez/core/utils/common/unauthenticated_widget.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/feature/agreements/presentation/widgets/member_task_card.dart';
@@ -21,7 +22,9 @@ class AgreementsViewBody extends StatefulWidget {
 class _AgreementsViewBodyState extends State<AgreementsViewBody> {
   int _selectedFilterIndex = 0;
 
-  List<_TaskWithMemberInfo> _getFilteredTasks(List<_TaskWithMemberInfo> allTasks) {
+  List<_TaskWithMemberInfo> _getFilteredTasks(
+    List<_TaskWithMemberInfo> allTasks,
+  ) {
     if (_selectedFilterIndex == 0) return allTasks; // ALL
 
     return allTasks.where((taskWithInfo) {
@@ -44,9 +47,9 @@ class _AgreementsViewBodyState extends State<AgreementsViewBody> {
     return Column(
       children: [
         const HomeTopSection(),
-       const SizedBox(height: 10),
+        const SizedBox(height: 10),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8 ),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: AgreementFilterTabs(
             selectedIndex: _selectedFilterIndex,
             onTabSelected: (index) {
@@ -63,30 +66,34 @@ class _AgreementsViewBodyState extends State<AgreementsViewBody> {
               if (state is MemberStatsLoading) {
                 return const ShimmerTaskList();
               }
-
               if (state is MemberStatsError) {
+                if (state.message.contains('Unauthenticated.')) {
+                  return Center(child: const UnauthenticatedWidget());
+                }
                 return Center(child: Text(state.message));
               }
 
               if (state is MemberStatsLoaded) {
-                final allTasks = state.response.members
-                    .expand(
-                      (member) => member.tasks.map(
-                        (task) => _TaskWithMemberInfo(
-                          task: task,
-                          member: member,
-                        ),
-                      ),
-                    )
-                    .toList();
+                final allTasks =
+                    state.response.members
+                        .expand(
+                          (member) => member.tasks.map(
+                            (task) =>
+                                _TaskWithMemberInfo(task: task, member: member),
+                          ),
+                        )
+                        .toList();
 
                 // Sort tasks by creation date (newest first)
                 allTasks.sort((a, b) {
                   try {
                     // Handle empty or null dates gracefully
-                    if (a.task.createdAt.isEmpty && b.task.createdAt.isEmpty) return 0;
-                    if (a.task.createdAt.isEmpty) return 1; // Treat empty dates as older
-                    if (b.task.createdAt.isEmpty) return -1; // Treat empty dates as older
+                    if (a.task.createdAt.isEmpty && b.task.createdAt.isEmpty)
+                      return 0;
+                    if (a.task.createdAt.isEmpty)
+                      return 1; // Treat empty dates as older
+                    if (b.task.createdAt.isEmpty)
+                      return -1; // Treat empty dates as older
 
                     final dateA = DateTime.parse(a.task.createdAt);
                     final dateB = DateTime.parse(b.task.createdAt);
@@ -102,7 +109,9 @@ class _AgreementsViewBodyState extends State<AgreementsViewBody> {
                 if (filteredTasks.isEmpty) {
                   return RefreshIndicator(
                     onRefresh: () async {
-                      await context.read<MemberStatsCubit>().fetchMemberTaskStats();
+                      await context
+                          .read<MemberStatsCubit>()
+                          .fetchMemberTaskStats();
                       return Future.delayed(const Duration(seconds: 1));
                     },
                     child: ListView(

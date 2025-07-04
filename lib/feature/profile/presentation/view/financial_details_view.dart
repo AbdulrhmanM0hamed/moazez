@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
+import 'package:moazez/core/utils/common/unauthenticated_widget.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
@@ -18,6 +19,11 @@ class FinancialDetailsView extends StatelessWidget {
       appBar: const CustomAppBar(title: 'الدعم والمساعدة'),
       body: BlocBuilder<FinancialDetailsCubit, FinancialDetailsState>(
         builder: (context, state) {
+          if (state is FinancialDetailsError) {
+            if (state.message.contains('Unauthenticated.')) {
+              return const UnauthenticatedWidget();
+            }
+          }
           if (state is FinancialDetailsLoading) {
             return const Center(child: CustomProgressIndcator());
           } else if (state is FinancialDetailsLoaded) {

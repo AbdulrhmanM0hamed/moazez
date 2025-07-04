@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/common/cached_network_image.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
+import 'package:moazez/core/utils/common/unauthenticated_widget.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
@@ -34,7 +35,9 @@ class _ReceivedInvitationsViewBody extends StatelessWidget {
       body: BlocConsumer<InvitationCubit, InvitationState>(
         listener: (context, state) {
           if (state is InvitationError) {
-            print(state.message);
+            if (state.message.contains('Unauthenticated.')) {
+              Center(child: const UnauthenticatedWidget());
+            }
             CustomSnackbar.showError(context: context, message: state.message);
           } else if (state is InvitationResponded) {
             CustomSnackbar.showSuccess(

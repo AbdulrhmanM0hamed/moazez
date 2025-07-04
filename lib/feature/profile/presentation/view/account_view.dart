@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
+import 'package:moazez/core/utils/common/unauthenticated_widget.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/feature/auth/presentation/cubit/logout_cubit/logout_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
@@ -51,38 +52,44 @@ class _AccountViewBody extends StatelessWidget {
             centerTitle: true,
           ),
           body: BlocBuilder<ProfileCubit, ProfileState>(
-          builder: (context, state) {
-            if (state is ProfileLoading) {
-              return const ProfileShimmer();
-            } else if (state is ProfileLoaded) {
-              return _buildProfileContent(
-                context,
-                state.profileResponse.data.user,
-              );
-            } else if (state is ProfileError) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      state.message,
-                      style: const TextStyle(color: AppColors.textSecondary),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed:
-                          () => context.read<ProfileCubit>().fetchProfile(),
-                      child: const Text('إعادة المحاولة'),
-                    ),
-                  ],
-                ),
-              );
-            }
-            return const SizedBox.shrink();
-          },
+            builder: (context, state) {
+              if (state is ProfileError) {
+                if (state.message.contains('Unauthenticated.')) {
+                  return const UnauthenticatedWidget();
+                }
+              }
+              if (state is ProfileLoading) {
+                return const ProfileShimmer();
+              } else if (state is ProfileLoaded) {
+                return _buildProfileContent(
+                  context,
+                  state.profileResponse.data.user,
+                );
+              } else if (state is ProfileError) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        state.message,
+                        style: const TextStyle(color: AppColors.textSecondary),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed:
+                            () => context.read<ProfileCubit>().fetchProfile(),
+                        child: const Text('إعادة المحاولة'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
         ),
       ),
-    ));
+    );
   }
 
   Widget _buildProfileContent(BuildContext context, UserProfile user) {

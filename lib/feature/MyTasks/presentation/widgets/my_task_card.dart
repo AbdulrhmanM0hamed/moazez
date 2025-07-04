@@ -113,9 +113,8 @@ class MyTaskCard extends StatelessWidget {
                         ),
                         Text(
                           '${task.progress}%',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -137,14 +136,16 @@ class MyTaskCard extends StatelessWidget {
                     child: ClipOval(
                       child: CachedNetworkImage(
                         imageUrl: task.creator.avatarUrl ?? '',
-                        placeholder: (context, url) => SvgPicture.asset(
-                          'assets/images/defualt_avatar.svg',
-                          fit: BoxFit.cover,
-                        ),
-                        errorWidget: (context, url, error) => SvgPicture.asset(
-                          'assets/images/defualt_avatar.svg',
-                          fit: BoxFit.cover,
-                        ),
+                        placeholder:
+                            (context, url) => SvgPicture.asset(
+                              'assets/images/defualt_avatar.svg',
+                              fit: BoxFit.cover,
+                            ),
+                        errorWidget:
+                            (context, url, error) => SvgPicture.asset(
+                              'assets/images/defualt_avatar.svg',
+                              fit: BoxFit.cover,
+                            ),
                         fit: BoxFit.cover,
                       ),
                     ),

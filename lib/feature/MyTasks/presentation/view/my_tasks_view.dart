@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/services/service_locator.dart';
+import 'package:moazez/core/utils/common/unauthenticated_widget.dart';
 import 'package:moazez/feature/MyTasks/domain/entities/my_task_entity.dart';
 import 'package:moazez/feature/MyTasks/presentation/cubit/my_tasks_cubit.dart';
 import 'package:moazez/feature/MyTasks/presentation/cubit/my_tasks_state.dart';
@@ -50,89 +51,96 @@ class _MyTasksViewBodyState extends State<_MyTasksViewBody> {
       },
       child: Scaffold(
         body: Column(
-        children: [
-          HomeTopSection(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: MyTasksFilterTabs(
-              selectedIndex: _selectedIndex,
-              onTabSelected: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
+          children: [
+            HomeTopSection(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: MyTasksFilterTabs(
+                selectedIndex: _selectedIndex,
+                onTabSelected: (index) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                },
+              ),
             ),
-          ),
-          Expanded(
-            child: BlocBuilder<MyTasksCubit, MyTasksState>(
-              builder: (context, state) {
-                if (state is MyTasksLoading) {
-                  return const ShimmerTaskList();
-                } else if (state is MyTasksError) {
-                  return Center(child: Text(state.message));
-                } else if (state is MyTasksLoaded) {
-                  final List<MyTaskEntity> filteredTasks;
-                  switch (_selectedIndex) {
-                    case 1: // لم تبدأ
-                      filteredTasks = state.tasks
-                          .where((task) => task.progress == 0)
-                          .toList();
-                      break;
-                    case 2: // قيد التنفيذ
-                      filteredTasks = state.tasks
-                          .where((task) => task.status == 'in_progress')
-                          .toList();
-                      break;
-                    case 3: // مكتملة
-                      filteredTasks = state.tasks
-                          .where((task) => task.status == 'completed')
-                          .toList();
-                      break;
-                    case 0: // الكل
-                    default:
-                      filteredTasks = state.tasks;
-                      break;
-                  }
+            Expanded(
+              child: BlocBuilder<MyTasksCubit, MyTasksState>(
+                builder: (context, state) {
+                  if (state is MyTasksLoading) {
+                    return const ShimmerTaskList();
+                  } else if (state is MyTasksError) {
+                    if (state.message.contains('Unauthenticated.')) {
+                      return Center(child: const UnauthenticatedWidget());
+                    }
+                    return Center(child: Text(state.message));
+                  } else if (state is MyTasksLoaded) {
+                    final List<MyTaskEntity> filteredTasks;
+                    switch (_selectedIndex) {
+                      case 1: // لم تبدأ
+                        filteredTasks =
+                            state.tasks
+                                .where((task) => task.progress == 0)
+                                .toList();
+                        break;
+                      case 2: // قيد التنفيذ
+                        filteredTasks =
+                            state.tasks
+                                .where((task) => task.status == 'in_progress')
+                                .toList();
+                        break;
+                      case 3: // مكتملة
+                        filteredTasks =
+                            state.tasks
+                                .where((task) => task.status == 'completed')
+                                .toList();
+                        break;
+                      case 0: // الكل
+                      default:
+                        filteredTasks = state.tasks;
+                        break;
+                    }
 
-                  if (filteredTasks.isEmpty) {
+                    if (filteredTasks.isEmpty) {
+                      return RefreshIndicator(
+                        onRefresh: () async {
+                          await context.read<MyTasksCubit>().getMyTasks();
+                          return Future.delayed(const Duration(seconds: 1));
+                        },
+                        child: ListView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          children: const [
+                            SizedBox(height: 40),
+                            EmptyView(
+                              imagePath: 'assets/images/tasksEmpty.png',
+                              message: 'لا توجد مهام تطابق هذا الفلتر',
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                     return RefreshIndicator(
                       onRefresh: () async {
                         await context.read<MyTasksCubit>().getMyTasks();
                         return Future.delayed(const Duration(seconds: 1));
                       },
-                      child: ListView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        children: const [
-                          SizedBox(height: 40),
-                          EmptyView(
-                            imagePath: 'assets/images/tasksEmpty.png',
-                            message: 'لا توجد مهام تطابق هذا الفلتر',
-                          ),
-                        ],
+                      child: ListView.builder(
+                        padding: const EdgeInsets.only(top: 8, bottom: 16),
+                        itemCount: filteredTasks.length,
+                        itemBuilder: (context, index) {
+                          final task = filteredTasks[index];
+                          return MyTaskCard(task: task);
+                        },
                       ),
                     );
                   }
-                  return RefreshIndicator(
-                    onRefresh: () async {
-                      await context.read<MyTasksCubit>().getMyTasks();
-                      return Future.delayed(const Duration(seconds: 1));
-                    },
-                    child: ListView.builder(
-                      padding: const EdgeInsets.only(top: 8, bottom: 16),
-                      itemCount: filteredTasks.length,
-                      itemBuilder: (context, index) {
-                        final task = filteredTasks[index];
-                        return MyTaskCard(task: task);
-                      },
-                    ),
-                  );
-                }
-                return const SizedBox.shrink();
-              },
+                  return const SizedBox.shrink();
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ));
+    );
   }
 }

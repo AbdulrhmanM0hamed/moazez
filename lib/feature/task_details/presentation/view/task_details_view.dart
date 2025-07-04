@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
+import 'package:moazez/core/utils/common/unauthenticated_widget.dart';
 import 'package:moazez/feature/task_details/domain/entities/task_details_entity.dart';
 import 'package:moazez/feature/task_details/presentation/cubit/task_details_cubit.dart';
 import 'package:moazez/feature/task_details/presentation/cubit/task_details_state.dart';
@@ -26,6 +27,11 @@ class TaskDetailsView extends StatelessWidget {
         appBar: CustomAppBar(title: 'تفاصيل الهدف'),
         body: BlocBuilder<TaskDetailsCubit, TaskDetailsState>(
           builder: (context, state) {
+            if (state is TaskDetailsError) {
+              if (state.message.contains('Unauthenticated.')) {
+                return const UnauthenticatedWidget();
+              }
+            }
             if (state is TaskDetailsLoading) {
               return const Center(child: CustomProgressIndcator());
             } else if (state is TaskDetailsLoaded) {

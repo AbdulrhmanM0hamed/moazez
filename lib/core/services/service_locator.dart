@@ -150,7 +150,11 @@ Future<void> init() async {
     () => ProfileCubit(getProfileUseCase: sl(), editProfileUseCase: sl()),
   );
   sl.registerFactory(
-    () => TeamCubit(getTeamInfoUseCase: sl(), teamRepository: sl()),
+    () => TeamCubit(
+      getTeamInfoUseCase: sl(),
+      getTeamMembersUsecase: sl(),
+      teamRepository: sl(),
+    ),
   );
   sl.registerFactory(() => MemberStatsCubit(getMemberTaskStatsUseCase: sl()));
   sl.registerFactory(
@@ -303,6 +307,7 @@ Future<void> init() async {
     () => AgreementsRepositoryImpl(remoteDataSource: sl()),
   );
   sl.registerFactory(() => TeamMembersCubit(getTeamMembersUsecase: sl()));
+ 
 
   // Create Task
   sl.registerLazySingleton(() => CreateTaskUsecase(sl()));

@@ -4,6 +4,8 @@ import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/feature/onboarding/presentation/onboarding_view.dart';
 import 'package:moazez/feature/home_supporter/presentation/view/supporter_nav_bar.dart';
 import 'package:moazez/feature/home_participant/presentation/view/participants_nav_bar.dart';
+import 'package:moazez/feature/auth/presentation/pages/login_view.dart';
+import 'package:moazez/feature/profile/data/datasources/profile_remote_data_source.dart';
 import '../../../core/utils/constant/app_assets.dart';
 import '../../../core/utils/animations/custom_animations.dart';
 
@@ -33,11 +35,19 @@ class _SplashViewState extends State<SplashView> {
 
     String route;
     if (!isFirstTime && token != null) {
-      // Default to Participant if no role is set for logged-in users
-      route =
-          (role == null || role == 'Participant')
-              ? ParticipantsNavBar.routeName
-              : SupporterNavBar.routeName;
+      // Check if token is still valid
+      try {
+        await sl<ProfileRemoteDataSource>().getProfile();
+        // If we get here, token is valid
+        route = (role == null || role == 'Participant')
+            ? ParticipantsNavBar.routeName
+            : SupporterNavBar.routeName;
+      } catch (e) {
+        // Token is invalid or expired
+        route = LoginView.routeName;
+        // Clear all cache since token is invalid
+        await cache.clearCache();
+      }
     } else if (!isFirstTime) {
       route = OnboardingView.routeName;
     } else {

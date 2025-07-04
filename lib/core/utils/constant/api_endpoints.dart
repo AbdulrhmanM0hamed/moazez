@@ -6,7 +6,7 @@ class ApiEndpoints {
   static const String subscribe = 'subscribe';
   static const String profile = 'profile';
   static const String packages = 'packages';
-  static const String trialPackage = 'trial-package';
+  //static const String trialPackage = 'trial-package';
   static const String currentSubscription = 'current-subscription';
   static const String myTeam = 'my-team';
   static const String createTeam = 'create-team';
@@ -18,7 +18,7 @@ class ApiEndpoints {
   static const String teamRewards = 'team/rewards';
   static const String myRewards = 'my-rewards';
   static const String passwordResetLink = 'password/reset-link';
-  static const String teamMembers = 'team/member-stats';
+ // static const String teamMembers = 'team/member-stats';
   static const String createTask = 'team/create-task';
   static const String closeTask = 'tasks/close';
   static const String taskDetails = 'task-details';
@@ -28,4 +28,5 @@ class ApiEndpoints {
   static const String financialDetails = 'financial-details';
   static const String search = 'search';
   static const String completeStage = 'tasks/complete-stage';
+  static const String paymentMobileInit = 'payment/mobile-init';
 }

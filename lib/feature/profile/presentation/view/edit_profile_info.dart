@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/common/custom_button.dart';
+import 'package:moazez/core/utils/common/unauthenticated_widget.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
@@ -141,9 +142,13 @@ class _EditProfileInfoState extends State<EditProfileInfo> {
               message: state.message,
             );
           }
-          // Removed duplicate success message from here as it's already shown in _saveProfile
         },
         builder: (context, state) {
+          if (state is ProfileError) {
+            if (state.message.contains('Unauthenticated.')) {
+              return const UnauthenticatedWidget();
+            }
+          }
           return Form(
             key: _formKey,
             child: SingleChildScrollView(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
+import 'package:moazez/core/utils/common/unauthenticated_widget.dart';
 import '../cubit/payments_cubit.dart';
 import '../widgets/payment_item_card.dart';
 
@@ -15,6 +16,11 @@ class PaymentsView extends StatelessWidget {
       appBar: CustomAppBar(title: 'مدفوعاتى'),
       body: BlocBuilder<PaymentsCubit, PaymentsState>(
         builder: (context, state) {
+          if (state is PaymentsError) {
+            if (state.message.contains('Unauthenticated.')) {
+              return const UnauthenticatedWidget();
+            }
+          }
           if (state is PaymentsLoading) {
             return const Center(child: CustomProgressIndcator());
           } else if (state is PaymentsLoaded) {

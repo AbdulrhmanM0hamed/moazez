@@ -14,6 +14,7 @@ import 'package:moazez/feature/packages/presentation/cubit/payment_cubit.dart';
 import 'package:moazez/feature/packages/presentation/cubit/payment_state.dart';
 import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/feature/packages/presentation/view/payment_webview.dart';
+import 'package:moazez/core/utils/common/unauthenticated_widget.dart';
 
 class HomeSupporterViewBody extends StatefulWidget {
   const HomeSupporterViewBody({super.key});
@@ -47,6 +48,9 @@ class _HomeViewBodyState extends State<HomeSupporterViewBody> {
               return const Center(child: CustomProgressIndcator());
             }
             if (profileState is ProfileError) {
+              if (profileState.message.contains('Unauthenticated.')) {
+                return const UnauthenticatedWidget();
+              }
               return Center(
                 child: Text(
                   profileState.message,
@@ -59,6 +63,11 @@ class _HomeViewBodyState extends State<HomeSupporterViewBody> {
                 builder: (context, teamState) {
                   if (teamState is TeamLoading) {
                     return const Center(child: CustomProgressIndcator());
+                  }
+
+                  if (teamState is TeamError && 
+                      teamState.message.contains('Unauthenticated.')) {
+                    return const UnauthenticatedWidget();
                   }
 
                   bool ownsTeam = false;
@@ -239,16 +248,8 @@ class _HomeViewBodyState extends State<HomeSupporterViewBody> {
                   );
                 },
               );
-            } else if (profileState is ProfileError) {
-              return Center(
-                child: Text(
-                  profileState.message,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              );
-            } else {
-              return const Center(child: CustomProgressIndcator());
             }
+            return const Center(child: CustomProgressIndcator());
           },
         ),
       ),

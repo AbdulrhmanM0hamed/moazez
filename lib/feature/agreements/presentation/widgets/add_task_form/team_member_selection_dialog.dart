@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moazez/core/utils/common/cached_network_image.dart';
-import 'package:moazez/feature/agreements/domain/entities/team_member.dart';
-import 'package:moazez/feature/agreements/presentation/cubit/team_members_cubit.dart';
-import 'package:moazez/feature/agreements/presentation/cubit/team_members_state.dart';
+import 'package:moazez/feature/agreements/data/models/team_member_model.dart';
+import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
+import 'package:moazez/feature/home_supporter/presentation/cubit/team_state.dart';
 
 class TeamMemberSelectionDialog extends StatefulWidget {
-  final List<TeamMember> initialSelectedMembers;
-  final Function(List<TeamMember>) onSelectionDone;
+  final List<TeamMemberModel> initialSelectedMembers;
+  final Function(List<TeamMemberModel>) onSelectionDone;
 
   const TeamMemberSelectionDialog({
     super.key,
@@ -33,19 +33,20 @@ class _TeamMemberSelectionDialogState extends State<TeamMemberSelectionDialog> {
     return uri.isScheme('HTTP') || uri.isScheme('HTTPS');
   }
 
-  late List<TeamMember> _tempSelectedMembers;
+  late List<TeamMemberModel> _tempSelectedMembers;
 
   @override
   void initState() {
     super.initState();
     _tempSelectedMembers = List.from(widget.initialSelectedMembers);
+    context.read<TeamCubit>().fetchTeamMembers();
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('اختيار أعضاء الفريق'),
-      content: BlocBuilder<TeamMembersCubit, TeamMembersState>(
+      content: BlocBuilder<TeamCubit, TeamState>(
         builder: (context, state) {
           if (state is TeamMembersLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -63,7 +64,7 @@ class _TeamMemberSelectionDialogState extends State<TeamMemberSelectionDialog> {
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () {
-                        context.read<TeamMembersCubit>().fetchTeamMembers();
+                        context.read<TeamCubit>().fetchTeamMembers();
                       },
                       child: const Text('تحديث القائمة'),
                     ),
@@ -86,23 +87,22 @@ class _TeamMemberSelectionDialogState extends State<TeamMemberSelectionDialog> {
                       children: [
                         CircleAvatar(
                           radius: 20,
-                          child:
-                              _isValidUrl(member.avatarUrl)
-                                  ? CustomCachedNetworkImage(
-                                    imageUrl: member.avatarUrl!,
-                                    width: 40,
-                                    height: 40,
-                                    fit: BoxFit.cover,
-                                    borderRadius: BorderRadius.circular(20),
-                                  )
-                                  : SvgPicture.asset(
-                                    'assets/images/defualt_avatar.svg',
-                                    width: 40,
-                                    height: 40,
-                                    fit: BoxFit.cover,
-                                  ),
+                          child: _isValidUrl(member.avatarUrl)
+                              ? CustomCachedNetworkImage(
+                                  imageUrl: member.avatarUrl!,
+                                  width: 40,
+                                  height: 40,
+                                  fit: BoxFit.cover,
+                                  borderRadius: BorderRadius.circular(20),
+                                )
+                              : SvgPicture.asset(
+                                  'assets/images/defualt_avatar.svg',
+                                  width: 40,
+                                  height: 40,
+                                  fit: BoxFit.cover,
+                                ),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Text(member.name),
                       ],
                     ),
@@ -135,7 +135,7 @@ class _TeamMemberSelectionDialogState extends State<TeamMemberSelectionDialog> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<TeamMembersCubit>().fetchTeamMembers();
+                      context.read<TeamCubit>().fetchTeamMembers();
                     },
                     child: const Text('تحديث القائمة'),
                   ),

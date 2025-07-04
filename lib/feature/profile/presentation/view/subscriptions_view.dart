@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
+import 'package:moazez/core/utils/common/unauthenticated_widget.dart';
 import 'package:moazez/feature/profile/presentation/cubit/user_subscriptions_cubit.dart';
 import 'package:moazez/feature/profile/presentation/cubit/user_subscriptions_state.dart';
 import 'package:moazez/feature/profile/presentation/widgets/subscription_item_card.dart';
@@ -16,6 +17,11 @@ class SubscriptionsView extends StatelessWidget {
       appBar: CustomAppBar(title: 'اشتراكاتى'),
       body: BlocBuilder<UserSubscriptionsCubit, UserSubscriptionsState>(
         builder: (context, state) {
+          if (state is UserSubscriptionsError) {
+            if (state.message.contains('Unauthenticated.')) {
+              return const UnauthenticatedWidget();
+            }
+          }
           if (state is UserSubscriptionsLoading) {
             return const Center(child: CustomProgressIndcator());
           } else if (state is UserSubscriptionsLoaded) {

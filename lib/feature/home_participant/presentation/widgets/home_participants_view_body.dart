@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
+import 'package:moazez/core/utils/common/unauthenticated_widget.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
@@ -29,8 +30,13 @@ class HomeParticipantsViewBody extends StatelessWidget {
         create: (context) => sl<MyTasksCubit>()..getMyTasks(),
         child: BlocBuilder<MyTasksCubit, MyTasksState>(
           builder: (context, state) {
+            if (state is MyTasksError) {
+              if (state.message.contains('Unauthenticated.')) {
+                return const UnauthenticatedWidget();
+              }
+            }
             if (state is MyTasksLoading) {
-              return Center(child: CustomProgressIndcator());
+              return const Center(child: CustomProgressIndcator());
             }
             if (state is MyTasksError) {
               return Center(child: Text(state.message));

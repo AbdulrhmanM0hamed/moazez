@@ -76,19 +76,19 @@ class PackagesView extends StatelessWidget {
                     const InviteParticipantsSection(),
                   ],
                 ] else ...[
-                  Center(
-                    child: CreateTeamPrompt(
-                      onPressed: () async {
-                        final result = await Navigator.pushNamed(
-                          context,
-                          CreateTeamView.routeName,
-                        );
-                        if (result == true) {
-                          context.read<TeamCubit>().fetchTeamInfo();
-                        }
-                      },
-                    ),
-                  ),
+                  // Center(
+                  //   child: CreateTeamPrompt(
+                  //     onPressed: () async {
+                  //       final result = await Navigator.pushNamed(
+                  //         context,
+                  //         CreateTeamView.routeName,
+                  //       );
+                  //       if (result == true) {
+                  //         context.read<TeamCubit>().fetchTeamInfo();
+                  //       }
+                  //     },
+                  //   ),
+                  // ),
                 ],
                 BlocBuilder<SubscriptionCubit, SubscriptionState>(
                   builder: (context, subscriptionState) {

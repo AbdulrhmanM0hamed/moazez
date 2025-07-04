@@ -2,18 +2,20 @@ import 'package:equatable/equatable.dart';
 
 class UserSubscriptionEntity extends Equatable {
   final int id;
+  final int userId;
   final int packageId;
   final String status; // active / expired / cancelled
-  final String startDate;
+  final String createdAt;
   final String endDate;
   final String pricePaid;
   final PackageInfo packageInfo;
 
   const UserSubscriptionEntity({
     required this.id,
+    required this.userId,
     required this.packageId,
     required this.status,
-    required this.startDate,
+    required this.createdAt,
     required this.endDate,
     required this.pricePaid,
     required this.packageInfo,
@@ -21,14 +23,15 @@ class UserSubscriptionEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        packageId,
-        status,
-        startDate,
-        endDate,
-        pricePaid,
-        packageInfo,
-      ];
+    id,
+    userId,
+    packageId,
+    status,
+    createdAt,
+    endDate,
+    pricePaid,
+    packageInfo,
+  ];
 }
 
 class PackageInfo extends Equatable {
@@ -50,11 +53,11 @@ class PackageInfo extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        price,
-        maxTasks,
-        maxMilestonesPerTask,
-        isTrial,
-      ];
+    id,
+    name,
+    price,
+    maxTasks,
+    maxMilestonesPerTask,
+    isTrial,
+  ];
 }
