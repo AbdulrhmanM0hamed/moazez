@@ -152,11 +152,13 @@ class _SignUpViewState extends State<_SignUpViewBody> {
                       validator: FormValidators.validateEmail,
                     ),
                     const SizedBox(height: 16),
+
                     PasswordField(
                       controller: _passwordController,
                       hintText: 'كلمة المرور',
                       validator: FormValidators.validatePassword,
                     ),
+
                     const SizedBox(height: 16),
                     PasswordField(
                       controller: _confirmPasswordController,
@@ -167,6 +169,16 @@ class _SignUpViewState extends State<_SignUpViewBody> {
                             _passwordController.text,
                           ),
                     ),
+                     const SizedBox(height: 8),
+                    Text(
+                      'يُرجى كتابة كلمة مرور قوية تحتوي على حروف، أرقام ورموز.',
+                      style: TextStyle(
+                        fontSize: FontSize.size14,
+                        color: Colors.grey[600],
+                        fontFamily: FontConstant.cairo,
+                      ),
+                    ),
+                   
                     const SizedBox(height: 16),
                     TermsAndConditionsWidget(
                       value: _termsAccepted,

@@ -5,6 +5,7 @@ import 'package:moazez/core/utils/common/cached_network_image.dart';
 import 'package:moazez/feature/agreements/data/models/team_member_model.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_state.dart';
+import 'package:moazez/feature/invitations/presentation/send_invitations_view.dart';
 
 class TeamMemberSelectionDialog extends StatefulWidget {
   final List<TeamMemberModel> initialSelectedMembers;
@@ -21,7 +22,8 @@ class TeamMemberSelectionDialog extends StatefulWidget {
       _TeamMemberSelectionDialogState();
 }
 
-class _TeamMemberSelectionDialogState extends State<TeamMemberSelectionDialog> {
+class _TeamMemberSelectionDialogState
+    extends State<TeamMemberSelectionDialog> {
   bool _isValidUrl(String? url) {
     if (url == null || url.isEmpty) return false;
     Uri? uri;
@@ -62,7 +64,33 @@ class _TeamMemberSelectionDialogState extends State<TeamMemberSelectionDialog> {
                       style: TextStyle(fontSize: 16),
                     ),
                     const SizedBox(height: 16),
-                    ElevatedButton(
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.of(context).pop(); // إغلاق الديالوج
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SendInvitationsView(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.person_add_alt_1),
+                      label: const Text('دعوة أعضاء للمشاركة'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 12),
+                        textStyle: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 4,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    TextButton(
                       onPressed: () {
                         context.read<TeamCubit>().fetchTeamMembers();
                       },
@@ -112,9 +140,8 @@ class _TeamMemberSelectionDialogState extends State<TeamMemberSelectionDialog> {
                         if (value == true) {
                           _tempSelectedMembers.add(member);
                         } else {
-                          _tempSelectedMembers.removeWhere(
-                            (m) => m.id == member.id,
-                          );
+                          _tempSelectedMembers
+                              .removeWhere((m) => m.id == member.id);
                         }
                       });
                     },
@@ -133,7 +160,33 @@ class _TeamMemberSelectionDialogState extends State<TeamMemberSelectionDialog> {
                         : state.message,
                   ),
                   const SizedBox(height: 16),
-                  ElevatedButton(
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SendInvitationsView(),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.person_add_alt_1),
+                    label: const Text('دعوة أعضاء للمشاركة'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
+                      textStyle: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 4,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextButton(
                     onPressed: () {
                       context.read<TeamCubit>().fetchTeamMembers();
                     },

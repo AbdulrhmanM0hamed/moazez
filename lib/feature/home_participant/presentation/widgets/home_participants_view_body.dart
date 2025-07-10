@@ -99,7 +99,7 @@ class HomeParticipantsViewBody extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                         child: Text(
-                          'المهام الحالية',
+                          'الاهداف الحالية',
                           style: getBoldStyle(
                             fontFamily: FontConstant.cairo,
                             fontSize: FontSize.size16,

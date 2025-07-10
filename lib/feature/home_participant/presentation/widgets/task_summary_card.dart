@@ -34,7 +34,7 @@ class TaskSummaryCard extends StatelessWidget {
           _buildSummaryItem(
             context,
             count: completedTasks,
-            title: 'مهام مكتملة',
+            title: 'الاهداف المكتملة',
             icon: Icons.check_circle_outline_rounded,
             color: AppColors.success,
           ),
@@ -46,7 +46,7 @@ class TaskSummaryCard extends StatelessWidget {
           _buildSummaryItem(
             context,
             count: pendingTasks,
-            title: 'مهام قيد التنفيذ',
+            title: 'الاهداف قيد التنفيذ',
             icon: Icons.hourglass_top_rounded,
             color: AppColors.warning,
           ),

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:moazez/core/services/cache/cache_service.dart';
 import 'package:moazez/core/services/service_locator.dart';
+import 'package:moazez/core/utils/animations/door_open_animation.dart';
 import 'package:moazez/feature/onboarding/presentation/onboarding_view.dart';
 import 'package:moazez/feature/home_supporter/presentation/view/supporter_nav_bar.dart';
 import 'package:moazez/feature/home_participant/presentation/view/participants_nav_bar.dart';
 import 'package:moazez/feature/auth/presentation/pages/login_view.dart';
 import 'package:moazez/feature/profile/data/datasources/profile_remote_data_source.dart';
 import '../../../core/utils/constant/app_assets.dart';
-import '../../../core/utils/animations/custom_animations.dart';
 
 class SplashView extends StatefulWidget {
   static const String routeName = '/splash';
@@ -39,9 +39,10 @@ class _SplashViewState extends State<SplashView> {
       try {
         await sl<ProfileRemoteDataSource>().getProfile();
         // If we get here, token is valid
-        route = (role == null || role == 'Participant')
-            ? ParticipantsNavBar.routeName
-            : SupporterNavBar.routeName;
+        route =
+            (role == null || role == 'Participant')
+                ? ParticipantsNavBar.routeName
+                : SupporterNavBar.routeName;
       } catch (e) {
         // Token is invalid or expired
         route = LoginView.routeName;
@@ -63,14 +64,32 @@ class _SplashViewState extends State<SplashView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: CustomAnimations.doorOpen(
-            child: Image.asset(
-              AppAssets.splashImage,
-              width: MediaQuery.of(context).size.width * 0.5,
-              fit: BoxFit.contain,
+        child: Column(
+          crossAxisAlignment:CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            DoorOpenAnimation(
+              height: 300, // أو أي ارتفاع تريده
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    AppAssets.splashImage,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    fit: BoxFit.contain,
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'النسخة التجريبية',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moazez/core/services/cache/cache_service.dart';
-import 'package:moazez/core/services/service_locator.dart';
-
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
@@ -39,8 +36,7 @@ class TaskStagesCard extends StatelessWidget {
         ),
         children: stages.map((stage) {
           final statusColor =
-              StatusChipAr.statusColor[stage.status.toLowerCase()] ??
-              Colors.grey;
+              StatusChipAr.statusColor[stage.status.toLowerCase()] ?? Colors.grey;
           final IconData statusIcon;
           switch (stage.status.toLowerCase()) {
             case 'completed':
@@ -55,9 +51,10 @@ class TaskStagesCard extends StatelessWidget {
             default:
               statusIcon = Icons.help_outline;
           }
+
           return ListTile(
             leading: CircleAvatar(
-              backgroundColor: statusColor.withValues(alpha: 0.1),
+              backgroundColor: statusColor.withOpacity(0.1),
               child: Icon(statusIcon, color: statusColor, size: 22),
             ),
             title: Text(
@@ -68,52 +65,42 @@ class TaskStagesCard extends StatelessWidget {
                 fontSize: FontSize.size14,
               ),
             ),
-           
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 StatusChipAr(status: stage.status),
+                const SizedBox(width: 8),
                 if (stage.status.toLowerCase() != 'completed')
-                   FutureBuilder<String?>(
-                     future: sl<CacheService>().getUserRole(),
-                     builder: (context, snapshot) {
-                       if (snapshot.hasData && snapshot.data?.toLowerCase() != 'supporter') {
-                         return PopupMenuButton<String>(
-                           icon: const Icon(Icons.more_vert),
-                           onSelected: (value) {
-                             if (value == 'complete') {
-                               showDialog(
-                                 context: context,
-                                 builder: (dialogContext) {
-                                   return BlocProvider.value(
-                                     value: BlocProvider.of<StageCompletionCubit>(context),
-                                     child: StageCompletionDialog(
-                                       parentContext: context,
-                                       stageId: stage.id,
-                                       stageTitle: stage.title,
-                                       onComplete: () {
-                                         context.read<TaskDetailsCubit>().fetchTaskDetails(stage.taskId);
-                                       },
-                                     ),
-                                   );
-                                 },
-                               );
-                             }
-                           },
-                           itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                             const PopupMenuItem<String>(
-                               value: 'complete',
-                               child: ListTile(
-                                 leading: Icon(Icons.check_circle_outline, color: Colors.green),
-                                 title: Text('إتمام المرحلة'),
-                               ),
-                             ),
-                           ],
-                         );
-                       }
-                       return const SizedBox.shrink();
-                     },
-                   ),
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.green,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: const BorderSide(color: Colors.green),
+                      ),
+                    ),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (dialogContext) {
+                          return BlocProvider.value(
+                            value: BlocProvider.of<StageCompletionCubit>(context),
+                            child: StageCompletionDialog(
+                              parentContext: context,
+                              stageId: stage.id,
+                              stageTitle: stage.title,
+                              onComplete: () {
+                                context.read<TaskDetailsCubit>().fetchTaskDetails(stage.taskId);
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    icon: const Icon(Icons.check_circle_outline),
+                    label: const Text('إتمام'),
+                  ),
               ],
             ),
             onTap: () {

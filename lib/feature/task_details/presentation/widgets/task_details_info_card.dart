@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:moazez/core/services/cache/cache_service.dart';
+import 'package:moazez/core/services/service_locator.dart';
 import 'package:moazez/core/utils/constant/font_manger.dart';
 import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/feature/task_details/domain/entities/task_details_entity.dart';
@@ -45,11 +47,26 @@ class TaskDetailsInfoCard extends StatelessWidget {
               title: 'المنشئ',
               value: taskDetails.creator.name,
             ),
-            InfoTile(
-              icon: Icons.person_pin_outlined,
-              title: 'المستلم',
-              value: taskDetails.receiver.name,
-            ),
+            FutureBuilder<String?>(
+  future: sl<CacheService>().getUserRole(), // حسب اللي بتستخدمه, // أو sl<CacheService>().getUserRole() حسب اللي بتستخدمه
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const SizedBox.shrink(); // أو مؤقتًا Placeholder صغير
+    }
+
+    final role = snapshot.data?.toLowerCase();
+    if (role == 'participant') {
+      return const SizedBox.shrink();
+    }
+
+    return InfoTile(
+      icon: Icons.person_pin_outlined,
+      title: 'المستلم',
+      value: taskDetails.receiver.name,
+    );
+  },
+),
+
             InfoTile(
               icon: Icons.group_outlined,
               title: 'الفريق',

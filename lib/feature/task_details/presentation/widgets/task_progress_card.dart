@@ -18,7 +18,7 @@ class TaskProgressCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'تقدم المهمة',
+              'تقدم الهدف',
               style: getBoldStyle(
                 color: AppColors.primary,
                 fontSize: 18,

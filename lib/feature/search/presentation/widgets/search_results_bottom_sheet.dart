@@ -36,7 +36,7 @@ class SearchResultsBottomSheet extends StatelessWidget {
                 onPressed: () => Navigator.pop(context),
               ),
               Text(
-                'البحث عن المهام',
+                'البحث عن الاهداف',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -51,7 +51,7 @@ class SearchResultsBottomSheet extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(bottom: 16),
             child: CustomTextField(
-              hint: 'ابحث عن مهمة...',
+              hint: 'ابحث عن هدف...',
               prefix: const Icon(Icons.search, color: AppColors.textSecondary),
               onChanged: (value) {
                 context.read<SearchCubit>().performSearch(value);
@@ -140,7 +140,7 @@ class SearchResultsBottomSheet extends StatelessWidget {
     return const Expanded(
       child: EmptyView(
         imagePath: 'assets/images/tasksEmpty.png',
-        message: 'ابحث عن المهام',
+        message: 'ابحث عن الاهداف',
       ),
     );
   }
