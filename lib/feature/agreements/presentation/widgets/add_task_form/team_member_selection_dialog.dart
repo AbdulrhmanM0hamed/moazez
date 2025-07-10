@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moazez/core/utils/common/cached_network_image.dart';
+import 'package:moazez/core/utils/constant/font_manger.dart';
+import 'package:moazez/core/utils/constant/styles_manger.dart';
 import 'package:moazez/feature/agreements/data/models/team_member_model.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_state.dart';
@@ -75,10 +77,9 @@ class _TeamMemberSelectionDialogState
                         );
                       },
                       icon: const Icon(Icons.person_add_alt_1),
-                      label: const Text('دعوة أعضاء للمشاركة'),
+                      label:  Text('دعوة أعضاء للمشاركة' , style: getSemiBoldStyle(fontFamily: FontConstant.cairo),),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
-                        foregroundColor: Colors.white,
+                       
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 12),
                         textStyle: const TextStyle(
@@ -171,10 +172,9 @@ class _TeamMemberSelectionDialogState
                       );
                     },
                     icon: const Icon(Icons.person_add_alt_1),
-                    label: const Text('دعوة أعضاء للمشاركة'),
+                    label:  Text('دعوة أعضاء للمشاركة' , style: getSemiBoldStyle(fontFamily: FontConstant.cairo)),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                      foregroundColor: Colors.white,
+                      
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 12),
                       textStyle: const TextStyle(
