@@ -45,5 +45,17 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>To allow the app to take your profile picture, helping you personalize your account and improve your experience</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>To allow the app to show nearby stores and enhance your shopping experience by suggesting available products and services in your area.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>To allow the app to show nearby stores and enhance your shopping experience by suggesting available products and services in your area.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>To allow the app to show nearby stores and enhance your shopping experience by suggesting available products and services in your area.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>To allow the app to access your photo library so you can upload a profile picture and personalize your account.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To allow the app to access your photo library so you can upload a profile picture and personalize your account.</string>
 </dict>
 </plist>

@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       // locale: DevicePreview.locale(context),
       // builder: DevicePreview.appBuilder,
-      title: 'Flutter Demo',
+      title: 'معزز',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
