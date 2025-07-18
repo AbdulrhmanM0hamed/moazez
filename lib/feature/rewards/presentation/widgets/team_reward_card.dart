@@ -10,7 +10,7 @@ import 'package:moazez/core/utils/constant/font_manger.dart';
 
 class TeamRewardCard extends StatelessWidget {
   final RewardEntity reward;
-  const TeamRewardCard({Key? key, required this.reward}) : super(key: key);
+  const TeamRewardCard({super.key, required this.reward});
 
   @override
   Widget build(BuildContext context) {

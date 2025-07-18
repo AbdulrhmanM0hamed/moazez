@@ -67,7 +67,7 @@ class TaskDetailsRemoteDataSourceImpl implements TaskDetailsRemoteDataSource {
         ));
       }
 
-      print('Sending request to complete stage with data: {stage_id: $stageId, proof_notes: $proofNotes}');
+     // print('Sending request to complete stage with data: {stage_id: $stageId, proof_notes: $proofNotes}');
       final response = await dio.post(
         '${ApiEndpoints.baseUrl}${ApiEndpoints.completeStage}',
         data: formData,
@@ -78,17 +78,17 @@ class TaskDetailsRemoteDataSourceImpl implements TaskDetailsRemoteDataSource {
           },
         ),
       );
-      print('Response received with status code: ${response.statusCode}');
+   //   print('Response received with status code: ${response.statusCode}');
       if (response.statusCode == 200 && response.data != null) {
-        print('Stage completion successful, parsing response data: ${response.data}');
+       // print('Stage completion successful, parsing response data: ${response.data}');
         return StageCompletionModel.fromJson(response.data['data']);
       } else {
-        print('Stage completion failed with status code: ${response.statusCode}');
+       // print('Stage completion failed with status code: ${response.statusCode}');
         throw ServerException(message: 'فشل إكمال المرحلة');
       }
     } on DioException catch (e) {
-      print('DioException occurred while completing stage: ${e.message}');
-      print('Response data if available: ${e.response?.data}');
+     // print('DioException occurred while completing stage: ${e.message}');
+     // print('Response data if available: ${e.response?.data}');
       throw ServerException(
         message: e.response?.data['message'] ?? 'فشل إكمال المرحلة بسبب خطأ في الخادم',
       );

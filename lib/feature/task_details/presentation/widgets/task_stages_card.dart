@@ -54,7 +54,7 @@ class TaskStagesCard extends StatelessWidget {
 
           return ListTile(
             leading: CircleAvatar(
-              backgroundColor: statusColor.withOpacity(0.1),
+              backgroundColor: statusColor.withValues(alpha: 0.1),
               child: Icon(statusIcon, color: statusColor, size: 22),
             ),
             title: Text(

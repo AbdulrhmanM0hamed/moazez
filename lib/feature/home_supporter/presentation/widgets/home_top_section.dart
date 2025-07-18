@@ -67,22 +67,7 @@ class _HomeTopSectionContentState extends State<_HomeTopSectionContent> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const HomeHeader(),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.info_outline, color: Colors.white70, size: 16),
-              const SizedBox(width: 4),
-              Text(
-                'النسخة التجريبية',
-                style: getRegularStyle(
-                  fontFamily: 'Cairo',
-                  fontSize: 12,
-                  color: Colors.white70,
-                ),
-              ),
-            ],
-          ),
+
           const SizedBox(height: 8),
           Text(
             'ابحث عن اتفاقياتك أو تابع تقدم مشاركيك لتحقيق أهدافهم',
@@ -114,7 +99,11 @@ class _HomeTopSectionContentState extends State<_HomeTopSectionContent> {
                     ),
                     textAlign: TextAlign.right,
                   ),
-                  const Icon(Icons.search, size: 30, color: AppColors.textSecondary),
+                  const Icon(
+                    Icons.search,
+                    size: 30,
+                    color: AppColors.textSecondary,
+                  ),
                 ],
               ),
             ),

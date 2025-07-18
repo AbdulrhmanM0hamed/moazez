@@ -155,7 +155,7 @@ class PackagesView extends StatelessWidget {
                           subscription: subState.subscription,
                         );
                       } else if (subState is SubscriptionError) {
-                        print(subState.message);
+                     //   print(subState.message);
                         return Center(child: Text(subState.message));
                       } else {
                         return const SizedBox.shrink();

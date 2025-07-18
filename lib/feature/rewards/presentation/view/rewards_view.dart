@@ -8,7 +8,7 @@ import 'package:moazez/feature/rewards/presentation/cubit/reward_state.dart';
 import 'package:moazez/feature/rewards/presentation/widgets/team_reward_card.dart';
 
 class RewardsView extends StatelessWidget {
-  const RewardsView({Key? key}) : super(key: key);
+  const RewardsView({super.key});
 
   static const String routeName = '/rewards';
   @override

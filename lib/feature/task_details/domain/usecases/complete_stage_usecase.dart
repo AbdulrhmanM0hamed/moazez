@@ -19,7 +19,7 @@ class CompleteStageUseCase implements UseCase<StageCompletionEntity, CompleteSta
       );
       return result;
     } catch (e) {
-      print('Error in CompleteStageUseCase: $e');
+    //  print('Error in CompleteStageUseCase: $e');
       return Left(ServerFailure(message: 'فشل في إكمال المرحلة: $e'));
     }
   }

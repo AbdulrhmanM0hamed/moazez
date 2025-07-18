@@ -65,7 +65,7 @@ class _SplashViewState extends State<SplashView> {
     return Scaffold(
       body: SafeArea(
         child: Column(
-          crossAxisAlignment:CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             DoorOpenAnimation(
@@ -79,13 +79,6 @@ class _SplashViewState extends State<SplashView> {
                     fit: BoxFit.contain,
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'النسخة التجريبية',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
-                    ),
-                  ),
                 ],
               ),
             ),

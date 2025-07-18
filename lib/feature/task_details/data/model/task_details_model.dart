@@ -1,7 +1,7 @@
 import 'package:moazez/feature/task_details/domain/entities/task_details_entity.dart';
 
 class TaskDetailsModel extends TaskDetailsEntity {
-  TaskDetailsModel({
+  const TaskDetailsModel({
     required super.id,
     required super.title,
     required super.description,

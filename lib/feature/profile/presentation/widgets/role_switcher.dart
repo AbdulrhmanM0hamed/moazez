@@ -59,8 +59,8 @@ class _RoleSwitcherState extends State<RoleSwitcher> {
         selectedColor: Colors.white,
       
         fillColor: AppColors.primary,
-        splashColor: AppColors.primary.withOpacity(0.12),
-        hoverColor: AppColors.primary.withOpacity(0.04),
+        splashColor: AppColors.primary.withValues(alpha: 0.12),
+        hoverColor: AppColors.primary.withValues(alpha: 0.04),
         renderBorder: false,
         children: [
           Padding(

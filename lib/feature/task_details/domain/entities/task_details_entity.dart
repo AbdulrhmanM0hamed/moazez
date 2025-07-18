@@ -20,7 +20,7 @@ class TaskDetailsEntity extends Equatable {
   final String? rewardType;
   final bool rewardDistributed;
 
-  TaskDetailsEntity({
+  const TaskDetailsEntity({
     required this.id,
     required this.title,
     required this.description,

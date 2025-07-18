@@ -5,9 +5,9 @@ class CancellationDialog extends StatelessWidget {
   final Function(bool) onConfirm;
 
   const CancellationDialog({
-    Key? key,
+    super.key,
     required this.onConfirm,
-  }) : super(key: key);
+  });
 
   @override
     Widget build(BuildContext context) {

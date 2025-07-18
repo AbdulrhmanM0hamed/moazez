@@ -8,11 +8,9 @@ class CustomAnimations {
     required Widget child,
     Duration duration = const Duration(milliseconds: 1500),
   }) {
-    return DoorOpenAnimation(
-      child: child,
-      duration: duration,
-    );
+    return DoorOpenAnimation(duration: duration, child: child);
   }
+
   static Widget slideFromBottom({
     required Widget child,
     Duration duration = const Duration(milliseconds: 500),
@@ -22,10 +20,7 @@ class CustomAnimations {
       duration: duration,
       curve: Curves.easeOutCubic,
       builder: (context, value, child) {
-        return Transform.translate(
-          offset: Offset(0, value),
-          child: child,
-        );
+        return Transform.translate(offset: Offset(0, value), child: child);
       },
       child: child,
     );
@@ -40,10 +35,7 @@ class CustomAnimations {
       duration: duration,
       curve: Curves.easeIn,
       builder: (context, value, child) {
-        return Opacity(
-          opacity: value,
-          child: child,
-        );
+        return Opacity(opacity: value, child: child);
       },
       child: child,
     );
@@ -58,10 +50,7 @@ class CustomAnimations {
       duration: duration,
       curve: Curves.easeOutCubic,
       builder: (context, value, child) {
-        return Transform.scale(
-          scale: value,
-          child: child,
-        );
+        return Transform.scale(scale: value, child: child);
       },
       child: child,
     );
@@ -76,10 +65,7 @@ class CustomAnimations {
       duration: duration,
       curve: Curves.easeOutCubic,
       builder: (context, value, child) {
-        return Transform.translate(
-          offset: Offset(value, 0),
-          child: child,
-        );
+        return Transform.translate(offset: Offset(value, 0), child: child);
       },
       child: child,
     );
@@ -94,10 +80,7 @@ class CustomAnimations {
       duration: duration,
       curve: Curves.easeOutCubic,
       builder: (context, value, child) {
-        return Transform.translate(
-          offset: Offset(value, 0),
-          child: child,
-        );
+        return Transform.translate(offset: Offset(value, 0), child: child);
       },
       child: child,
     );
@@ -112,10 +95,7 @@ class CustomAnimations {
       duration: duration,
       curve: Curves.easeOutCubic,
       builder: (context, value, child) {
-        return Transform.translate(
-          offset: Offset(0, value),
-          child: child,
-        );
+        return Transform.translate(offset: Offset(0, value), child: child);
       },
       child: child,
     );
@@ -133,11 +113,7 @@ class CustomAnimations {
           animation: Tween(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
               parent: const AlwaysStoppedAnimation(1),
-              curve:const Interval(
-                0.0,
-                1.0,
-                curve: Curves.easeOut,
-              ),
+              curve: const Interval(0.0, 1.0, curve: Curves.easeOut),
             ),
           ),
           builder: (context, child) {
@@ -147,23 +123,15 @@ class CustomAnimations {
                 end: Offset.zero,
               ).animate(
                 CurvedAnimation(
-                  parent:const AlwaysStoppedAnimation(1),
-                  curve:const Interval(
-                    0.0,
-                    1.0,
-                    curve: Curves.easeOut,
-                  ),
+                  parent: const AlwaysStoppedAnimation(1),
+                  curve: const Interval(0.0, 1.0, curve: Curves.easeOut),
                 ),
               ),
               child: FadeTransition(
                 opacity: Tween<double>(begin: 0, end: 1).animate(
                   CurvedAnimation(
-                    parent:const AlwaysStoppedAnimation(1),
-                    curve:const Interval(
-                      0.0,
-                      1.0,
-                      curve: Curves.easeOut,
-                    ),
+                    parent: const AlwaysStoppedAnimation(1),
+                    curve: const Interval(0.0, 1.0, curve: Curves.easeOut),
                   ),
                 ),
                 child: children[index],

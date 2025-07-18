@@ -15,7 +15,7 @@ import 'package:moazez/core/services/service_locator.dart' as di;
 class StageDetailsScreen extends StatelessWidget {
   final StageEntity stage;
 
-  const StageDetailsScreen({Key? key, required this.stage}) : super(key: key);
+  const StageDetailsScreen({super.key, required this.stage});
 
   @override
   Widget build(BuildContext context) {

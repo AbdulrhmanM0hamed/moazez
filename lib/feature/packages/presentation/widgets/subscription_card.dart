@@ -17,7 +17,7 @@ class SubscriptionCard extends StatelessWidget {
 
     // Debug log
     // ignore: avoid_print
-   // print("🟢 [SubscriptionCard] incoming data: $subscription");
+    // print("🟢 [SubscriptionCard] incoming data: $subscription");
 
     // Unify the data source to SubscriptionEntity
     if (subscription is SubscriptionEntity) {
@@ -112,15 +112,19 @@ class SubscriptionCard extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: isTrial
-                    ? [
-                        AppColors.primary, // Primary color from app_colors.dart
-                        AppColors.secondary, // Secondary color from app_colors.dart
-                      ]
-                    : [
-                        AppColors.secondary, // Secondary color from app_colors.dart
-                        AppColors.third, // Third color from app_colors.dart
-                      ],
+                colors:
+                    isTrial
+                        ? [
+                          AppColors
+                              .primary, // Primary color from app_colors.dart
+                          AppColors
+                              .secondary, // Secondary color from app_colors.dart
+                        ]
+                        : [
+                          AppColors
+                              .secondary, // Secondary color from app_colors.dart
+                          AppColors.third, // Third color from app_colors.dart
+                        ],
               ),
             ),
             child: Padding(
@@ -164,7 +168,7 @@ class SubscriptionCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "${planName} ",
+              planName,
               style: getBoldStyle(
                 fontFamily: FontConstant.cairo,
                 fontSize: 16.0,

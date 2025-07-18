@@ -29,13 +29,13 @@ class SubscriptionItemCard extends StatelessWidget {
 
     return Card(
       elevation: 4,
-      shadowColor: Colors.black.withOpacity(0.12),
+      shadowColor: Colors.black.withValues(alpha: 0.12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           gradient: LinearGradient(
-            colors: [theme.cardColor.withOpacity(0.9), theme.cardColor],
+            colors: [theme.cardColor.withValues(alpha: 0.9), theme.cardColor],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -47,7 +47,7 @@ class SubscriptionItemCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withOpacity(0.1),
+                color: theme.colorScheme.primary.withValues(alpha: 0.1),
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(15),
                   topRight: Radius.circular(15),
@@ -145,10 +145,10 @@ class SubscriptionItemCard extends StatelessWidget {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.primary.withOpacity(0.1),
+                        color: theme.colorScheme.primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: theme.colorScheme.primary.withOpacity(0.3),
+                          color: theme.colorScheme.primary.withValues(alpha: 0.3),
                         ),
                       ),
                       child: Row(
@@ -197,7 +197,7 @@ class SubscriptionItemCard extends StatelessWidget {
           style: getRegularStyle(
             fontFamily: FontConstant.cairo,
             fontSize: FontSize.size14,
-            color: theme.textTheme.bodyMedium!.color!.withOpacity(0.7),
+            color: theme.textTheme.bodyMedium!.color!.withValues(alpha: 0.7),
           ),
         ),
         const Spacer(),

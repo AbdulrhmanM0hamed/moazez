@@ -160,7 +160,7 @@ class _ReceivedInvitationsViewBody extends StatelessWidget {
                                     child: Container(
                                       padding: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
-                                        color: Colors.green.withOpacity(0.15),
+                                        color: Colors.green.withValues(alpha: 0.15),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: const Icon(
@@ -186,7 +186,7 @@ class _ReceivedInvitationsViewBody extends StatelessWidget {
                                     child: Container(
                                       padding: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
-                                        color: AppColors.error.withOpacity(0.1),
+                                        color: AppColors.error.withValues(alpha: 0.1),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: const Icon(

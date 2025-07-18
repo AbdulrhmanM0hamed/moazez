@@ -9,7 +9,7 @@ import 'dart:ui';
 
 class MyRewardCard extends StatelessWidget {
   final RewardEntity reward;
-  const MyRewardCard({Key? key, required this.reward}) : super(key: key);
+  const MyRewardCard({super.key, required this.reward});
 
   @override
   Widget build(BuildContext context) {

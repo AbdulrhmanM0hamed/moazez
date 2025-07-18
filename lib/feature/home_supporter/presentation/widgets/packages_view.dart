@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
-import 'package:moazez/feature/home_supporter/presentation/view/create_team_view.dart';
-import 'package:moazez/feature/home_supporter/presentation/widgets/create_team_prompt.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/home_top_section.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/invite_participants_section.dart';
 import 'package:moazez/feature/home_supporter/presentation/widgets/participants_section.dart';
@@ -15,7 +13,6 @@ import 'package:moazez/feature/packages/presentation/cubit/package_state.dart';
 import 'package:moazez/feature/packages/presentation/cubit/subscription_cubit.dart';
 import 'package:moazez/feature/profile/presentation/cubit/profile_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/team_state.dart';
-import 'package:moazez/feature/home_supporter/presentation/cubit/team_cubit.dart';
 import 'package:moazez/feature/home_supporter/presentation/cubit/member_stats_cubit.dart';
 import 'package:moazez/core/services/service_locator.dart';
 

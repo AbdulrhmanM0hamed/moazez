@@ -5,7 +5,6 @@ import 'package:moazez/core/utils/common/cached_network_image.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/common/unauthenticated_widget.dart';
 import 'package:moazez/core/utils/theme/app_colors.dart';
-import 'package:moazez/core/utils/widgets/custom_snackbar.dart';
 import 'package:moazez/feature/invitations/domain/entities/invitation_entity.dart';
 import 'package:moazez/feature/invitations/presentation/cubit/invitation_cubit.dart';
 import 'package:moazez/feature/invitations/presentation/cubit/invitation_state.dart';

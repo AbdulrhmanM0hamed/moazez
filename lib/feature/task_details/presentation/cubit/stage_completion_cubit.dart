@@ -39,7 +39,7 @@ class StageCompletionCubit extends Cubit<StageCompletionState> {
       _image = imagePath;
       emit(StageCompletionUpdated(image: imagePath));
     } catch (e) {
-      print('Error updating image: $e');
+    //  print('Error updating image: $e');
       emit(StageCompletionError(message: 'فشل في معالجة الصورة'));
     }
   }

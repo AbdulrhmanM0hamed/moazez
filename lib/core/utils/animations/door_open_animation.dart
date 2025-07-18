@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 /// revealing a [child] widget beneath. Typically used for a splash screen effect.
 class DoorOpenAnimation extends StatelessWidget {
   const DoorOpenAnimation({
-    Key? key,
+    super.key,
     required this.child,
     this.duration = const Duration(milliseconds: 1800),
     this.height = 300, // يمكنك تغييره حسب احتياجك
-  }) : super(key: key);
+  });
 
   /// Widget revealed after the doors fully open (e.g., app logo).
   final Widget child;
