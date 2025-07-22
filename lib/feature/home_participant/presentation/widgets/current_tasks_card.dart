@@ -10,6 +10,7 @@ class CurrentTasksCard extends StatelessWidget {
   final String title;
   final double progress;
   final int taskId;
+  final bool isGuestMode;
 
   const CurrentTasksCard({
     super.key,
@@ -17,6 +18,7 @@ class CurrentTasksCard extends StatelessWidget {
     required this.title,
     required this.progress,
     required this.taskId,
+    this.isGuestMode = false,
   });
 
   @override
@@ -27,7 +29,7 @@ class CurrentTasksCard extends StatelessWidget {
           Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => TaskDetailsView(taskId: taskId),
+            builder: (context) => TaskDetailsView(taskId: taskId, isGuestMode: isGuestMode),
           ),
         );
       },

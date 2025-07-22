@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moazez/core/utils/animations/custom_progress_indcator.dart';
 import 'package:moazez/core/utils/common/custom_app_bar.dart';
 import 'package:moazez/core/utils/common/unauthenticated_widget.dart';
+import 'package:moazez/feature/guest/data/models/dummy_task_details_entity.dart';
 import 'package:moazez/feature/task_details/domain/entities/task_details_entity.dart';
 import 'package:moazez/feature/task_details/presentation/cubit/task_details_cubit.dart';
 import 'package:moazez/feature/task_details/presentation/cubit/task_details_state.dart';
@@ -16,11 +17,19 @@ import 'package:moazez/feature/task_details/presentation/cubit/stage_completion_
 
 class TaskDetailsView extends StatelessWidget {
   final int taskId;
+  final bool isGuestMode;
 
-  const TaskDetailsView({super.key, required this.taskId});
+  const TaskDetailsView({super.key, required this.taskId, this.isGuestMode = false});
 
   @override
   Widget build(BuildContext context) {
+    if (isGuestMode) {
+      return Scaffold(
+        appBar: CustomAppBar(title: 'تفاصيل الهدف'),
+        body: _TaskDetailsContent(taskDetails: DummyTaskDetailsData.getDummyTaskDetails(taskId)),
+      );
+    }
+
     return BlocProvider(
       create: (context) => di.sl<TaskDetailsCubit>()..fetchTaskDetails(taskId),
       child: Scaffold(

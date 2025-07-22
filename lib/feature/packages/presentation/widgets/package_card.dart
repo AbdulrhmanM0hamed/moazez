@@ -152,7 +152,7 @@ class PackageCard extends StatelessWidget {
                   final bool isTooManyRequests = paymentCubit.isRateLimited;
                   
                   // تحديد نص الزر بناءً على حالة الدفع
-                  String buttonText = package.isTrial ? 'جرب الآن' : 'اشترك الآن';
+                  String buttonText = package.isTrial ? 'ابدأ مجانا' : 'اشترك الآن';
                   if (isLoading) {
                     buttonText = 'جارٍ المعالجة...';
                   } else if (isTooManyRequests) {
