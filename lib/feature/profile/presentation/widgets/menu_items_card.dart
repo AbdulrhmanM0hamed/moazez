@@ -205,6 +205,71 @@ class MenuItemsCard extends StatelessWidget {
                   },
                 );
               }, isLogout: true),
+
+              // const SizedBox(height: 16),
+              // TextButton(
+              //   onPressed: () {
+              //     showDialog(
+              //       context: context,
+              //       builder: (BuildContext dialogContext) {
+              //         return AlertDialog(
+              //           shape: RoundedRectangleBorder(
+              //             borderRadius: BorderRadius.circular(16),
+              //           ),
+              //           title: const Text(
+              //             'هل أنت متأكد تمامًا؟',
+              //             textAlign: TextAlign.center,
+              //             style: TextStyle(
+              //                 fontWeight: FontWeight.bold, color: AppColors.error),
+              //           ),
+              //           content: const Text(
+              //             'سيتم حذف حسابك نهائيًا وستفقد جميع بياناتك. لا يمكن التراجع عن هذا الإجراء.',
+              //             textAlign: TextAlign.center,
+              //           ),
+              //           actionsAlignment: MainAxisAlignment.center,
+              //           actions: <Widget>[
+              //             TextButton(
+              //               child: const Text(
+              //                 'إلغاء',
+              //                 style: TextStyle(color: AppColors.textSecondary),
+              //               ),
+              //               onPressed: () {
+              //                 Navigator.of(dialogContext).pop();
+              //               },
+              //             ),
+              //             const SizedBox(width: 16),
+              //             ElevatedButton(
+              //               style: ElevatedButton.styleFrom(
+              //                 backgroundColor: AppColors.error,
+              //                 shape: RoundedRectangleBorder(
+              //                   borderRadius: BorderRadius.circular(12),
+              //                 ),
+              //                 padding: const EdgeInsets.symmetric(
+              //                   horizontal: 24,
+              //                   vertical: 12,
+              //                 ),
+              //               ),
+              //               child: const Text(
+              //                 'نعم، احذف الحساب',
+              //                 style: TextStyle(color: Colors.white),
+              //               ),
+              //               onPressed: () {
+              //                 // TODO: Implement account deletion logic
+              //                 // This should call a specific cubit for account deletion, not logout.
+              //                 Navigator.of(dialogContext).pop();
+              //                 context.read<LogoutCubit>().logout();
+              //               },
+              //             ),
+              //           ],
+              //         );
+              //       },
+              //     );
+              //   },
+              //   child: const Text(
+              //     'حذف الحساب',
+              //     style: TextStyle(color: AppColors.error, fontSize: 16),
+              //   ),
+              // ),
             ],
           ),
         );
