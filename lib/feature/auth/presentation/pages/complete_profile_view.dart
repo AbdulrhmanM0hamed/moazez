@@ -119,19 +119,17 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                // Gender
+                // Gender selection (اختياري)
                 FormField<String>(
                   initialValue: _gender,
                   validator: (value) {
-                    if (value == null) {
-                      return 'يرجى اختيار النوع';
-                    }
+                    // Gender is now optional
                     return null;
                   },
                   builder: (FormFieldState<String> state) {
                     return InputDecorator(
                       decoration: InputDecoration(
-                        labelText: 'النوع',
+                        labelText: 'النوع (اختياري)',
                         errorText: state.errorText,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.0),
@@ -182,7 +180,7 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                 const SizedBox(height: 16),
                 // Birth date
                 CustomTextField(
-                  label: 'تاريخ الميلاد',
+                  label: 'تاريخ الميلاد (اختياري)',
                   suffix: const Icon(Icons.calendar_today_outlined),
                   readOnly: true,
                   controller: TextEditingController(
@@ -192,16 +190,12 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                             : _birthDate!.toLocal().toString().split(' ')[0],
                   ),
                   onTap: _pickDate,
-                  validator:
-                      (v) =>
-                          _birthDate == null
-                              ? 'يرجى اختيار تاريخ الميلاد'
-                              : null,
+                  validator: (v) => null, // Birth date is now optional
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<Area>(
                   decoration: const InputDecoration(
-                    labelText: 'المنطقة',
+                    labelText: 'المنطقة (اختياري)',
                     border: OutlineInputBorder(),
                   ),
                   value: _selectedArea,
@@ -218,13 +212,13 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                       _selectedCity = null;
                     });
                   },
-                  validator: (v) => v == null ? 'يرجى اختيار المنطقة' : null,
+                  validator: (v) => null, // Area is now optional
                 ),
                 const SizedBox(height: 16),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<City>(
                   decoration: const InputDecoration(
-                    labelText: 'المدينة',
+                    labelText: 'المدينة (اختياري)',
                     border: OutlineInputBorder(),
                   ),
                   value: _selectedCity,
@@ -240,7 +234,7 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
                       _selectedCity = val;
                     });
                   },
-                  validator: (v) => v == null ? 'يرجى اختيار المدينة' : null,
+                  validator: (v) => null, // City is now optional
                 ),
                 const SizedBox(height: 32),
                 BlocBuilder<CompleteProfileCubit, CompleteProfileState>(
@@ -286,16 +280,19 @@ class _CompleteProfileViewState extends State<CompleteProfileView> {
 
   void _onFinish(BuildContext context) {
     if (_formKey.currentState?.validate() ?? false) {
-      // Combine data and navigate further or show success
+      // Provide default values for optional fields
+      final defaultArea = kAreas.isNotEmpty ? kAreas.first : null;
+      final defaultCity = defaultArea?.cities.isNotEmpty == true ? defaultArea!.cities.first : null;
+      
       debugPrint(
         'Submitting CompleteProfile with avatarPath: \\${_avatarImage?.path}',
       );
       context.read<CompleteProfileCubit>().submit(
         CompleteProfileParams(
-          areaId: _selectedArea!.id,
-          cityId: _selectedCity!.id,
-          gender: _gender!,
-          birthdate: _birthDate!,
+          areaId: _selectedArea?.id ?? defaultArea?.id ?? 1, // Default area ID
+          cityId: _selectedCity?.id ?? defaultCity?.id ?? 1, // Default city ID
+          gender: _gender ?? 'male', // Default gender
+          birthdate: _birthDate ?? DateTime(1990, 1, 1), // Default birthdate
           avatarPath: _avatarImage?.path,
         ),
       );

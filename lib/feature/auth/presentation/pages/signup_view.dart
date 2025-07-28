@@ -63,9 +63,15 @@ class _SignUpViewState extends State<_SignUpViewBody> {
       return;
     }
     if (_formKey.currentState!.validate()) {
+      // Handle empty phone by providing default value since backend requires it
+      String phoneValue = _phoneController.text.trim();
+      if (phoneValue.isEmpty) {
+        phoneValue = '0000000000'; // Default phone value for backend requirement
+      }
+      
       context.read<RegisterCubit>().register(
         name: _nameController.text.trim(),
-        phone: _phoneController.text.trim(),
+        phone: phoneValue,
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
@@ -138,10 +144,10 @@ class _SignUpViewState extends State<_SignUpViewBody> {
                     const SizedBox(height: 16),
                     CustomTextField(
                       controller: _phoneController,
-                      label: 'رقم الجوال',
+                      label: 'رقم الجوال (اختياري)',
                       keyboardType: TextInputType.phone,
                       prefix: const Icon(Icons.phone_outlined),
-                      validator: FormValidators.validatePhone,
+                     
                     ),
                     const SizedBox(height: 16),
                     CustomTextField(
