@@ -54,6 +54,30 @@ class _SignUpViewState extends State<_SignUpViewBody> {
     super.dispose();
   }
 
+  // Simple validator for optional phone field
+  String? _validatePhoneOptional(String? value) {
+    // Allow empty phone numbers
+    if (value == null || value.trim().isEmpty) {
+      return null;
+    }
+    
+    // Remove spaces and dashes
+    String cleanedValue = value.replaceAll(RegExp(r'[\s\-]'), '');
+    
+    // Check if it contains only numbers and + sign
+    if (!RegExp(r'^[0-9+]+$').hasMatch(cleanedValue)) {
+      return 'يرجى إدخال أرقام فقط';
+    }
+    
+    // Check reasonable length (between 8 and 15 digits)
+    String numbersOnly = cleanedValue.replaceAll('+', '');
+    if (numbersOnly.length < 6 || numbersOnly.length > 16) {
+      return 'رقم الجوال غير صحيح';
+    }
+    
+    return null;
+  }
+
   void _onContinue() {
     if (!_termsAccepted) {
       CustomSnackbar.showError(
@@ -147,7 +171,7 @@ class _SignUpViewState extends State<_SignUpViewBody> {
                       label: 'رقم الجوال (اختياري)',
                       keyboardType: TextInputType.phone,
                       prefix: const Icon(Icons.phone_outlined),
-                     
+                      validator: _validatePhoneOptional,
                     ),
                     const SizedBox(height: 16),
                     CustomTextField(
